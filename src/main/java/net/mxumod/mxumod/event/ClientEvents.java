@@ -19,7 +19,13 @@ public class ClientEvents {
         @SubscribeEvent
         public  static void onKeyInput(InputEvent.Key event) {
             if (Keybinding.COMBATMODE_KEY.consumeClick()) {
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("enters combat mode"));
+                if (!EnterCombatmode.isCombatmode()) {
+                    EnterCombatmode.setCombatmode(true);
+                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("entering combatmode"));
+                }else {
+                    EnterCombatmode.setCombatmode(false);
+                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("leaving combatmode"));
+                }
             }
         }
     }
