@@ -1,5 +1,7 @@
 package net.mxumod.mxumod.event;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,6 +30,25 @@ public class ClientEvents {
                 }
             }
         }
+        @SubscribeEvent
+        public static void onMouseLeftClick(InputEvent.MouseButton event) {
+            if (Keybinding.LEFTCLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal("attack!"));
+            }
+        }
+        @SubscribeEvent
+        public static void onMouseRightClick(InputEvent.MouseButton event) {
+            if (Keybinding.RIGHTCLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal("block!"));
+            }
+        }
+        @SubscribeEvent
+        public static void onMouseMiddleClick(InputEvent.MouseButton event) {
+            if (Keybinding.MIDDLECLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal("lock on!"));
+            }
+        }
+
     }
 
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -35,6 +56,9 @@ public class ClientEvents {
         @SubscribeEvent
         public  static void onKeyRegister(RegisterKeyMappingsEvent event) {
             event.register(Keybinding.COMBATMODE_KEY);
+            event.register(Keybinding.LEFTCLICK_KEY);
+            event.register(Keybinding.RIGHTCLICK_KEY);
+            event.register(Keybinding.MIDDLECLICK_KEY);
         }
     }
 

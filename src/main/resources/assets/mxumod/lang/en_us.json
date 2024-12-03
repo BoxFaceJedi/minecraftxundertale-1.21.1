@@ -1,4 +1,7 @@
 {
   "key.category.minecraftxundertalemod.minecraftxundertale": "Minecraft X Undertale",
-  "key.minecraftxundertalemod.combatmode": "Enter CombatMode"
+  "key.minecraftxundertalemod.combatmode": "Enter CombatMode",
+  "key.minecraftxundertalemod.skill_left_click": "Skill Attack Button",
+  "key.minecraftxundertalemod.skill_right_click": "Skill Block Button",
+  "key.minecraftxundertalemod.skill_middle_click": "Skill Lock-On Button"
 }
