@@ -32,7 +32,5 @@ public class EnterCombatmode {
         event.setCanceled(combatmode);
     }
     @SubscribeEvent
-    public  static void onRightClickEntityInteract (PlayerInteractEvent.EntityInteract event) {
-        event.setCanceled(combatmode);
-    }
+    public  static void onRightClickEntityInteract (PlayerInteractEvent.EntityInteract event) {event.setCanceled(combatmode);}
 }
