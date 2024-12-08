@@ -22,6 +22,7 @@ public class MxuC2SPacket {
     public boolean handle(Supplier<NetworkContext> supplier) {
         NetworkContext context = supplier.get();
 
+
         return true;
     }
 
