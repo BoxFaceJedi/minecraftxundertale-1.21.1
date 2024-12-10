@@ -8,6 +8,8 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
+import net.mxumod.mxumod.networking.ModMessages;
+import net.mxumod.mxumod.networking.packet.MxuC2SPacket;
 import net.mxumod.mxumod.util.Keybinding;
 
 
@@ -31,7 +33,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onMouseLeftClick(InputEvent.MouseButton event) {
             if (Keybinding.LEFTCLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("attack!"));
+                ModMessages.sendToServer(new MxuC2SPacket());
             }
         }
         @SubscribeEvent

@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.*;
 import net.mxumod.mxumod.MxuMod;
+import net.mxumod.mxumod.networking.packet.MxuC2SPacket;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;
@@ -20,11 +21,17 @@ public class ModMessages {
             SimpleChannel net = ChannelBuilder
                     .named(ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "messages"))
                     .networkProtocolVersion(1)
-                    .clientAcceptedVersions(Channel.VersionTest.ACCEPT_VANILLA)
-                    .serverAcceptedVersions(Channel.VersionTest.ACCEPT_VANILLA)
+                    .clientAcceptedVersions((s, v) -> true)
+                    .serverAcceptedVersions((s, v) -> true)
                     .simpleChannel();
 
             INSTANCE = net;
+
+            net.messageBuilder(MxuC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                    .decoder(MxuC2SPacket::new)
+                    .encoder(MxuC2SPacket::toBytes)
+                    .consumerMainThread(MxuC2SPacket::handle)
+                    .add();
 
         }
 
