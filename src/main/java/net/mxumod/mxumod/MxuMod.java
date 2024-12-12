@@ -37,6 +37,7 @@ public class MxuMod {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        ModMessages.register();
     }
 
     // Add the example block item to the building blocks tab

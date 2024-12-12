@@ -3,7 +3,6 @@ package net.mxumod.mxumod.networking;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.*;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.packet.MxuC2SPacket;
@@ -39,7 +38,7 @@ public class ModMessages {
             INSTANCE.send(message, PacketDistributor.SERVER.noArg());
         }
         public static <MSG> void sendToClient(MSG message, ServerPlayer player) {
-            INSTANCE.send(PacketDistributor.PLAYER.with(player), (Connection) message);
+            INSTANCE.send(message, PacketDistributor.PLAYER.with(player));
         }
 
 }
