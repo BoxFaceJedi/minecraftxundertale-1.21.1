@@ -1,11 +1,10 @@
 package net.mxumod.mxumod.networking;
 
-import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.*;
 import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.networking.packet.MxuC2SPacket;
+import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;
@@ -26,10 +25,10 @@ public class ModMessages {
 
             INSTANCE = net;
 
-            net.messageBuilder(MxuC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                    .decoder(MxuC2SPacket::new)
-                    .encoder(MxuC2SPacket::toBytes)
-                    .consumerMainThread(MxuC2SPacket::handle)
+            net.messageBuilder(MxuTestC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                    .decoder(MxuTestC2SPacket::new)
+                    .encoder(MxuTestC2SPacket::toBytes)
+                    .consumerMainThread(MxuTestC2SPacket::handle)
                     .add();
 
         }

@@ -7,12 +7,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
-public class MxuC2SPacket {
-    public MxuC2SPacket() {
+public class MxuTestC2SPacket {
+    public MxuTestC2SPacket() {
 
     }
 
-    public MxuC2SPacket(FriendlyByteBuf buf) {
+    public MxuTestC2SPacket(FriendlyByteBuf buf) {
 
     }
 
