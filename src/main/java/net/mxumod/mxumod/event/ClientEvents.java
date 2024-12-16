@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
@@ -16,6 +17,7 @@ import net.mxumod.mxumod.util.Keybinding;
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
+        public static boolean keyHeld = false;
 
 
         @SubscribeEvent
@@ -31,9 +33,19 @@ public class ClientEvents {
             }
         }
         @SubscribeEvent
-        public static void onMouseLeftClick(InputEvent.MouseButton event) {
-            if (Keybinding.LEFTCLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
-                ModMessages.sendToServer(new MxuTestC2SPacket());
+        public static void onClientTick(TickEvent.ClientTickEvent event) {
+            if (event.phase == TickEvent.Phase.END) {
+                if (Keybinding.LEFTCLICK_KEY.isDown()) {
+                    if (!keyHeld) {
+                        keyHeld = true;
+                    }
+
+                    ModMessages.sendToServer(new MxuTestC2SPacket());
+                } else {
+                    if (keyHeld) {
+                        keyHeld = false;
+                    }
+                }
             }
         }
         @SubscribeEvent
