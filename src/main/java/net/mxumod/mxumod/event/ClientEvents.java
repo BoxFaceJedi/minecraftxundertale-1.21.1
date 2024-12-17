@@ -17,7 +17,6 @@ import net.mxumod.mxumod.util.Keybinding;
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
-        public static boolean keyHeld = false;
 
 
         @SubscribeEvent
@@ -34,17 +33,9 @@ public class ClientEvents {
         }
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
-            if (event.phase == TickEvent.Phase.END) {
+            if (event.phase == TickEvent.Phase.END && EnterCombatmode.isCombatmode()) {
                 if (Keybinding.LEFTCLICK_KEY.isDown()) {
-                    if (!keyHeld) {
-                        keyHeld = true;
-                    }
-
                     ModMessages.sendToServer(new MxuTestC2SPacket());
-                } else {
-                    if (keyHeld) {
-                        keyHeld = false;
-                    }
                 }
             }
         }
