@@ -22,11 +22,11 @@ public class ShootArrow {
         Arrow arrow = new Arrow(level,randomPosition.x, randomPosition.y, randomPosition.z, new ItemStack(Items.ARROW), null);
 
         Vec3 lookVec = player.getLookAngle();
-        arrow.shoot(lookVec.x, lookVec.y, lookVec.z, 2.0f, 0.0f);
+        arrow.shoot(lookVec.x, lookVec.y, lookVec.z, 3.5f, 0.0f);
         arrow.setOwner(player);
         arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
         level.addFreshEntity(arrow);
-        level.playSound(null, player.getOnPos(), SoundEvents.ARROW_SHOOT, SoundSource.MASTER);
+        level.playSound(null, arrow.getX(), arrow.getY(), arrow.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.MASTER);
 
     }
 
