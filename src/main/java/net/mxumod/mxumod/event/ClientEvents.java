@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.ModMessages;
+import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.util.Keybinding;
 
@@ -42,7 +43,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onMouseRightClick(InputEvent.MouseButton event) {
             if (Keybinding.RIGHTCLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("block!"));
+                ModMessages.sendToServer(new BlockingC2SPacket());
             }
         }
         @SubscribeEvent

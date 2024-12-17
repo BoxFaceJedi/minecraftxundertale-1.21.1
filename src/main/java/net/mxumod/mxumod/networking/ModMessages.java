@@ -4,7 +4,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.*;
 import net.mxumod.mxumod.MxuMod;
+import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
+import net.mxumod.mxumod.skill.Blocking;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;
@@ -29,6 +31,12 @@ public class ModMessages {
                     .decoder(MxuTestC2SPacket::new)
                     .encoder(MxuTestC2SPacket::toBytes)
                     .consumerMainThread(MxuTestC2SPacket::handle)
+                    .add();
+
+            net.messageBuilder(BlockingC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                    .decoder(BlockingC2SPacket::new)
+                    .encoder(BlockingC2SPacket::toBytes)
+                    .consumerMainThread(BlockingC2SPacket::handle)
                     .add();
 
         }
