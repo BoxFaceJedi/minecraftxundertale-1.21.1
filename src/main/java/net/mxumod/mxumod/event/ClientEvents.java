@@ -42,7 +42,7 @@ public class ClientEvents {
         }
         @SubscribeEvent
         public static void onMouseRightClick(InputEvent.MouseButton event) {
-            if (Keybinding.RIGHTCLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
+            if (Keybinding.RIGHTCLICK_KEY.isDown() && EnterCombatmode.isCombatmode()) {
                 ModMessages.sendToServer(new BlockingC2SPacket());
             }
         }

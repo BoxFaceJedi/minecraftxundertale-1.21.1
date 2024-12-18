@@ -2,22 +2,30 @@ package net.mxumod.mxumod.skill;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.phys.Vec3;
 
 public class Blocking {
 
+    static boolean isBlocking = false;
     public static void blocking(ServerPlayer player) {
-        ServerLevel level = player.serverLevel().getLevel();
 
+        ServerLevel level = player.serverLevel().getLevel();
         Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 
         Shulker shulker = new Shulker(EntityType.SHULKER, level);
         shulker.setNoAi(true);
         shulker.setPos(posInFront.x, posInFront.y,posInFront.z);
 
-        level.addFreshEntity(shulker);
+        if (!isBlocking) {
+            level.addFreshEntity(shulker);
+            isBlocking = true;
+        }else {
+
+            isBlocking = false;
+        }
 
     }
 
