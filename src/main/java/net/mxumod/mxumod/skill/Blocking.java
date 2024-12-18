@@ -1,29 +1,35 @@
 package net.mxumod.mxumod.skill;
 
+import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
 import net.minecraft.world.phys.Vec3;
 
 public class Blocking {
 
-    static boolean isBlocking = false;
+    static boolean isBlocking;
     public static void blocking(ServerPlayer player) {
 
         ServerLevel level = player.serverLevel().getLevel();
         Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 
-        Shulker shulker = new Shulker(EntityType.SHULKER, level);
-        shulker.setNoAi(true);
-        shulker.setPos(posInFront.x, posInFront.y,posInFront.z);
+        IronGolem ironGolem = new IronGolem(EntityType.IRON_GOLEM, level);
+        ironGolem.setNoAi(true);
+        ironGolem.setPos(posInFront.x, posInFront.y,posInFront.z);
 
         if (!isBlocking) {
-            level.addFreshEntity(shulker);
+            level.addFreshEntity(ironGolem);
             isBlocking = true;
         }else {
-
+            ironGolem.teleportTo(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            ironGolem.setRemoved(Entity.RemovalReason.DISCARDED);
             isBlocking = false;
         }
 
