@@ -1,15 +1,10 @@
 package net.mxumod.mxumod.skill;
 
-import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.monster.Shulker;
-import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
 import net.minecraft.world.phys.Vec3;
 
 public class Blocking {
@@ -36,18 +31,14 @@ public class Blocking {
     }
 
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
-        // Get player's current position
         Vec3 playerPos = player.position();
-        double playerYaw = Math.toRadians(player.getYRot()); // Convert yaw to radians
+        double playerYaw = Math.toRadians(player.getYRot());
 
-        // Calculate offsets based on the yaw (cosine and sine for X and Z directions)
-        double offsetX = -Math.sin(playerYaw) * distance; // Negative sine for X-axis
-        double offsetZ = Math.cos(playerYaw) * distance;  // Cosine for Z-axis
+        double offsetX = -Math.sin(playerYaw) * distance;
+        double offsetZ = Math.cos(playerYaw) * distance;
 
-        // Y-coordinate: Use player's feet position
         double y = player.getY();
 
-        // Combine into a BlockPos (rounded to integers for block coordinates)
         return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
     }
 

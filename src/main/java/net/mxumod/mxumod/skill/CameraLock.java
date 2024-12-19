@@ -8,16 +8,16 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class CameraLock {
-    public static void cameraLockOn(Player player) {player.lookAt(EntityAnchorArgument.Anchor.EYES, entityInView(player, 20));
+    public static void cameraLockOn(Player player) {player.lookAt(EntityAnchorArgument.Anchor.EYES, entityInView(player, 48));
     }
 
     private static Vec3 entityInView(Player player, double distance) {
-        HitResult hitResult = player.pick(distance, 0, true );
+        HitResult hitResult = player.pick(distance, 0, false);
 
-        if (hitResult instanceof EntityHitResult entityHitResult) {
-            return entityHitResult.getEntity().position();
+        if (hitResult.getType() == (HitResult.Type.ENTITY )) {
+            return hitResult.getLocation();
         }else {
-            return null;
+            return player.position();
         }
     }
 }
