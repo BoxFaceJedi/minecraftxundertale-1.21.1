@@ -1,15 +1,15 @@
 package net.mxumod.mxumod.skill;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.phys.Vec3;
 
 public class Blocking {
 
-    static boolean isBlocking;
+    public static boolean isBlocking;
     public static void blocking(ServerPlayer player) {
 
         ServerLevel level = player.serverLevel().getLevel();
@@ -22,10 +22,11 @@ public class Blocking {
         if (!isBlocking) {
             level.addFreshEntity(ironGolem);
             isBlocking = true;
+            player.sendSystemMessage(Component.literal("Player is Blocking!"));
         }else {
-            ironGolem.teleportTo(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            ironGolem.setRemoved(Entity.RemovalReason.DISCARDED);
+            ironGolem.kill();
             isBlocking = false;
+            player.sendSystemMessage(Component.literal("Player no longer Blocking!"));
         }
 
     }
