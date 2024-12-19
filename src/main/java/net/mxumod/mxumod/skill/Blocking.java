@@ -28,8 +28,7 @@ public class Blocking {
             level.addFreshEntity(ironGolem);
             isBlocking = true;
         }else {
-            ironGolem.teleportTo(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-            ironGolem.setRemoved(Entity.RemovalReason.DISCARDED);
+            ironGolem.kill();
             isBlocking = false;
         }
 
@@ -40,14 +39,11 @@ public class Blocking {
         Vec3 playerPos = player.position();
         double playerYaw = Math.toRadians(player.getYRot()); // Convert yaw to radians
 
-        // Calculate offsets based on the yaw (cosine and sine for X and Z directions)
-        double offsetX = -Math.sin(playerYaw) * distance; // Negative sine for X-axis
-        double offsetZ = Math.cos(playerYaw) * distance;  // Cosine for Z-axis
+        double offsetX = -Math.sin(playerYaw) * distance;
+        double offsetZ = Math.cos(playerYaw) * distance;
 
-        // Y-coordinate: Use player's feet position
         double y = player.getY();
 
-        // Combine into a BlockPos (rounded to integers for block coordinates)
         return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
     }
 
