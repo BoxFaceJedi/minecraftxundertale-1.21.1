@@ -53,7 +53,6 @@ public class ClientEvents {
                 CameraLock.cameraLockOn(Minecraft.getInstance().player);
             }
         }
-
     }
 
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
