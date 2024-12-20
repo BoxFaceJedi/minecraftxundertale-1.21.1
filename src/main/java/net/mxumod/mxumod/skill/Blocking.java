@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -27,7 +26,7 @@ public class Blocking {
             blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
             level.addFreshEntity(blockingGolem);
 
-            applySpeedModifier(player, 0.65);
+            applySpeedModifier(player, 0.35);
 
             isBlocking = true;
         } else {
