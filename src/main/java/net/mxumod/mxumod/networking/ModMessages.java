@@ -6,7 +6,6 @@ import net.minecraftforge.network.*;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
-import net.mxumod.mxumod.skill.Blocking;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;

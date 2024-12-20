@@ -12,6 +12,7 @@ import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
+import net.mxumod.mxumod.skill.CameraLock;
 import net.mxumod.mxumod.util.Keybinding;
 
 
@@ -49,7 +50,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onMouseMiddleClick(InputEvent.MouseButton event) {
             if (Keybinding.MIDDLECLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
-                Minecraft.getInstance().player.sendSystemMessage(Component.literal("lock on!"));
+                CameraLock.cameraLockOn(Minecraft.getInstance().player);
             }
         }
 
