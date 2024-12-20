@@ -23,7 +23,6 @@ public class Blocking {
             blockingGolem = new IronGolem(EntityType.IRON_GOLEM, level);
             blockingGolem.setNoAi(true);
             blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
-            blockingGolem.setInvisible(false);
             level.addFreshEntity(blockingGolem);
 
             isBlocking = true;
@@ -37,7 +36,6 @@ public class Blocking {
             player.sendSystemMessage(Component.literal("Player no longer Blocking!"));
         }
     }
-
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
         Vec3 playerPos = player.position();
         double playerYaw = Math.toRadians(player.getYRot());

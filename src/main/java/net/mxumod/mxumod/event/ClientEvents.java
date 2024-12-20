@@ -15,11 +15,12 @@ import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
 import net.mxumod.mxumod.util.Keybinding;
 
+import java.util.UUID;
+
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
-
 
         @SubscribeEvent
         public  static void onKeyInput(InputEvent.Key event) {
