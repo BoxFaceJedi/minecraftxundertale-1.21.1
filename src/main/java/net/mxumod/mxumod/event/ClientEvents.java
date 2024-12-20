@@ -15,7 +15,6 @@ import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
 import net.mxumod.mxumod.util.Keybinding;
 
-import java.util.UUID;
 
 
 public class ClientEvents {

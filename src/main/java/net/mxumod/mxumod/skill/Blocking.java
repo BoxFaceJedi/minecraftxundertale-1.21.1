@@ -1,14 +1,16 @@
 package net.mxumod.mxumod.skill;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Overwrite;
+import net.mxumod.mxumod.MxuMod;
 
 public class Blocking {
 
@@ -25,17 +27,44 @@ public class Blocking {
             blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
             level.addFreshEntity(blockingGolem);
 
+            applySpeedModifier(player, 0.65);
+
             isBlocking = true;
-            player.sendSystemMessage(Component.literal("Player is Blocking!"));
         } else {
             if (blockingGolem != null) {
                 blockingGolem.kill();
+
+                removeModifier(player);
             }
             blockingGolem = null;
             isBlocking = false;
-            player.sendSystemMessage(Component.literal("Player no longer Blocking!"));
         }
     }
+
+    private static void applySpeedModifier (Player player, double multiplier) {
+        var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
+
+        if (attributes == null) return;
+
+        if (!attributes.hasModifier(ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"))) {
+
+            AttributeModifier modifier = new AttributeModifier(
+                    ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"),
+                    -1.0 + multiplier,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+            );
+
+            attributes.addPermanentModifier(modifier);
+        }
+    }
+
+    private static void removeModifier(ServerPlayer player) {
+        var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (attributes == null) return;
+
+        attributes.removeModifier(ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"));
+    }
+
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
         Vec3 playerPos = player.position();
         double playerYaw = Math.toRadians(player.getYRot());
