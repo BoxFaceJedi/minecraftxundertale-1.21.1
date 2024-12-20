@@ -18,9 +18,11 @@ public class Blocking {
         IronGolem ironGolem = new IronGolem(EntityType.IRON_GOLEM, level);
         ironGolem.setNoAi(true);
         ironGolem.setPos(posInFront.x, posInFront.y,posInFront.z);
+        ironGolem.setInvisible(false);
+
 
         if (!isBlocking) {
-            level.addFreshEntity(ironGolem);
+            //level.addFreshEntity(ironGolem);
             isBlocking = true;
             player.sendSystemMessage(Component.literal("Player is Blocking!"));
         }else {
