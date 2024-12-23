@@ -1,10 +1,12 @@
 package net.mxumod.mxumod.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,6 +15,7 @@ import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
+import net.mxumod.mxumod.skill.Dodge;
 import net.mxumod.mxumod.util.Keybinding;
 
 
@@ -51,6 +54,12 @@ public class ClientEvents {
         public static void onMouseMiddleClick(InputEvent.MouseButton event) {
             if (Keybinding.MIDDLECLICK_KEY.consumeClick() && EnterCombatmode.isCombatmode()) {
                 CameraLock.cameraLockOn(Minecraft.getInstance().player);
+            }
+        }
+        @SubscribeEvent
+        public static void onShiftKey(InputEvent.Key event) {
+            if (Screen.hasShiftDown() && EnterCombatmode.isCombatmode()) {
+                Dodge.dodge(Minecraft.getInstance().player);
             }
         }
     }
