@@ -1,34 +1,67 @@
 package net.mxumod.mxumod.skill;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.mxumod.mxumod.MxuMod;
 
 public class Blocking {
 
     public static boolean isBlocking;
-    public static void blocking(ServerPlayer player) {
+    private static IronGolem blockingGolem;
 
+    public static void blocking(ServerPlayer player) {
         ServerLevel level = player.serverLevel().getLevel();
         Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 
-        IronGolem ironGolem = new IronGolem(EntityType.IRON_GOLEM, level);
-        ironGolem.setNoAi(true);
-        ironGolem.setPos(posInFront.x, posInFront.y,posInFront.z);
-
         if (!isBlocking) {
-            level.addFreshEntity(ironGolem);
-            isBlocking = true;
-            player.sendSystemMessage(Component.literal("Player is Blocking!"));
-        }else {
-            ironGolem.kill();
-            isBlocking = false;
-            player.sendSystemMessage(Component.literal("Player no longer Blocking!"));
-        }
+            blockingGolem = new IronGolem(EntityType.IRON_GOLEM, level);
+            blockingGolem.setNoAi(true);
+            blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
+            level.addFreshEntity(blockingGolem);
 
+            applySpeedModifier(player, 0.35);
+
+            isBlocking = true;
+        } else {
+            if (blockingGolem != null) {
+                blockingGolem.kill();
+
+                removeModifier(player);
+            }
+            blockingGolem = null;
+            isBlocking = false;
+        }
+    }
+
+    private static void applySpeedModifier (Player player, double multiplier) {
+        var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
+
+        if (attributes == null) return;
+
+        if (!attributes.hasModifier(ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"))) {
+
+            AttributeModifier modifier = new AttributeModifier(
+                    ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"),
+                    -1.0 + multiplier,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+            );
+
+            attributes.addPermanentModifier(modifier);
+        }
+    }
+
+    private static void removeModifier(ServerPlayer player) {
+        var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (attributes == null) return;
+
+        attributes.removeModifier(ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"));
     }
 
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
