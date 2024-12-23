@@ -36,14 +36,14 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
             if (event.phase == TickEvent.Phase.END && EnterCombatmode.isCombatmode()) {
-                if (Keybinding.LEFTCLICK_KEY.isDown()) {
+                if (Keybinding.LEFTCLICK_KEY.isDown() && !Keybinding.RIGHTCLICK_KEY.isDown()) {
                     ModMessages.sendToServer(new MxuTestC2SPacket());
                 }
             }
         }
         @SubscribeEvent
         public static void onMouseRightClick(InputEvent.MouseButton event) {
-            if (Keybinding.RIGHTCLICK_KEY.isDown() && EnterCombatmode.isCombatmode()) {
+            if (Keybinding.RIGHTCLICK_KEY.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.LEFTCLICK_KEY.isDown()) {
                 ModMessages.sendToServer(new BlockingC2SPacket());
             }
         }
