@@ -14,11 +14,10 @@ public class CameraLock {
 
     private static Vec3 entityInView(Player player, double distance) {
         HitResult hitResult = player.pick(distance, 0, false);
-
-        if (hitResult.getType() == (HitResult.Type.ENTITY )) {
+        if (hitResult.getType().equals(HitResult.Type.ENTITY)) {
             return hitResult.getLocation();
         }else {
-            return player.position();
+            return player.getEyePosition();
         }
     }
     private static final Minecraft mc = Minecraft.getInstance();
