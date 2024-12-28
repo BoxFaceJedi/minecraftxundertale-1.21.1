@@ -1,45 +1,57 @@
 package net.mxumod.mxumod.skill;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
+import org.joml.Quaterniond;
+import org.joml.Quaternionf;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CameraLock {
-    public static void cameraLockOn(Player player) {player.lookAt(EntityAnchorArgument.Anchor.EYES, entityInView(player, 48));
-    }
-
-    private static Vec3 entityInView(Player player, double distance) {
-        HitResult hitResult = player.pick(distance, 0, false);
-        if (hitResult.getType().equals(HitResult.Type.ENTITY)) {
-            return hitResult.getLocation();
-        }else {
-            return player.getEyePosition();
-        }
-    }
     private static final Minecraft mc = Minecraft.getInstance();
 
-    public static Vec3 getPlayerLookDirection() {
-        if (mc.player == null) {
-            return null; // 玩家对象不存在
+    public static void cameraLockOn(LocalPlayer player) {
+        List<LivingEntity> livingEntities = entityInView(player, 20);
+
+        for (LivingEntity tmp_Entity: livingEntities) {
+            System.out.print(tmp_Entity.getName().getString());
         }
+    }
 
-        // 获取玩家的旋转角度
-        float yaw = mc.player.getYRot();  // 水平角度（Yaw）
-        float pitch = mc.player.getXRot(); // 垂直角度（Pitch）
+    private static List<LivingEntity> entityInView(LocalPlayer player, double distance) {
+        Camera camera = mc.gameRenderer.getMainCamera();
+        float fov = Minecraft.getInstance().options.fov().get().floatValue();
 
-        // 将角度转换为弧度
-        double yawRad = Math.toRadians(-yaw);   // 注意：Minecraft 的 yaw 是逆时针为正
-        double pitchRad = Math.toRadians(-pitch); // Pitch 向下为正，向上为负
+        Matrix4f viewMatrix = new PoseStack().last().pose();
+        Matrix4f projectionMatrix = mc.gameRenderer.getProjectionMatrix(fov);
+        Frustum frustum = new Frustum(viewMatrix, projectionMatrix);
 
-        // 计算方向向量
-        double x = Math.cos(yawRad) * Math.cos(pitchRad);
-        double y = Math.sin(pitchRad);
-        double z = Math.sin(yawRad) * Math.cos(pitchRad);
+        Vec3 cameraPos = player.getEyePosition();
+        frustum.prepare(cameraPos.x, cameraPos.y, cameraPos.z);
 
-        return new Vec3(x, y, z); // 返回方向向量
+        double px = player.getX();
+        double py = player.getY();
+        double pz = player.getZ();
+        AABB tmp_Box = new AABB(new Vec3(px + distance, py + distance, pz + distance), new Vec3(px - distance, py - distance, pz - distance));
+
+
+        return mc.level.getEntitiesOfClass(LivingEntity.class, tmp_Box).stream()
+                .filter(entity -> frustum.isVisible(entity.getBoundingBox()))
+                .collect(Collectors.toList());
     }
 }
