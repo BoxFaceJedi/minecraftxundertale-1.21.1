@@ -59,7 +59,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onShiftKey(InputEvent.Key event) {
             if (Minecraft.getInstance().options.keyShift.consumeClick() && EnterCombatmode.isCombatmode()) {
-                Dodge.dodge(Minecraft.getInstance().player);
+                Dodge.dodge(Minecraft.getInstance().player, 1);
             }
         }
     }
