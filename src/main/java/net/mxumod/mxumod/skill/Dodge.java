@@ -1,11 +1,22 @@
 package net.mxumod.mxumod.skill;
 
+import com.ibm.icu.impl.breakiter.DictionaryBreakEngine;
 import net.minecraft.client.Minecraft;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.mxumod.mxumod.MxuMod;
+import org.w3c.dom.Entity;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-
+@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
 public class Dodge {
     private static final AtomicBoolean isMoving = new AtomicBoolean(false);
     private static Thread movementThread;
@@ -38,7 +49,7 @@ public class Dodge {
                     Minecraft.getInstance().execute(() -> player.moveTo(x, y, z));
 
                     // Sleep for smooth transitions
-                    Thread.sleep(50);
+                    Thread.sleep(5);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -63,9 +74,9 @@ public class Dodge {
         double playerYaw = Math.toRadians(player.getYRot());
         Minecraft minecraft = Minecraft.getInstance();
 
-        if (minecraft.options.keyDown.isDown()) {
-            double offsetX = Math.sin(playerYaw) * distance;
-            double offsetZ = -Math.cos(playerYaw) * distance;
+        if (minecraft.options.keyUp.isDown()) {
+            double offsetX = -Math.sin(playerYaw) * distance;
+            double offsetZ = Math.cos(playerYaw) * distance;
 
             double y = player.getY();
 
@@ -85,12 +96,20 @@ public class Dodge {
 
             return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
         } else {
-            double offsetX = -Math.sin(playerYaw) * distance;
-            double offsetZ = Math.cos(playerYaw) * distance;
+            double offsetX = Math.sin(playerYaw) * distance;
+            double offsetZ = -Math.cos(playerYaw) * distance;
 
             double y = player.getY();
 
             return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
+        }
+    }
+    @SubscribeEvent
+    public static void onPlayerHurt(LivingHurtEvent event) {
+        if (event.getEntity() instanceof Player && event.getSource().getEntity() != null) {
+            if (isMoving.get()) {
+                event.setCanceled(true);
+            }
         }
     }
 }
