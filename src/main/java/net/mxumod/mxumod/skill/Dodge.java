@@ -1,19 +1,13 @@
 package net.mxumod.mxumod.skill;
 
-import com.ibm.icu.impl.breakiter.DictionaryBreakEngine;
 import net.minecraft.client.Minecraft;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
-import org.w3c.dom.Entity;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
@@ -105,7 +99,7 @@ public class Dodge {
         }
     }
     @SubscribeEvent
-    public static void onPlayerHurt(LivingHurtEvent event) {
+    public static void onLivingEntityAttack(LivingAttackEvent event) {
         if (event.getEntity() instanceof Player && event.getSource().getEntity() != null) {
             if (isMoving.get()) {
                 event.setCanceled(true);

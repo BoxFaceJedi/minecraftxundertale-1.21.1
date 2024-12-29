@@ -19,6 +19,9 @@ import net.mxumod.mxumod.util.Keybinding;
 
 
 public class ClientEvents {
+    private static final long DODGE_COOLDOWN_MS = 500;
+    private static long lastDodgeTime = 0;
+
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
 
@@ -56,8 +59,10 @@ public class ClientEvents {
         }
         @SubscribeEvent
         public static void onShiftKey(InputEvent.Key event) {
-            if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode()) {
+            long currentTime = System.currentTimeMillis();
+            if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
                 Dodge.dodge(Minecraft.getInstance().player, 0.1);
+                lastDodgeTime = currentTime;
             }
         }
     }
