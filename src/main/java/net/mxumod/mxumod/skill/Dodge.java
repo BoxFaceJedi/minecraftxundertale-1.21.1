@@ -75,6 +75,13 @@ public class Dodge {
             double y = player.getY();
 
             return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
+        } else if (minecraft.options.keyRight.isDown() && minecraft.options.keyLeft.isDown()) {
+            double offsetX = Math.sin(playerYaw) * distance;
+            double offsetZ = -Math.cos(playerYaw) * distance;
+
+            double y = player.getY();
+
+            return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
         } else if (minecraft.options.keyLeft.isDown()) {
             double offsetX = Math.cos(playerYaw) * distance;
             double offsetZ = Math.sin(playerYaw) * distance;
