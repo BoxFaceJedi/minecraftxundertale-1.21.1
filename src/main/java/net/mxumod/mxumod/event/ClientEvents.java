@@ -25,44 +25,58 @@ public class ClientEvents {
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
 
+        private static final Minecraft minecraft = Minecraft.getInstance();
+
         @SubscribeEvent
         public  static void onKeyInput(InputEvent.Key event) {
-            if (Keybinding.COMBAT_MODE.consumeClick()) {
-                if (!EnterCombatmode.isCombatmode()) {
-                    EnterCombatmode.setCombatmode(true);
-                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("entering combatmode"));
-                }else {
-                    EnterCombatmode.setCombatmode(false);
-                    Minecraft.getInstance().player.sendSystemMessage(Component.literal("leaving combatmode"));
+            if (minecraft.player != null) {
+                long currentTime = System.currentTimeMillis();
+                if (Keybinding.COMBAT_MODE.consumeClick()) {
+                    if (!EnterCombatmode.isCombatmode()) {
+                        EnterCombatmode.setCombatmode(true);
+                        minecraft.player.sendSystemMessage(Component.literal("entering combatmode"));
+                    }else {
+                        EnterCombatmode.setCombatmode(false);
+                        minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));
+                    }
+                }
+                if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
+                    if (minecraft.player.getInventory().selected == 0) {
+                        Dodge.dodge(minecraft.player, 0.1);
+                    }
+                    lastDodgeTime = currentTime;
+                }
+                if (Keybinding.SPECIAL_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
+                    minecraft.player.sendSystemMessage(Component.literal("SPECIAL attack"));
+                }
+                if (Keybinding.ULTIMATE_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
+                    minecraft.player.sendSystemMessage(Component.literal("ult attack"));
                 }
             }
         }
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
-            if (event.phase == TickEvent.Phase.END && EnterCombatmode.isCombatmode()) {
-                if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown()) {
-                    ModMessages.sendToServer(new MxuTestC2SPacket());
+            if (minecraft.player != null) {
+                if (event.phase == TickEvent.Phase.END && EnterCombatmode.isCombatmode()) {
+                    if (minecraft.player.getInventory().selected == 0) {
+                        if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown()) {
+                            ModMessages.sendToServer(new MxuTestC2SPacket());
+                        }
+                    }
                 }
             }
         }
         @SubscribeEvent
-        public static void onMouseRightClick(InputEvent.MouseButton event) {
-            if (Keybinding.BLOCKING.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.BASIC_ATTACK.isDown()) {
-                ModMessages.sendToServer(new BlockingC2SPacket());
-            }
-        }
-        @SubscribeEvent
-        public static void onMouseMiddleClick(InputEvent.MouseButton event) {
-            if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {
-                CameraLock.cameraLockOn(Minecraft.getInstance().player);
-            }
-        }
-        @SubscribeEvent
-        public static void onShiftKey(InputEvent.Key event) {
-            long currentTime = System.currentTimeMillis();
-            if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
-                Dodge.dodge(Minecraft.getInstance().player, 0.1);
-                lastDodgeTime = currentTime;
+        public static void onMouseInput(InputEvent.MouseButton event) {
+            if (minecraft.player != null) {
+                if (minecraft.player.getInventory().selected == 0) {
+                    if (Keybinding.BLOCKING.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.BASIC_ATTACK.isDown()) {
+                        ModMessages.sendToServer(new BlockingC2SPacket());
+                    }
+                }
+                if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {
+                    CameraLock.cameraLockOn(minecraft.player);
+                }
             }
         }
     }
@@ -73,6 +87,8 @@ public class ClientEvents {
         public  static void onKeyRegister(RegisterKeyMappingsEvent event) {
             event.register(Keybinding.COMBAT_MODE);
             event.register(Keybinding.DODGE);
+            event.register(Keybinding.SPECIAL_ATTACK);
+            event.register(Keybinding.ULTIMATE_ATTACK);
             event.register(Keybinding.BASIC_ATTACK);
             event.register(Keybinding.BLOCKING);
             event.register(Keybinding.LOCK_ON);
