@@ -1,6 +1,8 @@
 package net.mxumod.mxumod.skill;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -107,9 +109,10 @@ public class Dodge {
     }
     @SubscribeEvent
     public static void onLivingEntityAttack(LivingAttackEvent event) {
-        if (event.getEntity() instanceof Player && event.getSource().getEntity() != null) {
+        if (event.getEntity() instanceof Player player && event.getSource().getEntity() != null) {
             if (isMoving.get()) {
                 event.setCanceled(true);
+                player.level().playSound(player, player.blockPosition(), SoundEvents.WIND_CHARGE_THROW, SoundSource.MASTER);
             }
         }
     }
