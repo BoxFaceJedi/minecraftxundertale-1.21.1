@@ -49,10 +49,8 @@ public class EnterCombatmode {
     }
     @SubscribeEvent
     public static void disabledDropItem(ItemTossEvent event) {
-        if (combatmode) {
-            event.setCanceled(true);
-            event.getPlayer().addItem(event.getEntity().getItem());
-        }
+        event.getPlayer().addItem(event.getEntity().getItem());
+        event.getEntity().remove(Entity.RemovalReason.DISCARDED);
     }
 
 }

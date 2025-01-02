@@ -21,6 +21,7 @@ public class BlockingC2SPacket {
     public void handle(CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
 
+
             ServerPlayer player = context.getSender();
 
             Blocking.blocking(player);
