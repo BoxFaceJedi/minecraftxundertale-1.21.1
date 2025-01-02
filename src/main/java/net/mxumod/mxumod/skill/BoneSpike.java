@@ -1,23 +1,26 @@
 package net.mxumod.mxumod.skill;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber()
 public class BoneSpike {
-    private static EvokerFangs bone_spike;
 
     public static void boneSpikeAttack(ServerPlayer player) {
         ServerLevel level = player.serverLevel().getLevel();
         Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 
-        bone_spike = new EvokerFangs(EntityType.EVOKER_FANGS, level);
+        EvokerFangs bone_spike = new EvokerFangs(EntityType.EVOKER_FANGS, level);
         bone_spike.setPos(posInFront.x, posInFront.y, posInFront.z);
         bone_spike.setOwner(player);
         level.addFreshEntity(bone_spike);
@@ -37,7 +40,7 @@ public class BoneSpike {
 
     @SubscribeEvent
     public static void boneSpikeHit(LivingHurtEvent event) {
-        if (event.getSource().getEntity() == bone_spike) {
+        if (event.getSource().getEntity() instanceof EvokerFangs) {
             event.getEntity().setDeltaMovement(0, 10, 0);
         }
     }
