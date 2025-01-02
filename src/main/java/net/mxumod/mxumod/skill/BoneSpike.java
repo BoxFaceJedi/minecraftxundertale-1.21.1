@@ -5,7 +5,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber()
 public class BoneSpike {
     private static EvokerFangs bone_spike;
 
@@ -13,9 +17,10 @@ public class BoneSpike {
         ServerLevel level = player.serverLevel().getLevel();
         Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 
-            bone_spike = new EvokerFangs(EntityType.EVOKER_FANGS, level);
-            bone_spike.setPos(posInFront.x, posInFront.y, posInFront.z);
-            level.addFreshEntity(bone_spike);
+        bone_spike = new EvokerFangs(EntityType.EVOKER_FANGS, level);
+        bone_spike.setPos(posInFront.x, posInFront.y, posInFront.z);
+        bone_spike.setOwner(player);
+        level.addFreshEntity(bone_spike);
     }
 
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
@@ -30,4 +35,10 @@ public class BoneSpike {
         return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
     }
 
+    @SubscribeEvent
+    public static void boneSpikeHit(LivingHurtEvent event) {
+        if (event.getSource().getEntity() == bone_spike) {
+            event.getEntity().setDeltaMovement(0, 10, 0);
+        }
+    }
 }
