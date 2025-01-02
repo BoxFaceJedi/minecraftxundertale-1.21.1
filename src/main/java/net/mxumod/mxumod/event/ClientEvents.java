@@ -20,7 +20,7 @@ import net.mxumod.mxumod.util.Keybinding;
 
 
 public class ClientEvents {
-    private static final long DODGE_COOLDOWN_MS = 500;
+    private static final long DODGE_COOLDOWN_MS = 750;
     private static long lastDodgeTime = 0;
 
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
@@ -42,8 +42,8 @@ public class ClientEvents {
                     }
                 }
                 if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
-                    if (minecraft.player.getInventory().selected == 0) {
-                        Dodge.dodge(minecraft.player, 0.1);
+                    if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
+                        Dodge.dodge(minecraft.player, 15);
                     }
                     lastDodgeTime = currentTime;
                 }
