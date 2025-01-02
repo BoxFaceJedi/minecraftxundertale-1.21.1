@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.*;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
+import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 
 public class ModMessages {
@@ -36,6 +37,12 @@ public class ModMessages {
                     .decoder(BlockingC2SPacket::new)
                     .encoder(BlockingC2SPacket::toBytes)
                     .consumerMainThread(BlockingC2SPacket::handle)
+                    .add();
+
+            net.messageBuilder(BoneSpikeC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                    .decoder(BoneSpikeC2SPacket::new)
+                    .encoder(BoneSpikeC2SPacket::toBytes)
+                    .consumerMainThread(BoneSpikeC2SPacket::handle)
                     .add();
 
         }

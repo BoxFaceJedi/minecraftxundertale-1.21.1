@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
+import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
 import net.mxumod.mxumod.skill.Dodge;
@@ -47,7 +48,9 @@ public class ClientEvents {
                     lastDodgeTime = currentTime;
                 }
                 if (Keybinding.SPECIAL_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
-                    minecraft.player.sendSystemMessage(Component.literal("SPECIAL attack"));
+                    if (minecraft.player.getInventory().selected == 0) {
+                        ModMessages.sendToServer((new BoneSpikeC2SPacket()));
+                    }
                 }
                 if (Keybinding.ULTIMATE_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
                     minecraft.player.sendSystemMessage(Component.literal("ult attack"));
