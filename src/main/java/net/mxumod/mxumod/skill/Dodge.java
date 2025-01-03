@@ -1,6 +1,8 @@
 package net.mxumod.mxumod.skill;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,11 +16,12 @@ public class Dodge {
 
     public static void dodge(Player player, double speed) {
         player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(speed, 1, speed));
+        player.sendSystemMessage(Component.literal(String.valueOf(player.getDeltaMovement().length())));
     }
     @SubscribeEvent
     public static void onLivingEntityAttack(LivingAttackEvent event) {
-        if (event.getEntity() instanceof Player player && event.getSource().getEntity() != null) {
-
+        if (event.getEntity() instanceof Player player && player.getDeltaMovement().length() > 1.0) {
+            event.setCanceled(true);
         }
     }
 }
