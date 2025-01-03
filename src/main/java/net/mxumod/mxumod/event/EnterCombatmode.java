@@ -42,6 +42,8 @@ public class EnterCombatmode {
     @SubscribeEvent
     public static void onRightClickEntityInteract (PlayerInteractEvent.EntityInteract event) {event.setCanceled(combatmode);}
     @SubscribeEvent
+    public static void onRightClickItem (PlayerInteractEvent.RightClickItem event) {event.setCanceled(combatmode);}
+    @SubscribeEvent
     public static void onOpenInventory (ScreenEvent event) {
         if (event.getScreen() instanceof InventoryScreen && combatmode) {
             event.setCanceled(true);
@@ -49,8 +51,10 @@ public class EnterCombatmode {
     }
     @SubscribeEvent
     public static void disabledDropItem(ItemTossEvent event) {
-        event.getPlayer().addItem(event.getEntity().getItem());
-        event.getEntity().remove(Entity.RemovalReason.DISCARDED);
+        if (combatmode) {
+            event.getPlayer().addItem(event.getEntity().getItem());
+            event.setCanceled(true);
+        }
     }
 
 }
