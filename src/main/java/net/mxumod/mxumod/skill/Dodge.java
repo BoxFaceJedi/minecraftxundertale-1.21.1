@@ -6,7 +6,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
@@ -40,7 +39,6 @@ public class Dodge {
                     // Cancel the damage during i-frames
                     event.setCanceled(true);
                     player.serverLevel().playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.WIND_CHARGE_BURST, SoundSource.PLAYERS, 1.0f, 1.0f);
-                    return;
                 } else {
                     // Remove player from the tracker after i-frames expire
                     iFrameTracker.remove(player);
