@@ -32,9 +32,9 @@ public class BoneSpike {
         bone_spike.setOwner(player);
         level.addFreshEntity(bone_spike);
 
-        for (LivingEntity entity : entityInFront) {
-            entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, 1.5, 0.0));
-        }
+        //for (LivingEntity entity : entityInFront) {
+            //entity.setDeltaMovement(entity.getDeltaMovement().normalize().add(0.0, 2.5, 0.0));
+        //}
     }
 
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
@@ -50,10 +50,11 @@ public class BoneSpike {
     }
 
     @SubscribeEvent
-    public static void boneSpikeHit(LivingHurtEvent event) {
+    public static void boneSpikeHit(LivingAttackEvent event) {
         if (event.getSource().getDirectEntity() instanceof EvokerFangs fangs) {
-            if (fangs.getOwner() instanceof Player) {
-                event.getEntity().setDeltaMovement(0.0, 10.0, 0.0);
+            if (fangs.getOwner() instanceof Player player) {
+                event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().normalize().multiply(0.0, 2.0, 0.0));
+                player.sendSystemMessage(Component.literal("SPECIAL ATTACK"));
             }
         }
     }
