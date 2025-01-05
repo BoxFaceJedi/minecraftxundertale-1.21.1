@@ -24,7 +24,9 @@ public class Dodge {
         player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(speed, 0, speed));
 
         // Activate i-frames
-        iFrameTracker.put(player, System.currentTimeMillis());
+        if (player.getDeltaMovement().length() != 0.0) {
+            iFrameTracker.put(player, System.currentTimeMillis());
+        }
     }
 
     @SubscribeEvent
