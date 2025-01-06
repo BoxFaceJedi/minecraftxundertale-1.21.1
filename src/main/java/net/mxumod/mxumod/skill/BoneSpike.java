@@ -21,20 +21,17 @@ import java.util.List;
 
 @Mod.EventBusSubscriber()
 public class BoneSpike {
-
+    static Vec3 posInFront;
+    static List<LivingEntity> entityInFront;
     public static void boneSpikeAttack(ServerPlayer player) {
         ServerLevel level = player.serverLevel().getLevel();
-        Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
-        List<LivingEntity> entityInFront = level.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(posInFront, 1, 1, 1));
+        posInFront = getPositionInFrontOfPlayer(player, 1);
+        entityInFront = level.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(posInFront, 1, 1, 1));
 
         EvokerFangs bone_spike = new EvokerFangs(EntityType.EVOKER_FANGS, level);
         bone_spike.setPos(posInFront.x, posInFront.y, posInFront.z);
         bone_spike.setOwner(player);
         level.addFreshEntity(bone_spike);
-
-        //for (LivingEntity entity : entityInFront) {
-            //entity.setDeltaMovement(entity.getDeltaMovement().normalize().add(0.0, 2.5, 0.0));
-        //}
     }
 
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
@@ -53,8 +50,9 @@ public class BoneSpike {
     public static void boneSpikeHit(LivingAttackEvent event) {
         if (event.getSource().getDirectEntity() instanceof EvokerFangs fangs) {
             if (fangs.getOwner() instanceof Player player) {
-                event.getEntity().setDeltaMovement(event.getEntity().getDeltaMovement().normalize().multiply(0.0, 2.0, 0.0));
-                player.sendSystemMessage(Component.literal("SPECIAL ATTACK"));
+                for (LivingEntity entity : entityInFront) {
+                    entity.setDeltaMovement(entity.getDeltaMovement().normalize().add(0.0, 2.5, 0.0));
+                }
             }
         }
     }
