@@ -1,25 +1,22 @@
 package net.mxumod.mxumod.skill;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.mxumod.mxumod.MxuMod;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
-@Mod.EventBusSubscriber()
+@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
 public class BoneSpike {
     static Vec3 posInFront;
     static List<LivingEntity> entityInFront;
