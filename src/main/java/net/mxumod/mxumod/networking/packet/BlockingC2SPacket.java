@@ -3,7 +3,7 @@ package net.mxumod.mxumod.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.mxumod.mxumod.skill.Blocking;
+import net.mxumod.mxumod.skill.slot1.Blocking;
 
 public class BlockingC2SPacket {
     public BlockingC2SPacket() {
