@@ -12,7 +12,7 @@ public class GlowPostProcessor extends MultiInstancePostProcessor<LightingFx> {
 
     @Override
     public ResourceLocation getPostChainLocation() {
-        return ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "glow");
+        return ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "glow_post");
     }
     // Max amount of FxInstances that can be added to the post processor at once
     @Override
