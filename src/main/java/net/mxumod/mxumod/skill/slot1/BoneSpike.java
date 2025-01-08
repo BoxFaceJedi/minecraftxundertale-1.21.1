@@ -12,9 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.mxumod.mxumod.LightingFx;
 import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.TestShaderProcessor;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -32,10 +30,6 @@ public class BoneSpike {
         bone_spike.setPos(posInFront.x, posInFront.y, posInFront.z);
         bone_spike.setOwner(player);
         level.addFreshEntity(bone_spike);
-
-        Vector3f center = new Vector3f(posInFront.toVector3f());
-        Vector3f color = new Vector3f(1, 0, 1);
-        TestShaderProcessor.INSTANCE.addFxInstance(new LightingFx(center, color));
     }
 
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {

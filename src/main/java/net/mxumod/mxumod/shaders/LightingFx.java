@@ -1,4 +1,4 @@
-package net.mxumod.mxumod;
+package net.mxumod.mxumod.shaders;
 
 import org.joml.Vector3f;
 import team.lodestar.lodestone.systems.postprocess.DynamicShaderFxInstance;
@@ -6,7 +6,6 @@ import team.lodestar.lodestone.systems.postprocess.DynamicShaderFxInstance;
 import java.util.function.BiConsumer;
 
 public class LightingFx extends DynamicShaderFxInstance {
-
     public Vector3f center;
     public Vector3f color;
 

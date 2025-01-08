@@ -13,6 +13,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mxumod.mxumod.networking.ModMessages;
+import net.mxumod.mxumod.shaders.GlowPostProcessor;
+import net.mxumod.mxumod.shaders.LightingFx;
+import org.joml.Vector3f;
 import org.slf4j.Logger;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
 
@@ -50,6 +53,10 @@ public class MxuMod {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
 
+        Vector3f center = new Vector3f(8, -60, 8);
+        Vector3f color = new Vector3f(1, 0, 1);
+        GlowPostProcessor.INSTANCE.addFxInstance(new LightingFx(center, color));
+
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -57,7 +64,7 @@ public class MxuMod {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            PostProcessHandler.addInstance(TestShaderProcessor.INSTANCE);
+            PostProcessHandler.addInstance(GlowPostProcessor.INSTANCE);
         }
     }
 }
