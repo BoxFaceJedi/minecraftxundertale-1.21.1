@@ -2,13 +2,10 @@ package net.mxumod.mxumod.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
@@ -32,15 +29,17 @@ public class ClientEvents {
         private static final Minecraft minecraft = Minecraft.getInstance();
 
         @SubscribeEvent
-        public  static void onKeyInput(InputEvent.Key event) {
+        public static void onKeyInput(InputEvent.Key event) {
             if (minecraft.player != null) {
                 long currentTime = System.currentTimeMillis();
                 if (Keybinding.COMBAT_MODE.consumeClick()) {
                     if (!EnterCombatmode.isCombatmode()) {
                         EnterCombatmode.setCombatmode(true);
+                        CameraLock.enableCameraLock();
                         minecraft.player.sendSystemMessage(Component.literal("entering combatmode"));
                     }else {
                         EnterCombatmode.setCombatmode(false);
+                        CameraLock.disableCameraLock();
                         minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));
                     }
                 }

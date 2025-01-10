@@ -3,41 +3,56 @@ package net.mxumod.mxumod.skill;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.joml.Vector3f;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class CameraLock {
     private static final Minecraft mc = Minecraft.getInstance();
-    private static LivingEntity Target=null;
-    private static boolean LockingOn=false;
+    private static LivingEntity Target = null;
 
-
-    public void enableCameraLock() {
-        MinecraftForge.EVENT_BUS.register(this);
+    public static void enableCameraLock() {
+        MinecraftForge.EVENT_BUS.register(CameraLock.class);
     }
 
-    public void disableCameraLock() {
-        MinecraftForge.EVENT_BUS.unregister(this);
+    public static void disableCameraLock() {
+        MinecraftForge.EVENT_BUS.unregister(CameraLock.class);
+    }
+
+
+    public static LivingEntity getTarget() {
+        return Target;
     }
 
     public static void cameraLockOn(LocalPlayer player) {
-        Target = getEntityonMouseIcon(player, 20);
-        if (Target == null) {
-            System.out.println("Nothing selected");
-        }else {
-            System.out.println(Target.getName().getString());
-        }
+        LivingEntity tmp_Target = getEntityonMouseIcon(player, 20);
 
+        if (tmp_Target == Target) {
+            Target = null;
+        }else {
+            Target = tmp_Target;
+        }
+    }
+
+    @SubscribeEvent
+    public static void TargetDetectEvent(LivingDeathEvent event) {
+        if (event.getEntity() == Target) {
+            Target = null;
+        }
+    }
+
+    @SubscribeEvent
+    public static void LockingOn(TickEvent.ClientTickEvent event) {
+        if (Target != null) {
+            assert mc.player != null;
+            mc.player.lookAt(EntityAnchorArgument.Anchor.EYES, Target.getEyePosition());
+        }
     }
 
     private static AABB scaleAABB(AABB BoundingBox, double Scale) {
