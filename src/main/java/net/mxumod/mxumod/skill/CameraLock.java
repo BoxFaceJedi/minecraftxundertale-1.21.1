@@ -32,7 +32,7 @@ public class CameraLock {
     }
 
     public static void cameraLockOn(LocalPlayer player) {
-        LivingEntity tmp_Target = getEntityonMouseIcon(player, 20);
+        LivingEntity tmp_Target = getEntityOnMouseIcon(player, 20);
 
         if (tmp_Target == Target.getValue()) {
             Target.setValue(null);
@@ -54,6 +54,7 @@ public class CameraLock {
         @Override
         public void run() {
             while (Target.getValue() != null) {
+                assert mc.player != null;
                 mc.player.lookAt(EntityAnchorArgument.Anchor.EYES, Target.getValue().getEyePosition());
                 try {
                     Thread.sleep(2);
@@ -75,13 +76,14 @@ public class CameraLock {
         }
 
         public static void main() {
-            Target.addChangeListener((oldValue, newValue) -> setLockingThread(oldValue, newValue));
+            Target.addChangeListener(ThreadOfLockingOn::setLockingThread);
         }
     }
 
     private static AABB scaleAABB(AABB BoundingBox, double Scale) {
         Vec3 center = BoundingBox.getCenter();
-        AABB ScaledBox = new AABB(
+
+        return new AABB(
                 center.x - BoundingBox.getXsize()*Scale/2,
                 center.y - BoundingBox.getYsize()*Scale/2,
                 center.z - BoundingBox.getZsize()*Scale/2,
@@ -89,12 +91,9 @@ public class CameraLock {
                 center.y + BoundingBox.getYsize()*Scale/2,
                 center.z + BoundingBox.getZsize()*Scale/2
         );
-
-
-        return ScaledBox;
     }
 
-    private static LivingEntity getEntityonMouseIcon (LocalPlayer player, double distance) {
+    private static LivingEntity getEntityOnMouseIcon(LocalPlayer player, double distance) {
         Camera camera = mc.gameRenderer.getMainCamera();
         Vec3 LookVector = new Vec3(camera.getLookVector()).normalize();
 
