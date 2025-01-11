@@ -15,6 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.shaders.GlowPostProcessor;
 import net.mxumod.mxumod.shaders.LightingFx;
+import net.mxumod.mxumod.skill.CameraLock;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
@@ -38,6 +39,8 @@ public class MxuMod {
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        CameraLock.ThreadOfLockingOn.main();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
