@@ -36,11 +36,11 @@ public class ClientEvents {
                 if (Keybinding.COMBAT_MODE.consumeClick()) {
                     if (!EnterCombatmode.isCombatmode()) {
                         EnterCombatmode.setCombatmode(true);
-                        CameraLock.enableCameraLock();
+                        CameraLock.enabledEvent();
                         minecraft.player.sendSystemMessage(Component.literal("entering combatmode"));
                     }else {
                         EnterCombatmode.setCombatmode(false);
-                        CameraLock.disableCameraLock();
+                        CameraLock.disabledEvent();
                         if (Blocking.isBlocking()) {
                             ModMessages.sendToServer(new BlockingC2SPacket());
                         }
