@@ -13,6 +13,10 @@ import net.mxumod.mxumod.MxuMod;
 
 public class Blocking {
 
+    public static boolean isIsBlocking() {
+        return isBlocking;
+    }
+
     public static boolean isBlocking;
     private static IronGolem blockingGolem;
 

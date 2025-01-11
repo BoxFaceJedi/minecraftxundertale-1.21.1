@@ -15,6 +15,7 @@ import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
 import net.mxumod.mxumod.skill.Dodge;
+import net.mxumod.mxumod.skill.slot1.Blocking;
 import net.mxumod.mxumod.util.Keybinding;
 
 
@@ -40,6 +41,9 @@ public class ClientEvents {
                     }else {
                         EnterCombatmode.setCombatmode(false);
                         CameraLock.disableCameraLock();
+                        if (Blocking.isIsBlocking()) {
+                            ModMessages.sendToServer(new BlockingC2SPacket());
+                        }
                         minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));
                     }
                 }
