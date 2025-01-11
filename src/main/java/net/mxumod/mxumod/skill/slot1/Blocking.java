@@ -13,18 +13,18 @@ import net.mxumod.mxumod.MxuMod;
 
 public class Blocking {
 
-    public static boolean isIsBlocking() {
-        return isBlocking;
+    public static boolean isBlocking() {
+        return blocking;
     }
 
-    public static boolean isBlocking;
+    public static boolean blocking;
     private static IronGolem blockingGolem;
 
     public static void blocking(ServerPlayer player) {
         ServerLevel level = player.serverLevel().getLevel();
         Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 
-        if (!isBlocking) {
+        if (!blocking) {
             blockingGolem = new IronGolem(EntityType.IRON_GOLEM, level);
             blockingGolem.setNoAi(true);
             blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
@@ -32,7 +32,7 @@ public class Blocking {
 
             applySpeedModifier(player, 0.35);
 
-            isBlocking = true;
+            blocking = true;
         } else {
             if (blockingGolem != null) {
                 blockingGolem.kill();
@@ -40,7 +40,7 @@ public class Blocking {
                 removeModifier(player);
             }
             blockingGolem = null;
-            isBlocking = false;
+            blocking = false;
         }
     }
 

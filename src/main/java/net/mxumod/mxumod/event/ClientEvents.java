@@ -41,7 +41,7 @@ public class ClientEvents {
                     }else {
                         EnterCombatmode.setCombatmode(false);
                         CameraLock.disableCameraLock();
-                        if (Blocking.isIsBlocking()) {
+                        if (Blocking.isBlocking()) {
                             ModMessages.sendToServer(new BlockingC2SPacket());
                         }
                         minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));
