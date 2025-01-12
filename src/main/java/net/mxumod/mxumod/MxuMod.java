@@ -13,9 +13,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mxumod.mxumod.networking.ModMessages;
-import net.mxumod.mxumod.shaders.GlowPostProcessor;
-import net.mxumod.mxumod.shaders.LightingFx;
-import net.mxumod.mxumod.skill.CameraLock;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
@@ -56,7 +53,6 @@ public class MxuMod {
 
         Vector3f center = new Vector3f(8, -60, 8);
         Vector3f color = new Vector3f(1, 0, 1);
-        GlowPostProcessor.INSTANCE.addFxInstance(new LightingFx(center, color));
 
     }
 
@@ -65,7 +61,6 @@ public class MxuMod {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            PostProcessHandler.addInstance(GlowPostProcessor.INSTANCE);
         }
     }
 }
