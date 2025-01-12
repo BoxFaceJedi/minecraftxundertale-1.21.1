@@ -27,6 +27,8 @@ public class CameraLock {
         MinecraftForge.EVENT_BUS.unregister(CameraLock.class);
     }
 
+
+
     public static void toggleCameraLock(LocalPlayer player) {
         LivingEntity newTarget = getEntityOnMouseIcon(player, 20);
 
@@ -112,7 +114,9 @@ public class CameraLock {
                 cameraPos.z + lookVector.z * distance
         );
 
-        List<LivingEntity> entities = player.level().getEntitiesOfClass(LivingEntity.class, rangeBox);
+        List<LivingEntity> entities = player.level().getEntitiesOfClass(LivingEntity.class, rangeBox).stream()
+                .filter(entity -> entity != player)
+                .toList();
 
         double nearestDistance = distance;
         LivingEntity nearestEntity = null;
