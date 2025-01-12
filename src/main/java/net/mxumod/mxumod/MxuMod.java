@@ -39,8 +39,6 @@ public class MxuMod {
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
-        CameraLock.ThreadOfLockingOn.main();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

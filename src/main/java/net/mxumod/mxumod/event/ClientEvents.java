@@ -36,11 +36,11 @@ public class ClientEvents {
                 if (Keybinding.COMBAT_MODE.consumeClick()) {
                     if (!EnterCombatmode.isCombatmode()) {
                         EnterCombatmode.setCombatmode(true);
-                        CameraLock.enabledEvent();
+                        CameraLock.enableEvent();
                         minecraft.player.sendSystemMessage(Component.literal("entering combatmode"));
                     }else {
                         EnterCombatmode.setCombatmode(false);
-                        CameraLock.disabledEvent();
+                        CameraLock.disableEvent();
                         if (Blocking.isBlocking()) {
                             ModMessages.sendToServer(new BlockingC2SPacket());
                         }
@@ -84,7 +84,7 @@ public class ClientEvents {
                     }
                 }
                 if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {
-                    CameraLock.cameraLockOn(minecraft.player);
+                    CameraLock.toggleCameraLock(minecraft.player);
                 }
             }
         }

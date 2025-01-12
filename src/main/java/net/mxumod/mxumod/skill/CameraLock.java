@@ -3,12 +3,13 @@ package net.mxumod.mxumod.skill;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.*;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.mxumod.mxumod.libraries.ObservableValue;
 
 import java.util.List;
@@ -16,28 +17,24 @@ import java.util.Optional;
 
 public class CameraLock {
     private static final Minecraft mc = Minecraft.getInstance();
-    private static ObservableValue<LivingEntity> Target = new ObservableValue<>(null);
+    private static final ObservableValue<LivingEntity> Target = new ObservableValue<>(null);
+    private static final float SMOOTH_FACTOR = 0.2f; // Controls smoothness of rotation (0.1-0.3 recommended).
 
-
-    public static Object getTarget() {
-        return Target.getValue();
-    }
-
-    public static void enabledEvent() {
+    public static void enableEvent() {
         MinecraftForge.EVENT_BUS.register(CameraLock.class);
     }
 
-    public static void disabledEvent() {
+    public static void disableEvent() {
         MinecraftForge.EVENT_BUS.unregister(CameraLock.class);
     }
 
-    public static void cameraLockOn(LocalPlayer player) {
-        LivingEntity tmp_Target = getEntityOnMouseIcon(player, 20);
+    public static void toggleCameraLock(LocalPlayer player) {
+        LivingEntity newTarget = getEntityOnMouseIcon(player, 20);
 
-        if (tmp_Target == Target.getValue()) {
+        if (newTarget == Target.getValue()) {
             Target.setValue(null);
-        }else {
-            Target.setValue(tmp_Target);
+        } else {
+            Target.setValue(newTarget);
         }
     }
 
@@ -45,80 +42,90 @@ public class CameraLock {
     public static void livingTargetDetect(LivingDeathEvent event) {
         if (event.getEntity() == Target.getValue()) {
             Target.setValue(null);
-        }else {
-            System.out.println(event.getEntity().getName().getString());
         }
     }
 
-    public static class ThreadOfLockingOn extends Thread {
-        @Override
-        public void run() {
-            while (Target.getValue() != null) {
-                assert mc.player != null;
-                mc.player.lookAt(EntityAnchorArgument.Anchor.EYES, Target.getValue().getEyePosition());
-                try {
-                    Thread.sleep(2);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+    @SubscribeEvent
+    public static void onClientTick(RenderLivingEvent.Pre<?, ?> event) {
+        if (Target.getValue() == null) {
+            return;
         }
 
-        static ThreadOfLockingOn LockingThread = null;
-
-        private static void setLockingThread(LivingEntity oldValue, LivingEntity newValue) {
-            if (newValue != null) {
-                LockingThread = new ThreadOfLockingOn();
-                LockingThread.start();
-            }else {
-                LockingThread = null;
-            }
-        }
-
-        public static void main() {
-            Target.addChangeListener(ThreadOfLockingOn::setLockingThread);
+        if (mc.player != null) {
+            smoothLookAt(mc.player, Target.getValue());
         }
     }
 
-    private static AABB scaleAABB(AABB BoundingBox, double Scale) {
-        Vec3 center = BoundingBox.getCenter();
+    private static void smoothLookAt(LocalPlayer player, LivingEntity target) {
+        Vec3 targetPos = target.getEyePosition();
+        Vec3 playerPos = player.getEyePosition();
+
+        double dx = targetPos.x - playerPos.x;
+        double dy = targetPos.y - playerPos.y;
+        double dz = targetPos.z - playerPos.z;
+
+        double distanceXZ = Math.sqrt(dx * dx + dz * dz);
+        float targetYaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90.0f;
+        float targetPitch = (float) -Math.toDegrees(Math.atan2(dy, distanceXZ));
+
+        // Smoothly interpolate yaw and pitch
+        float newYaw = interpolateAngle(player.getYRot(), targetYaw, SMOOTH_FACTOR);
+        float newPitch = interpolateAngle(player.getXRot(), targetPitch, SMOOTH_FACTOR);
+
+        player.setYRot(newYaw);
+        player.setXRot(newPitch);
+    }
+
+    private static float interpolateAngle(float current, float target, float factor) {
+        float delta = normalizeAngle(target - current);
+        return current + delta * factor;
+    }
+
+    private static float normalizeAngle(float angle) {
+        angle = angle % 360.0f;
+        if (angle > 180.0f) angle -= 360.0f;
+        if (angle < -180.0f) angle += 360.0f;
+        return angle;
+    }
+
+    private static AABB scaleAABB(AABB boundingBox, double scale) {
+        Vec3 center = boundingBox.getCenter();
 
         return new AABB(
-                center.x - BoundingBox.getXsize()*Scale/2,
-                center.y - BoundingBox.getYsize()*Scale/2,
-                center.z - BoundingBox.getZsize()*Scale/2,
-                center.x + BoundingBox.getXsize()*Scale/2,
-                center.y + BoundingBox.getYsize()*Scale/2,
-                center.z + BoundingBox.getZsize()*Scale/2
+                center.x - boundingBox.getXsize() * scale / 2,
+                center.y - boundingBox.getYsize() * scale / 2,
+                center.z - boundingBox.getZsize() * scale / 2,
+                center.x + boundingBox.getXsize() * scale / 2,
+                center.y + boundingBox.getYsize() * scale / 2,
+                center.z + boundingBox.getZsize() * scale / 2
         );
     }
 
     private static LivingEntity getEntityOnMouseIcon(LocalPlayer player, double distance) {
         Camera camera = mc.gameRenderer.getMainCamera();
-        Vec3 LookVector = new Vec3(camera.getLookVector()).normalize();
+        Vec3 lookVector = new Vec3(camera.getLookVector().x(), camera.getLookVector().y(), camera.getLookVector().z()).normalize();
+        Vec3 cameraPos = camera.getPosition();
 
-        Vec3 CameraPos = camera.getPosition();
-        double  x = camera.getPosition().x();
-        double y = player.getY();
-        double z = player.getZ();
+        AABB rangeBox = new AABB(
+                cameraPos.x, cameraPos.y, cameraPos.z,
+                cameraPos.x + lookVector.x * distance,
+                cameraPos.y + lookVector.y * distance,
+                cameraPos.z + lookVector.z * distance
+        );
 
-        AABB RangeBox = new AABB(CameraPos, CameraPos.add(LookVector.scale(distance)));
-
-        List<LivingEntity> entities = player.level().getEntitiesOfClass(LivingEntity.class, RangeBox);
+        List<LivingEntity> entities = player.level().getEntitiesOfClass(LivingEntity.class, rangeBox);
 
         double nearestDistance = distance;
         LivingEntity nearestEntity = null;
 
         for (LivingEntity entity : entities) {
             if (entity.isDeadOrDying()) continue;
-            AABB tmp_EntityBox = scaleAABB(entity.getBoundingBox(), 7.5);
-            Optional<Vec3> result = tmp_EntityBox.clip(CameraPos, CameraPos.add(LookVector.scale(distance)));
+            AABB entityBox = scaleAABB(entity.getBoundingBox(), 7.5);
+            Optional<Vec3> result = entityBox.clip(cameraPos, cameraPos.add(lookVector.scale(distance)));
 
-            if (!result.isEmpty()) {
-                if (result.get().distanceTo(CameraPos) < nearestDistance) {
-                    nearestEntity = entity;
-                    nearestDistance = result.get().distanceTo(CameraPos);
-                }
+            if (result.isPresent() && result.get().distanceTo(cameraPos) < nearestDistance) {
+                nearestEntity = entity;
+                nearestDistance = result.get().distanceTo(cameraPos);
             }
         }
         return nearestEntity;
