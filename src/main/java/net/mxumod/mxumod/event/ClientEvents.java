@@ -2,10 +2,12 @@ package net.mxumod.mxumod.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
@@ -86,6 +88,12 @@ public class ClientEvents {
                 if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {
                     CameraLock.toggleCameraLock(minecraft.player);
                 }
+            }
+        }
+        @SubscribeEvent
+        public static void onPlayerDeath(LivingDeathEvent event) {
+            if (event.getEntity() instanceof Player) {
+                CameraLock.disableEvent();
             }
         }
     }

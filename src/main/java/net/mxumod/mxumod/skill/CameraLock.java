@@ -25,6 +25,7 @@ public class CameraLock {
 
     public static void disableEvent() {
         MinecraftForge.EVENT_BUS.unregister(CameraLock.class);
+        Target.setValue(null);
     }
 
 
