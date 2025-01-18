@@ -17,7 +17,6 @@ import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
 import net.mxumod.mxumod.skill.Dodge;
-import net.mxumod.mxumod.skill.slot1.Blocking;
 import net.mxumod.mxumod.util.Keybinding;
 
 
@@ -37,16 +36,9 @@ public class ClientEvents {
                 long currentTime = System.currentTimeMillis();
                 if (Keybinding.COMBAT_MODE.consumeClick()) {
                     if (!EnterCombatmode.isCombatmode()) {
-                        EnterCombatmode.setCombatmode(true);
-                        CameraLock.enableEvent();
-                        minecraft.player.sendSystemMessage(Component.literal("entering combatmode"));
+                        EnterCombatmode.enterCombatmode();
                     }else {
-                        EnterCombatmode.setCombatmode(false);
-                        CameraLock.disableEvent();
-                        if (Blocking.isBlocking()) {
-                            ModMessages.sendToServer(new BlockingC2SPacket());
-                        }
-                        minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));
+                        EnterCombatmode.leaveCombatmode();
                     }
                 }
                 if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
@@ -93,7 +85,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onPlayerDeath(LivingDeathEvent event) {
             if (event.getEntity() instanceof Player) {
-                CameraLock.disableEvent();
+                EnterCombatmode.leaveCombatmode();
             }
         }
     }

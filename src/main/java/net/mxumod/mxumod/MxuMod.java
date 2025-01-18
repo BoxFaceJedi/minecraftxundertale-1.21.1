@@ -1,7 +1,12 @@
 package net.mxumod.mxumod;
 
 import com.mojang.logging.LogUtils;
+import com.sun.jna.platform.unix.X11;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -13,6 +18,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mxumod.mxumod.networking.ModMessages;
+import org.joml.Options;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;

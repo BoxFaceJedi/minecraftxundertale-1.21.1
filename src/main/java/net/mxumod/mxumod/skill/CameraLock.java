@@ -9,14 +9,13 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.mxumod.mxumod.libraries.ObservableValue;
 
 import java.util.List;
 import java.util.Optional;
 
 public class CameraLock {
     private static final Minecraft mc = Minecraft.getInstance();
-    private static final ObservableValue<LivingEntity> Target = new ObservableValue<>(null);
+    private static LivingEntity Target = null;
     private static final float SMOOTH_FACTOR = 0.2f; // Controls smoothness of rotation (0.1-0.3 recommended).
 
     public static void enableEvent() {
@@ -25,36 +24,34 @@ public class CameraLock {
 
     public static void disableEvent() {
         MinecraftForge.EVENT_BUS.unregister(CameraLock.class);
-        Target.setValue(null);
+        Target = null;
     }
-
-
 
     public static void toggleCameraLock(LocalPlayer player) {
         LivingEntity newTarget = getEntityOnMouseIcon(player, 20);
 
-        if (newTarget == Target.getValue()) {
-            Target.setValue(null);
+        if (newTarget == Target) {
+            Target = null;
         } else {
-            Target.setValue(newTarget);
+            Target = newTarget;
         }
     }
 
     @SubscribeEvent
     public static void livingTargetDetect(LivingDeathEvent event) {
-        if (event.getEntity() == Target.getValue()) {
-            Target.setValue(null);
+        if (event.getEntity() == Target) {
+            Target = null;
         }
     }
 
     @SubscribeEvent
     public static void onClientTick(RenderLivingEvent.Pre<?, ?> event) {
-        if (Target.getValue() == null) {
+        if (Target == null) {
             return;
         }
 
         if (mc.player != null) {
-            smoothLookAt(mc.player, Target.getValue());
+            smoothLookAt(mc.player, Target);
         }
     }
 
