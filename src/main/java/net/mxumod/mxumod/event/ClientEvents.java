@@ -1,6 +1,7 @@
 package net.mxumod.mxumod.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -40,20 +41,23 @@ public class ClientEvents {
                     }else {
                         EnterCombatmode.leaveCombatmode();
                     }
-                }
-                if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
-                    if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
-                        Dodge.dodge(minecraft.player, 2);
+                } else if (EnterCombatmode.isCombatmode()) {
+                    if (Keybinding.DODGE.consumeClick() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
+                        if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
+                            Dodge.dodge(minecraft.player, 2);
+                        }
+                        lastDodgeTime = currentTime;
+                    }else if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
+                        if (minecraft.player.getInventory().selected == 0) {
+                            ModMessages.sendToServer((new BoneSpikeC2SPacket()));
+                        }
+                    }else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
+                        minecraft.player.sendSystemMessage(Component.literal("ult attack"));
                     }
-                    lastDodgeTime = currentTime;
-                }
-                if (Keybinding.SPECIAL_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
-                    if (minecraft.player.getInventory().selected == 0) {
-                        ModMessages.sendToServer((new BoneSpikeC2SPacket()));
+                }else {
+                    if (Keybinding.SETTINGS.consumeClick()) {
+                        OptionInstance
                     }
-                }
-                if (Keybinding.ULTIMATE_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
-                    minecraft.player.sendSystemMessage(Component.literal("ult attack"));
                 }
             }
         }
@@ -101,6 +105,7 @@ public class ClientEvents {
             event.register(Keybinding.BASIC_ATTACK);
             event.register(Keybinding.BLOCKING);
             event.register(Keybinding.LOCK_ON);
+            event.register(Keybinding.SETTINGS);
         }
     }
 
