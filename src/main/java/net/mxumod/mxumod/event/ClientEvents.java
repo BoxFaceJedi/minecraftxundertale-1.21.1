@@ -56,7 +56,7 @@ public class ClientEvents {
                     }
                 }else {
                     if (Keybinding.SETTINGS.consumeClick()) {
-                        OptionInstance
+
                     }
                 }
             }
