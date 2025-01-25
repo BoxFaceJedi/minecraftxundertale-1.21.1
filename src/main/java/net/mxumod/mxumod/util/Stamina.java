@@ -10,11 +10,9 @@ import net.mxumod.mxumod.libraries.ObservableValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
 public class Stamina {
@@ -44,7 +42,7 @@ public class Stamina {
             try {
                 Thread.sleep(3000);
                 while (Stamina.getValue() < MaxStamina.getValue() && lastActionId == Id) {
-                    Stamina.setValue(Stamina.getValue() + 5, false);
+                    Stamina.setValue(Stamina.getValue() + 5);
                     Thread.sleep(1000);
                 }
                 WaitingList.remove(Id);
