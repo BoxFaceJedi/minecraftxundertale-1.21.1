@@ -3,7 +3,9 @@ package net.mxumod.mxumod.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.mxumod.mxumod.skill.special.BoneSpike;
+import net.mxumod.mxumod.skill.PlayerSkillManager;
+import net.mxumod.mxumod.skill.dodge.SideStepSkill;
+import net.mxumod.mxumod.skill.special.BoneSpikeSkill;
 
 public class BoneSpikeC2SPacket {
     public BoneSpikeC2SPacket() {
@@ -23,7 +25,7 @@ public class BoneSpikeC2SPacket {
 
             ServerPlayer player = context.getSender();
 
-            BoneSpike.boneSpikeAttack(player);
+            new PlayerSkillManager().activateSkill(new BoneSpikeSkill().getName(),player);
 
         });
     }

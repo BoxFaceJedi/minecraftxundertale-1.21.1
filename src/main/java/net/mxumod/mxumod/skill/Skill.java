@@ -2,29 +2,33 @@ package net.mxumod.mxumod.skill;
 
 import net.minecraft.world.entity.player.Player;
 
-public abstract class Skill {
+public abstract class Skill<T extends Player> {
     protected String name;
     protected int manaCost;
-    protected long lastActivationTime = 0;
-    protected long cooldown;
-    protected long currentTime;
+    protected int cooldown;
+    protected int currentCoolDown = 0;
 
-    public Skill(String name, int manaCost, long cooldown) {
+    public Skill(String name, int manaCost, int cooldown) {
         this.name = name;
         this.manaCost = manaCost;
         this.cooldown = cooldown;
     }
 
+    public void tickCoolDown() {
+        if (currentCoolDown < cooldown) {
+            currentCoolDown++;
+        }
+    }
+
     public abstract void activate(Player player);
 
-    public boolean canActivate(Player player, int currentMana) {
-        currentTime = System.currentTimeMillis();
-        if (currentMana >= manaCost && currentTime - lastActivationTime >= cooldown) {
-            lastActivationTime = currentTime;
+    public boolean canActivate(PlayerSkillManager manager) {
+        if (manager.getCurrentMana() >= manaCost && currentCoolDown >= cooldown) {
+            currentCoolDown = 0;
+            manager.reduceMana(manaCost); // Reduce mana via PlayerSkillManager
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public String getName() {
@@ -35,7 +39,11 @@ public abstract class Skill {
         return manaCost;
     }
 
-    public long getCooldown() {
+    public int getCooldown() {
         return cooldown;
+    }
+
+    public int getCurrentCoolDown() {
+        return currentCoolDown;
     }
 }

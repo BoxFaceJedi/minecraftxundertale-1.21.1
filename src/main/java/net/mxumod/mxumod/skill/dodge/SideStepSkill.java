@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
-public class SideStepSkill extends Skill {
+public class SideStepSkill extends Skill<Player> {
 
     private static final Map<Player, Long> iFrameTracker = new HashMap<>();
     private static final long I_FRAME_DURATION = 250; // in milliseconds (1 second)

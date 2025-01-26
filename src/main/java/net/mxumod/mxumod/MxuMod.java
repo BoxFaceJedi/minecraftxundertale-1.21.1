@@ -1,12 +1,7 @@
 package net.mxumod.mxumod;
 
 import com.mojang.logging.LogUtils;
-import com.sun.jna.platform.unix.X11;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.OptionInstance;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -18,10 +13,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mxumod.mxumod.networking.ModMessages;
-import org.joml.Options;
-import org.joml.Vector3f;
+import net.mxumod.mxumod.skill.PlayerSkillManager;
 import org.slf4j.Logger;
-import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MxuMod.MOD_ID)
@@ -57,9 +50,6 @@ public class MxuMod {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
 
-        Vector3f center = new Vector3f(8, -60, 8);
-        Vector3f color = new Vector3f(1, 0, 1);
-
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -67,6 +57,7 @@ public class MxuMod {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            new PlayerSkillManager();
         }
     }
 }

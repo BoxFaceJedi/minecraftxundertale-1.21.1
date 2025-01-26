@@ -40,7 +40,7 @@ public class ClientEvents {
                 }
                 if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode()) {
                     if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
-                       new PlayerSkillManager().activateSkill(new SideStepSkill().getName(), minecraft.player, 200);
+                       new PlayerSkillManager().activateSkill(new SideStepSkill().getName(), minecraft.player);
                     }
                 }
                 if (Keybinding.SPECIAL_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
@@ -62,6 +62,7 @@ public class ClientEvents {
                             ModMessages.sendToServer(new MxuTestC2SPacket());
                         }
                     }
+                    minecraft.player.displayClientMessage(Component.literal(String.valueOf(PlayerSkillManager.getCurrentMana())), true);
                 }
             }
         }
