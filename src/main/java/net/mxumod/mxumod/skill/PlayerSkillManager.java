@@ -7,6 +7,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
+import net.mxumod.mxumod.skill.basic.BoneBarrageSKill;
+import net.mxumod.mxumod.skill.block.BoneWallSkill;
 import net.mxumod.mxumod.skill.dodge.SideStepSkill;
 import net.mxumod.mxumod.skill.special.BoneSpikeSkill;
 
@@ -24,6 +26,8 @@ public class PlayerSkillManager {
         // Add all skills here
         skills.add(new SideStepSkill());
         skills.add(new BoneSpikeSkill());
+        skills.add(new BoneWallSkill());
+        skills.add(new BoneBarrageSKill());
     }
 
     public static int getCurrentMana() {

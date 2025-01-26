@@ -3,14 +3,15 @@ package net.mxumod.mxumod.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.mxumod.mxumod.skill.block.Blocking;
+import net.mxumod.mxumod.skill.PlayerSkillManager;
+import net.mxumod.mxumod.skill.block.BoneWallSkill;
 
-public class BlockingC2SPacket {
-    public BlockingC2SPacket() {
+public class BoneWallC2SPacket {
+    public BoneWallC2SPacket() {
 
     }
 
-    public BlockingC2SPacket(FriendlyByteBuf buf) {
+    public BoneWallC2SPacket(FriendlyByteBuf buf) {
 
     }
 
@@ -24,7 +25,7 @@ public class BlockingC2SPacket {
 
             ServerPlayer player = context.getSender();
 
-            Blocking.blocking(player);
+            new PlayerSkillManager().activateSkill(new BoneWallSkill().getName(),player);
 
         });
     }

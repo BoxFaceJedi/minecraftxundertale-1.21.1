@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.*;
 import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
+import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
 import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 
@@ -33,10 +33,10 @@ public class ModMessages {
                 .consumerMainThread(MxuTestC2SPacket::handle)
                 .add();
 
-        net.messageBuilder(BlockingC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(BlockingC2SPacket::new)
-                .encoder(BlockingC2SPacket::toBytes)
-                .consumerMainThread(BlockingC2SPacket::handle)
+        net.messageBuilder(BoneWallC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(BoneWallC2SPacket::new)
+                .encoder(BoneWallC2SPacket::toBytes)
+                .consumerMainThread(BoneWallC2SPacket::handle)
                 .add();
 
             net.messageBuilder(BoneSpikeC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)

@@ -10,9 +10,9 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.mxumod.mxumod.networking.ModMessages;
-import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
+import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
-import net.mxumod.mxumod.skill.block.Blocking;
+import net.mxumod.mxumod.skill.block.BoneWallSkill;
 
 
 public class EnterCombatmode {
@@ -34,8 +34,8 @@ public class EnterCombatmode {
     public static void leaveCombatmode() {
         disableEvents();
         CameraLock.disableEvent();
-        if (Blocking.isBlocking()) {
-            ModMessages.sendToServer(new BlockingC2SPacket());
+        if (BoneWallSkill.isBlocking()) {
+            ModMessages.sendToServer(new BoneWallC2SPacket());
         }
         combatmode = false;
         minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));

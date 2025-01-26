@@ -10,8 +10,13 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.mxumod.mxumod.MxuMod;
+import net.mxumod.mxumod.skill.Skill;
 
-public class Blocking {
+public class BoneWallSkill extends Skill<ServerPlayer> {
+
+    public BoneWallSkill() {
+        super("Bone Wall", 0, 5);
+    }
 
     public static boolean isBlocking() {
         return blocking;
@@ -19,30 +24,6 @@ public class Blocking {
 
     public static boolean blocking;
     private static IronGolem blockingGolem;
-
-    public static void blocking(ServerPlayer player) {
-        ServerLevel level = player.serverLevel().getLevel();
-        Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
-
-        if (!blocking) {
-            blockingGolem = new IronGolem(EntityType.IRON_GOLEM, level);
-            blockingGolem.setNoAi(true);
-            blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
-            level.addFreshEntity(blockingGolem);
-
-            applySpeedModifier(player, 0.35);
-
-            blocking = true;
-        } else {
-            if (blockingGolem != null) {
-                blockingGolem.kill();
-
-                removeModifier(player);
-            }
-            blockingGolem = null;
-            blocking = false;
-        }
-    }
 
     private static void applySpeedModifier (Player player, double multiplier) {
         var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -80,4 +61,29 @@ public class Blocking {
         return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
     }
 
+    @Override
+    public void activate(Player player) {
+        ServerLevel level = (ServerLevel) player.level();
+        Vec3 posInFront = getPositionInFrontOfPlayer((ServerPlayer) player, 1);
+
+        if (!blocking) {
+            blockingGolem = new IronGolem(EntityType.IRON_GOLEM, level);
+            blockingGolem.setNoAi(true);
+            blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
+            level.addFreshEntity(blockingGolem);
+
+            applySpeedModifier(player, 0.35);
+
+            blocking = true;
+        } else {
+            if (blockingGolem != null) {
+                blockingGolem.kill();
+
+                removeModifier((ServerPlayer) player);
+            }
+            blockingGolem = null;
+            blocking = false;
+        }
+
+    }
 }

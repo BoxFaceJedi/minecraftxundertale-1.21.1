@@ -12,7 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.ModMessages;
-import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
+import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
 import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
@@ -71,7 +71,7 @@ public class ClientEvents {
             if (minecraft.player != null) {
                 if (minecraft.player.getInventory().selected == 0) {
                     if (Keybinding.BLOCKING.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.BASIC_ATTACK.isDown()) {
-                        ModMessages.sendToServer(new BlockingC2SPacket());
+                        ModMessages.sendToServer(new BoneWallC2SPacket());
                     }
                 }
                 if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {

@@ -3,7 +3,8 @@ package net.mxumod.mxumod.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.mxumod.mxumod.skill.basic.ShootArrow;
+import net.mxumod.mxumod.skill.PlayerSkillManager;
+import net.mxumod.mxumod.skill.basic.BoneBarrageSKill;
 
 public class MxuTestC2SPacket {
     public MxuTestC2SPacket() {
@@ -22,7 +23,7 @@ public class MxuTestC2SPacket {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
 
-                ShootArrow.shootArrow(player);
+                new PlayerSkillManager().activateSkill(new BoneBarrageSKill().getName(), player);
 
         });
     }
