@@ -1,4 +1,4 @@
-package net.mxumod.mxumod.skill.slot1;
+package net.mxumod.mxumod.skill.block;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;

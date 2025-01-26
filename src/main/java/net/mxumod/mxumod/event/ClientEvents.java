@@ -16,24 +16,21 @@ import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
 import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
-import net.mxumod.mxumod.skill.Dodge;
+import net.mxumod.mxumod.skill.PlayerSkillManager;
+import net.mxumod.mxumod.skill.dodge.SideStepSkill;
 import net.mxumod.mxumod.util.Keybinding;
 
 
 
 public class ClientEvents {
-    private static final long DODGE_COOLDOWN_MS = 500;
-    private static long lastDodgeTime = 0;
 
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
 
         private static final Minecraft minecraft = Minecraft.getInstance();
-
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if (minecraft.player != null) {
-                long currentTime = System.currentTimeMillis();
                 if (Keybinding.COMBAT_MODE.consumeClick()) {
                     if (!EnterCombatmode.isCombatmode()) {
                         EnterCombatmode.enterCombatmode();
@@ -41,11 +38,10 @@ public class ClientEvents {
                         EnterCombatmode.leaveCombatmode();
                     }
                 }
-                if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
+                if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode()) {
                     if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
-                        Dodge.dodge(minecraft.player, 2);
+                       new PlayerSkillManager().activateSkill(new SideStepSkill().getName(), minecraft.player, 200);
                     }
-                    lastDodgeTime = currentTime;
                 }
                 if (Keybinding.SPECIAL_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
                     if (minecraft.player.getInventory().selected == 0) {

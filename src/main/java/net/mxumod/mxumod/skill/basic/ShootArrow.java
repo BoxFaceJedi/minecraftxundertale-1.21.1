@@ -1,4 +1,4 @@
-package net.mxumod.mxumod.skill.slot1;
+package net.mxumod.mxumod.skill.basic;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

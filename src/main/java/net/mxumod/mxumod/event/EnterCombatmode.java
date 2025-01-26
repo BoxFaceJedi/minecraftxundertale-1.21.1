@@ -2,21 +2,17 @@ package net.mxumod.mxumod.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
-import net.mxumod.mxumod.skill.slot1.Blocking;
+import net.mxumod.mxumod.skill.block.Blocking;
 
 
 public class EnterCombatmode {

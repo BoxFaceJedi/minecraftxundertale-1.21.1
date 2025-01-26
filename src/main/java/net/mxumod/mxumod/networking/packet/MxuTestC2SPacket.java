@@ -3,7 +3,7 @@ package net.mxumod.mxumod.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.mxumod.mxumod.skill.slot1.ShootArrow;
+import net.mxumod.mxumod.skill.basic.ShootArrow;
 
 public class MxuTestC2SPacket {
     public MxuTestC2SPacket() {

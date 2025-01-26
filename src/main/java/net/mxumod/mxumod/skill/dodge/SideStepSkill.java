@@ -1,4 +1,4 @@
-package net.mxumod.mxumod.skill;
+package net.mxumod.mxumod.skill.dodge;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -9,19 +9,25 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
+import net.mxumod.mxumod.skill.Skill;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
-public class Dodge {
+public class SideStepSkill extends Skill {
 
     private static final Map<Player, Long> iFrameTracker = new HashMap<>();
     private static final long I_FRAME_DURATION = 250; // in milliseconds (1 second)
 
-    public static void dodge(Player player, double speed) {
+    public SideStepSkill() {
+        super("Side Step", 0, 10);
+    }
+
+    @Override
+    public void activate(Player player) {
         // Apply dodge movement
-        player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(speed, 0, speed));
+        player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(2.0, 0.0, 2.0));
 
         // Activate i-frames
         if (player.getDeltaMovement().length() != 0.0) {
