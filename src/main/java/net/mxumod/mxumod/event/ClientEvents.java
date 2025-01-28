@@ -1,6 +1,7 @@
 package net.mxumod.mxumod.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -12,44 +13,51 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.ModMessages;
-import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
+import net.mxumod.mxumod.networking.packet.BlockingC2SPacket;
 import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
-import net.mxumod.mxumod.skill.PlayerSkillManager;
-import net.mxumod.mxumod.skill.dodge.SideStepSkill;
+import net.mxumod.mxumod.skill.Dodge;
 import net.mxumod.mxumod.util.Keybinding;
 
 
 
 public class ClientEvents {
+    private static final long DODGE_COOLDOWN_MS = 500;
+    private static long lastDodgeTime = 0;
 
     @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
 
         private static final Minecraft minecraft = Minecraft.getInstance();
+
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if (minecraft.player != null) {
+                long currentTime = System.currentTimeMillis();
                 if (Keybinding.COMBAT_MODE.consumeClick()) {
                     if (!EnterCombatmode.isCombatmode()) {
                         EnterCombatmode.enterCombatmode();
                     }else {
                         EnterCombatmode.leaveCombatmode();
                     }
-                }
-                if (Keybinding.DODGE.consumeClick() && EnterCombatmode.isCombatmode()) {
-                    if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
-                       new PlayerSkillManager().activateSkill(new SideStepSkill().getName(), minecraft.player);
+                } else if (EnterCombatmode.isCombatmode()) {
+                    if (Keybinding.DODGE.consumeClick() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
+                        if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
+                            Dodge.dodge(minecraft.player, 2);
+                        }
+                        lastDodgeTime = currentTime;
+                    }else if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
+                        if (minecraft.player.getInventory().selected == 0) {
+                            ModMessages.sendToServer((new BoneSpikeC2SPacket()));
+                        }
+                    }else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
+                        minecraft.player.sendSystemMessage(Component.literal("ult attack"));
                     }
-                }
-                if (Keybinding.SPECIAL_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
-                    if (minecraft.player.getInventory().selected == 0) {
-                        ModMessages.sendToServer((new BoneSpikeC2SPacket()));
+                }else {
+                    if (Keybinding.SETTINGS.consumeClick()) {
+
                     }
-                }
-                if (Keybinding.ULTIMATE_ATTACK.consumeClick() && EnterCombatmode.isCombatmode()) {
-                    minecraft.player.sendSystemMessage(Component.literal("ult attack"));
                 }
             }
         }
@@ -62,7 +70,6 @@ public class ClientEvents {
                             ModMessages.sendToServer(new MxuTestC2SPacket());
                         }
                     }
-                    minecraft.player.displayClientMessage(Component.literal(String.valueOf(PlayerSkillManager.getCurrentMana())), true);
                 }
             }
         }
@@ -71,7 +78,7 @@ public class ClientEvents {
             if (minecraft.player != null) {
                 if (minecraft.player.getInventory().selected == 0) {
                     if (Keybinding.BLOCKING.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.BASIC_ATTACK.isDown()) {
-                        ModMessages.sendToServer(new BoneWallC2SPacket());
+                        ModMessages.sendToServer(new BlockingC2SPacket());
                     }
                 }
                 if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {

@@ -2,6 +2,7 @@ package net.mxumod.mxumod.libraries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ObservableValue<T> {
     private T value; // 儲存當前值
@@ -16,10 +17,21 @@ public class ObservableValue<T> {
     }
 
     public void setValue(T newValue) {
-        if ((this.value == null && newValue != null) || (this.value != null && !this.value.equals(newValue))) {
+        if (!Objects.equals(this.value, newValue)) {
             T oldValue = this.value;
             this.value = newValue;
 
+            for (ChangeListener<T> listener : listeners) {
+                listener.onChanged(oldValue, newValue);
+            }
+        }
+    }
+
+    public void setValue(T newValue, boolean isEvent) {
+        if (!Objects.equals(this.value, newValue)) {
+            T oldValue = this.value;
+            this.value = newValue;
+            if (!isEvent) return;
             for (ChangeListener<T> listener : listeners) {
                 listener.onChanged(oldValue, newValue);
             }
@@ -36,6 +48,10 @@ public class ObservableValue<T> {
 
     public void removeChangeListener(ChangeListener<T> listener) {
         listeners.remove(listener);
+    }
+
+    public void clearChangeListeners() {
+        listeners.clear();
     }
 }
 

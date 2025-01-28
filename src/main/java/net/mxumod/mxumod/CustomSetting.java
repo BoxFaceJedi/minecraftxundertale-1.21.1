@@ -13,27 +13,27 @@ public class CustomSetting extends ControlsScreen {
         super(parentScreen, parentScreen.getMinecraft().options);
     }
 
-//    @Override
-//    protected void init() {
-//        super.init();
-//
-//        // 獲取控制設定的列表
-//        OptionsList optionsList = this.options.r;
-//
-//        // 計算按鈕位置
-//        int buttonX = this.width / 2 - 155; // 按鈕的 X 座標
-//        int buttonY = this.height / 6 + 72; // 按鈕的 Y 座標
-//
-//        // 為布爾選項新增按鈕
-//        optionsList.addSmall(
-//                ModOptions.TOGGLE_FEATURE_OPTION.createButton(
-//                        this.minecraft.options, // 遊戲選項管理器
-//                        buttonX,                // X 座標
-//                        buttonY,                // Y 座標
-//                        310                     // 按鈕寬度
-//                )
-//        );
-//    }
+    @Override
+    protected void init() {
+        super.init();
+
+        // 獲取控制設定的列表
+        OptionsList optionsList = this.options.r;
+
+        // 計算按鈕位置
+        int buttonX = this.width / 2 - 155; // 按鈕的 X 座標
+        int buttonY = this.height / 6 + 72; // 按鈕的 Y 座標
+
+        // 為布爾選項新增按鈕
+        optionsList.addSmall(
+                ModOptions.TOGGLE_FEATURE_OPTION.createButton(
+                        this.minecraft.options, // 遊戲選項管理器
+                        buttonX,                // X 座標
+                        buttonY,                // Y 座標
+                        310                     // 按鈕寬度
+                )
+        );
+    }
 
     public static void registerOptions(Options options) {
         CameraLock = new OptionInstance<>(
