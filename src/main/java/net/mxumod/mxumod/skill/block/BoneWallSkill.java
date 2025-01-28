@@ -49,18 +49,6 @@ public class BoneWallSkill extends Skill<ServerPlayer> {
         attributes.removeModifier(ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"));
     }
 
-    public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
-        Vec3 playerPos = player.position();
-        double playerYaw = Math.toRadians(player.getYRot());
-
-        double offsetX = -Math.sin(playerYaw) * distance;
-        double offsetZ = Math.cos(playerYaw) * distance;
-
-        double y = player.getY();
-
-        return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
-    }
-
     @Override
     public void activate(Player player) {
         ServerLevel level = (ServerLevel) player.level();

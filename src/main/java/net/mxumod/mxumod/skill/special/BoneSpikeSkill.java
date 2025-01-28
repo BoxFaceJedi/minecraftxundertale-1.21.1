@@ -27,18 +27,6 @@ public class BoneSpikeSkill extends Skill<ServerPlayer> {
         super("Bone Spike", 50, 15);
     }
 
-    public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
-        Vec3 playerPos = player.position();
-        double playerYaw = Math.toRadians(player.getYRot());
-
-        double offsetX = -Math.sin(playerYaw) * distance;
-        double offsetZ = Math.cos(playerYaw) * distance;
-
-        double y = player.getY();
-
-        return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
-    }
-
     @SubscribeEvent
     public static void onLivingAttack(LivingAttackEvent event) {
         // Check if the source is EvokerFangs
