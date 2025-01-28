@@ -6,7 +6,7 @@ import net.minecraftforge.network.*;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
 import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
-import net.mxumod.mxumod.networking.packet.MxuTestC2SPacket;
+import net.mxumod.mxumod.networking.packet.BoneBarrageC2SPacket;
 
 public class ModMessages {
     private static SimpleChannel INSTANCE;
@@ -27,10 +27,10 @@ public class ModMessages {
 
         INSTANCE = net;
 
-        net.messageBuilder(MxuTestC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(MxuTestC2SPacket::new)
-                .encoder(MxuTestC2SPacket::toBytes)
-                .consumerMainThread(MxuTestC2SPacket::handle)
+        net.messageBuilder(BoneBarrageC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(BoneBarrageC2SPacket::new)
+                .encoder(BoneBarrageC2SPacket::toBytes)
+                .consumerMainThread(BoneBarrageC2SPacket::handle)
                 .add();
 
         net.messageBuilder(BoneWallC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
@@ -39,11 +39,11 @@ public class ModMessages {
                 .consumerMainThread(BoneWallC2SPacket::handle)
                 .add();
 
-            net.messageBuilder(BoneSpikeC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                    .decoder(BoneSpikeC2SPacket::new)
-                    .encoder(BoneSpikeC2SPacket::toBytes)
-                    .consumerMainThread(BoneSpikeC2SPacket::handle)
-                    .add();
+        net.messageBuilder(BoneSpikeC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(BoneSpikeC2SPacket::new)
+                .encoder(BoneSpikeC2SPacket::toBytes)
+                .consumerMainThread(BoneSpikeC2SPacket::handle)
+                .add();
 
     }
 

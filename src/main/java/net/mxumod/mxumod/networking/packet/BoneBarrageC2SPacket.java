@@ -6,12 +6,12 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.mxumod.mxumod.skill.PlayerSkillManager;
 import net.mxumod.mxumod.skill.basic.BoneBarrageSKill;
 
-public class MxuTestC2SPacket {
-    public MxuTestC2SPacket() {
+public class BoneBarrageC2SPacket {
+    public BoneBarrageC2SPacket() {
 
     }
 
-    public MxuTestC2SPacket(FriendlyByteBuf buf) {
+    public BoneBarrageC2SPacket(FriendlyByteBuf buf) {
 
     }
 
