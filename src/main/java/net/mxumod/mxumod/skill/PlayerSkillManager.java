@@ -41,7 +41,7 @@ public class PlayerSkillManager {
     public void activateSkill(String skillName, Player player) {
         for (Skill skill : skills) {
             if (skill.getName().equals(skillName)) {
-                if (skill.canActivate(new PlayerSkillManager())) {
+                if (skill.canActivate()) {
                     skill.activate(player);
                 }
                 return;
