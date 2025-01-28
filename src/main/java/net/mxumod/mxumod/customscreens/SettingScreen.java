@@ -14,10 +14,10 @@ public class SettingScreen extends Screen {
         super.init();
     }
 
-    @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float delta) {
-
-    }
+//    @Override
+//    public void render(PoseStack poseStack, int mouseX, int mouseY, float delta) {
+//
+//    }
 
     @Override
     public boolean isPauseScreen() {

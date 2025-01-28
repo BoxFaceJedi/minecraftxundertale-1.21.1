@@ -98,6 +98,7 @@ public class ClientEvents {
             event.register(Keybinding.BASIC_ATTACK);
             event.register(Keybinding.BLOCKING);
             event.register(Keybinding.LOCK_ON);
+            event.register(Keybinding.SETTINGS);
         }
     }
 
