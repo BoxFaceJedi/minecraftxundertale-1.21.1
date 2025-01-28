@@ -27,7 +27,7 @@ public class SideStepSkill extends Skill<Player> {
     @Override
     public void activate(Player player) {
         // Apply dodge movement
-        player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(2.0, 0.0, 2.0));
+        player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(1.5, 0.0, 1.5));
 
         // Activate i-frames
         if (player.getDeltaMovement().length() != 0.0) {
