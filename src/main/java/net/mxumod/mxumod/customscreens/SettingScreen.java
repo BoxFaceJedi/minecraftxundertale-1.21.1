@@ -1,5 +1,5 @@
 package net.mxumod.mxumod.customscreens;
-
+/*
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -25,3 +25,4 @@ public class SettingScreen extends Screen {
         return true;
     }
 }
+*/

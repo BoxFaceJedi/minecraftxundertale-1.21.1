@@ -14,7 +14,7 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.DEDICATED_SERVER)
 public class Stamina {
     private static final HashMap<String, Integer> MaxStaminaDictionary = new HashMap<>() {{
         put("Sans", 100);

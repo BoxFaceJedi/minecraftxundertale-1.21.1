@@ -1,5 +1,5 @@
 package net.mxumod.mxumod;
-
+/*
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.OptionsList;
@@ -49,3 +49,4 @@ public class CustomSetting extends ControlsScreen {
         );
     }
 }
+*/
