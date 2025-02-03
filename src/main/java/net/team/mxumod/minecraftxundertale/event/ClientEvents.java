@@ -30,7 +30,6 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if (minecraft.player != null) {
-                long currentTime = System.currentTimeMillis();
                 if (Keybinding.COMBAT_MODE.consumeClick()) {
                     if (!EnterCombatmode.isCombatmode()) {
                         EnterCombatmode.enterCombatmode();
@@ -38,9 +37,9 @@ public class ClientEvents {
                         EnterCombatmode.leaveCombatmode();
                     }
                 } else if (EnterCombatmode.isCombatmode()) {
-                    if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
+                    if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround() && Keybinding.DODGE.consumeClick()) {
                         new PlayerSkillManager().activateSkill(new SideStepSkill().getName(), minecraft.player);
-                        }
+                    }
                     else if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
                         if (minecraft.player.getInventory().selected == 0) {
                             PacketDistributor.sendToServer((new BoneSpikeC2SPacket()));
