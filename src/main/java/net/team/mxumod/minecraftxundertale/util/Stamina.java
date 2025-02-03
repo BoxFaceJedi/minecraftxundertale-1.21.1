@@ -1,12 +1,12 @@
 package net.team.mxumod.minecraftxundertale.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.libraries.ObservableValue;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
+import net.team.mxumod.minecraftxundertale.libraries.ObservableValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.DEDICATED_SERVER)
+@EventBusSubscriber(modid = Minecraftxundertale.MODID, value = Dist.DEDICATED_SERVER)
 public class Stamina {
     private static final HashMap<String, Integer> MaxStaminaDictionary = new HashMap<>() {{
         put("Sans", 100);
@@ -67,6 +67,6 @@ public class Stamina {
 
     @SubscribeEvent
     public static void startClass(PlayerEvent.PlayerLoggedInEvent event) {
-        Stamina.addChangeListener((net.mxumod.mxumod.util.Stamina::staminaHandler));
+        Stamina.addChangeListener((net.team.mxumod.minecraftxundertale.util.Stamina::staminaHandler));
     }
 }

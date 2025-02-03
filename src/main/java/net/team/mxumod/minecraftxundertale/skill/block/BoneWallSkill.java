@@ -9,8 +9,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.skill.Skill;
+import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
+import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 public class BoneWallSkill extends Skill<ServerPlayer> {
 
@@ -30,10 +30,10 @@ public class BoneWallSkill extends Skill<ServerPlayer> {
 
         if (attributes == null) return;
 
-        if (!attributes.hasModifier(ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"))) {
+        if (!attributes.hasModifier(ResourceLocation.fromNamespaceAndPath(Minecraftxundertale.MODID, "blocking_speed"))) {
 
             AttributeModifier modifier = new AttributeModifier(
-                    ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"),
+                    ResourceLocation.fromNamespaceAndPath(Minecraftxundertale.MODID, "blocking_speed"),
                     -1.0 + multiplier,
                     AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
             );
@@ -46,7 +46,7 @@ public class BoneWallSkill extends Skill<ServerPlayer> {
         var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attributes == null) return;
 
-        attributes.removeModifier(ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "blocking_speed"));
+        attributes.removeModifier(ResourceLocation.fromNamespaceAndPath(Minecraftxundertale.MODID, "blocking_speed"));
     }
 
     @Override

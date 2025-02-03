@@ -3,18 +3,20 @@ package net.team.mxumod.minecraftxundertale.skill.dodge;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.skill.Skill;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
+import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minecraftxundertale.MODID, value = Dist.CLIENT)
 public class SideStepSkill extends Skill<Player> {
 
     private static final Map<Player, Long> iFrameTracker = new HashMap<>();
@@ -36,7 +38,7 @@ public class SideStepSkill extends Skill<Player> {
     }
 
     @SubscribeEvent
-    public static void onPlayerHurt(LivingAttackEvent event) {
+    public static void onPlayerHurt(AttackEntityEvent event) {
         // Check if the entity is a player
         if (event.getEntity() instanceof ServerPlayer player) {
             // Check if the player has active i-frames

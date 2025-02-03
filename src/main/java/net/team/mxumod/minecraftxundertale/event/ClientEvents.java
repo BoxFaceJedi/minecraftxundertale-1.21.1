@@ -3,30 +3,29 @@ package net.team.mxumod.minecraftxundertale.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.networking.ModMessages;
-import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
-import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
-import net.mxumod.mxumod.networking.packet.BoneBarrageC2SPacket;
-import net.mxumod.mxumod.skill.CameraLock;
-import net.mxumod.mxumod.skill.PlayerSkillManager;
-import net.mxumod.mxumod.skill.dodge.SideStepSkill;
-import net.mxumod.mxumod.util.Keybinding;
-
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
+import net.team.mxumod.minecraftxundertale.networking.ModMessages;
+import net.team.mxumod.minecraftxundertale.networking.packet.BoneBarrageC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.packet.BoneSpikeC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.packet.BoneWallC2SPacket;
+import net.team.mxumod.minecraftxundertale.skill.CameraLock;
+import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
+import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
+import net.team.mxumod.minecraftxundertale.util.Keybinding;
 
 
 public class ClientEvents {
     private static final long DODGE_COOLDOWN_MS = 500;
     private static long lastDodgeTime = 0;
 
-    @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = Minecraftxundertale.MODID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
 
         private static final Minecraft minecraft = Minecraft.getInstance();
@@ -62,9 +61,9 @@ public class ClientEvents {
             }
         }
         @SubscribeEvent
-        public static void onClientTick(TickEvent.ClientTickEvent event) {
+        public static void onClientTick(ClientTickEvent event) {
             if (minecraft.player != null) {
-                if (event.phase == TickEvent.Phase.END && EnterCombatmode.isCombatmode()) {
+                if (EnterCombatmode.isCombatmode()) {
                     if (minecraft.player.getInventory().selected == 0) {
                         if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown()) {
                             ModMessages.sendToServer(new BoneBarrageC2SPacket());
@@ -94,7 +93,7 @@ public class ClientEvents {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = Minecraftxundertale.MODID, value = Dist.CLIENT,bus = EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
         @SubscribeEvent
         public  static void onKeyRegister(RegisterKeyMappingsEvent event) {

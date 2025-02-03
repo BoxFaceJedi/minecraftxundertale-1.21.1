@@ -5,10 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +19,11 @@ public class CameraLock {
     private static final float SMOOTH_FACTOR = 0.2f; // Controls smoothness of rotation (0.1-0.3 recommended).
 
     public static void enableEvent() {
-        MinecraftForge.EVENT_BUS.register(CameraLock.class);
+        NeoForge.EVENT_BUS.register(CameraLock.class);
     }
 
     public static void disableEvent() {
-        MinecraftForge.EVENT_BUS.unregister(CameraLock.class);
+        NeoForge.EVENT_BUS.unregister(CameraLock.class);
         Target = null;
     }
 

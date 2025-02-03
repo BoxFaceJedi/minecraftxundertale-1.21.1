@@ -1,5 +1,7 @@
 package net.team.mxumod.minecraftxundertale.skill.special;
 
+import net.minecraft.advancements.critereon.EntityHurtPlayerTrigger;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -7,17 +9,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.skill.Skill;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
+import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
+import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 import java.util.WeakHashMap;
 
-@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minecraftxundertale.MODID, value = Dist.CLIENT)
 public class BoneSpikeSkill extends Skill<ServerPlayer> {
     private static final WeakHashMap<LivingEntity, Boolean> attackFlagMap = new WeakHashMap<>();
 
@@ -28,9 +30,9 @@ public class BoneSpikeSkill extends Skill<ServerPlayer> {
     }
 
     @SubscribeEvent
-    public static void onLivingAttack(LivingAttackEvent event) {
+    public static void onLivingAttack(LivingDamageEvent event) {
         // Check if the source is EvokerFangs
-        if (event.getSource().getDirectEntity() instanceof EvokerFangs fangs) {
+        if (event.getEntity().getLastDamageSource().getDirectEntity() instanceof EvokerFangs fangs) {
             // Ensure the fangs' owner is a player
             if (fangs.getOwner() instanceof ServerPlayer player) {
                 // Mark the entity in the map

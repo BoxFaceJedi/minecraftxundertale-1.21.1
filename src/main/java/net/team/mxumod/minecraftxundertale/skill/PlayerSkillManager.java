@@ -2,20 +2,20 @@ package net.team.mxumod.minecraftxundertale.skill;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.skill.basic.BoneBarrageSKill;
-import net.mxumod.mxumod.skill.block.BoneWallSkill;
-import net.mxumod.mxumod.skill.dodge.SideStepSkill;
-import net.mxumod.mxumod.skill.special.BoneSpikeSkill;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
+import net.team.mxumod.minecraftxundertale.skill.basic.BoneBarrageSKill;
+import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
+import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
+import net.team.mxumod.minecraftxundertale.skill.special.BoneSpikeSkill;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minecraftxundertale.MODID, value = Dist.CLIENT)
 public class PlayerSkillManager {
 
     private static final List<Skill> skills = new ArrayList<>();
@@ -51,17 +51,14 @@ public class PlayerSkillManager {
     }
 
     @SubscribeEvent
-    public static void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) { // Only run at the end of each tick
-            // Regenerate mana
-            if (currentMana < TOTAL_MANA) {
-                currentMana++;
-            }
+    public static void onTick(ClientTickEvent event) {
+        if (currentMana < TOTAL_MANA) {
+            currentMana++;
+        }
 
-            // Tick cooldown for all skills
-            for (Skill skill : skills) {
-                skill.tickCoolDown();
-            }
+        // Tick cooldown for all skills
+        for (Skill skill : skills) {
+            skill.tickCoolDown();
         }
     }
 }

@@ -1,9 +1,8 @@
 package net.team.mxumod.minecraftxundertale.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import jdk.jfr.Category;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
 public class Keybinding {
