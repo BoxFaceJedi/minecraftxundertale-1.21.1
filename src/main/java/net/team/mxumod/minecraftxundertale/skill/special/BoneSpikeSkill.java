@@ -28,13 +28,19 @@ public class BoneSpikeSkill extends Skill<ServerPlayer> {
     }
 
     @SubscribeEvent
-    public static void onLivingAttack(LivingDamageEvent.Pre event) {
+    public static void onLivingAttack(LivingDamageEvent.Post event) {
+        // Ensure the entity and last damage source are not null
+        if (event.getEntity().getLastDamageSource() == null) {
+            return;
+        }
+
         // Check if the source is EvokerFangs
         if (event.getEntity().getLastDamageSource().getDirectEntity() instanceof EvokerFangs fangs) {
-            // Ensure the fangs' owner is a player
+            // Ensure the fangs' owner is a player and the player is valid
             if (fangs.getOwner() instanceof ServerPlayer player) {
-                // Mark the entity in the map
+                // Ensure target is valid (should already be LivingEntity, but it's a good safety check)
                 if (event.getEntity() instanceof LivingEntity target) {
+                    // Mark the entity in the map
                     attackFlagMap.put(target, true); // Mark the entity for special treatment
                 }
             }

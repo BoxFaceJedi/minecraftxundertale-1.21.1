@@ -10,7 +10,7 @@ import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.team.mxumod.minecraftxundertale.networking.BoneWallC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.packets.BoneWallC2SPacket;
 import net.team.mxumod.minecraftxundertale.skill.CameraLock;
 import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 
@@ -52,7 +52,9 @@ public class EnterCombatmode {
     @SubscribeEvent
     public static void onRightClickItem (PlayerInteractEvent.RightClickItem event) {event.setCanceled(combatmode);}
     @SubscribeEvent
-    public static void onOpenInventory (ScreenEvent event) {if (event.getScreen() instanceof InventoryScreen && combatmode) {event.getScreen().removed();}}
+    public static void onOpenInventory (ScreenEvent.Opening event) {
+        if (event.getScreen() instanceof InventoryScreen) {event.setCanceled(combatmode);}
+    }
     @SubscribeEvent
     public static void disabledDropItem(ItemTossEvent event) {if (combatmode) {event.getPlayer().addItem(event.getEntity().getItem());event.setCanceled(true);}}
 

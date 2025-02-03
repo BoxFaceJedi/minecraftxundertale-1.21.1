@@ -12,9 +12,9 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
-import net.team.mxumod.minecraftxundertale.networking.BoneSpikeC2SPacket;
-import net.team.mxumod.minecraftxundertale.networking.BoneBarrageC2SPacket;
-import net.team.mxumod.minecraftxundertale.networking.BoneWallC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.packets.BoneSpikeC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.packets.BoneBarrageC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.packets.BoneWallC2SPacket;
 import net.team.mxumod.minecraftxundertale.skill.CameraLock;
 import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
@@ -22,9 +22,6 @@ import net.team.mxumod.minecraftxundertale.util.Keybinding;
 
 
 public class ClientEvents {
-    private static final long DODGE_COOLDOWN_MS = 500;
-    private static long lastDodgeTime = 0;
-
     @EventBusSubscriber(modid = Minecraftxundertale.MODID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
 
@@ -41,12 +38,10 @@ public class ClientEvents {
                         EnterCombatmode.leaveCombatmode();
                     }
                 } else if (EnterCombatmode.isCombatmode()) {
-                    if (Keybinding.DODGE.consumeClick() && !(currentTime - lastDodgeTime < DODGE_COOLDOWN_MS)) {
-                        if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
-                            new PlayerSkillManager().activateSkill(new SideStepSkill().getName(), minecraft.player);
+                    if (minecraft.player.getInventory().selected == 0 && minecraft.player.onGround()) {
+                        new PlayerSkillManager().activateSkill(new SideStepSkill().getName(), minecraft.player);
                         }
-                        lastDodgeTime = currentTime;
-                    }else if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
+                    else if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
                         if (minecraft.player.getInventory().selected == 0) {
                             PacketDistributor.sendToServer((new BoneSpikeC2SPacket()));
                         }
@@ -62,12 +57,10 @@ public class ClientEvents {
         }
         @SubscribeEvent
         public static void onClientTick(ClientTickEvent.Post event) {
-            if (minecraft.player != null) {
-                if (EnterCombatmode.isCombatmode()) {
-                    if (minecraft.player.getInventory().selected == 0) {
-                        if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown()) {
-                            PacketDistributor.sendToServer(new BoneBarrageC2SPacket());
-                        }
+            if (EnterCombatmode.isCombatmode()) {
+                if (minecraft.player.getInventory().selected == 0) {
+                    if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown()) {
+                        PacketDistributor.sendToServer(new BoneBarrageC2SPacket());
                     }
                 }
             }

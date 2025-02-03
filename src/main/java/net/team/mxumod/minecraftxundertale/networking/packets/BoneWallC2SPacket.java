@@ -1,4 +1,4 @@
-package net.team.mxumod.minecraftxundertale.networking;
+package net.team.mxumod.minecraftxundertale.networking.packets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -12,7 +12,7 @@ import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 
 public record BoneWallC2SPacket() implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<BoneWallC2SPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Minecraftxundertale.MODID, "BoneWallC2SPacket"));
+    public static final CustomPacketPayload.Type<BoneWallC2SPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Minecraftxundertale.MODID, "bonewallc2spacket"));
     public static final StreamCodec<FriendlyByteBuf, BoneWallC2SPacket> STREAM_CODEC = CustomPacketPayload.codec(BoneWallC2SPacket::write, BoneWallC2SPacket::new);
 
     public BoneWallC2SPacket(FriendlyByteBuf buf) {
@@ -21,17 +21,6 @@ public record BoneWallC2SPacket() implements CustomPacketPayload {
 
     public void write(FriendlyByteBuf buf) {
 
-    }
-
-    public static void handle(BoneWallC2SPacket message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-
-
-            ServerPlayer player = (ServerPlayer) context.player();
-
-            new PlayerSkillManager().activateSkill(new BoneWallSkill().getName(),player);
-
-        });
     }
 
     @Override
