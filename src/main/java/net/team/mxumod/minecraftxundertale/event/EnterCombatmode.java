@@ -9,8 +9,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.team.mxumod.minecraftxundertale.networking.ModMessages;
-import net.team.mxumod.minecraftxundertale.networking.packet.BoneWallC2SPacket;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.team.mxumod.minecraftxundertale.networking.BoneWallC2SPacket;
 import net.team.mxumod.minecraftxundertale.skill.CameraLock;
 import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 
@@ -36,7 +36,7 @@ public class EnterCombatmode {
         disableEvents();
         CameraLock.disableEvent();
         if (BoneWallSkill.isBlocking()) {
-            ModMessages.sendToServer(new BoneWallC2SPacket());
+            PacketDistributor.sendToServer(new BoneWallC2SPacket());
         }
         combatmode = false;
         minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));

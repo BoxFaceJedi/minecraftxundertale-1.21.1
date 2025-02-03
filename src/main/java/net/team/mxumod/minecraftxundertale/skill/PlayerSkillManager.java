@@ -51,7 +51,7 @@ public class PlayerSkillManager {
     }
 
     @SubscribeEvent
-    public static void onTick(ClientTickEvent event) {
+    public static void onTick(ClientTickEvent.Post event) {
         if (currentMana < TOTAL_MANA) {
             currentMana++;
         }

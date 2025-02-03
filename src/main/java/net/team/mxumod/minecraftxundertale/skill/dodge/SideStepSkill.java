@@ -38,7 +38,7 @@ public class SideStepSkill extends Skill<Player> {
     }
 
     @SubscribeEvent
-    public static void onPlayerHurt(AttackEntityEvent event) {
+    public static void onPlayerHurt(LivingDamageEvent.Pre event) {
         // Check if the entity is a player
         if (event.getEntity() instanceof ServerPlayer player) {
             // Check if the player has active i-frames
@@ -47,7 +47,7 @@ public class SideStepSkill extends Skill<Player> {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - iFrameStart < I_FRAME_DURATION) {
                     // Cancel the damage during i-frames
-                    event.setCanceled(true);
+                    event.setNewDamage(0);
                     player.serverLevel().playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.WIND_CHARGE_BURST, SoundSource.PLAYERS, 1.0f, 1.0f);
                 } else {
                     // Remove player from the tracker after i-frames expire

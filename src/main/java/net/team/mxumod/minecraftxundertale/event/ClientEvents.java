@@ -10,11 +10,11 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
-import net.team.mxumod.minecraftxundertale.networking.ModMessages;
-import net.team.mxumod.minecraftxundertale.networking.packet.BoneBarrageC2SPacket;
-import net.team.mxumod.minecraftxundertale.networking.packet.BoneSpikeC2SPacket;
-import net.team.mxumod.minecraftxundertale.networking.packet.BoneWallC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.BoneSpikeC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.BoneBarrageC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.BoneWallC2SPacket;
 import net.team.mxumod.minecraftxundertale.skill.CameraLock;
 import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
@@ -48,7 +48,7 @@ public class ClientEvents {
                         lastDodgeTime = currentTime;
                     }else if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
                         if (minecraft.player.getInventory().selected == 0) {
-                            ModMessages.sendToServer((new BoneSpikeC2SPacket()));
+                            PacketDistributor.sendToServer((new BoneSpikeC2SPacket()));
                         }
                     }else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
                         minecraft.player.sendSystemMessage(Component.literal("ult attack"));
@@ -61,23 +61,23 @@ public class ClientEvents {
             }
         }
         @SubscribeEvent
-        public static void onClientTick(ClientTickEvent event) {
+        public static void onClientTick(ClientTickEvent.Post event) {
             if (minecraft.player != null) {
                 if (EnterCombatmode.isCombatmode()) {
                     if (minecraft.player.getInventory().selected == 0) {
                         if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown()) {
-                            ModMessages.sendToServer(new BoneBarrageC2SPacket());
+                            PacketDistributor.sendToServer(new BoneBarrageC2SPacket());
                         }
                     }
                 }
             }
         }
         @SubscribeEvent
-        public static void onMouseInput(InputEvent.MouseButton event) {
+        public static void onMouseInput(InputEvent.MouseButton.Post event) {
             if (minecraft.player != null) {
                 if (minecraft.player.getInventory().selected == 0) {
                     if (Keybinding.BLOCKING.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.BASIC_ATTACK.isDown()) {
-                        ModMessages.sendToServer(new BoneWallC2SPacket());
+                        PacketDistributor.sendToServer(new BoneWallC2SPacket());
                     }
                 }
                 if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {

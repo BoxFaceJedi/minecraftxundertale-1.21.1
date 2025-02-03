@@ -1,7 +1,5 @@
 package net.team.mxumod.minecraftxundertale.skill.special;
 
-import net.minecraft.advancements.critereon.EntityHurtPlayerTrigger;
-import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -30,7 +28,7 @@ public class BoneSpikeSkill extends Skill<ServerPlayer> {
     }
 
     @SubscribeEvent
-    public static void onLivingAttack(LivingDamageEvent event) {
+    public static void onLivingAttack(LivingDamageEvent.Pre event) {
         // Check if the source is EvokerFangs
         if (event.getEntity().getLastDamageSource().getDirectEntity() instanceof EvokerFangs fangs) {
             // Ensure the fangs' owner is a player
