@@ -13,6 +13,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
+import net.team.mxumod.minecraftxundertale.networking.packets.BoneBarrageC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packets.BoneSpikeC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packets.BoneWallC2SPacket;
 import net.team.mxumod.minecraftxundertale.skill.CameraLock;
@@ -59,6 +60,13 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onClientTick(ClientTickEvent.Post event) {
             if (minecraft.player != null) {
+                if (EnterCombatmode.isCombatMode()) {
+                    if (minecraft.player.getInventory().selected == 0) {
+                        if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown()) {
+                            PacketDistributor.sendToServer(new BoneBarrageC2SPacket());
+                        }
+                    }
+                }
                 if (minecraft.screen == null) { // Only detect when no GUI is open
                     KeyMapping key = Keybinding.BLOCKING; // Replace with your keybind reference
 

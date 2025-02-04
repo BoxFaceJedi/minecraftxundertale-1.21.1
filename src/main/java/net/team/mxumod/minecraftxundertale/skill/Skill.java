@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.skill;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -9,6 +10,7 @@ public abstract class Skill<T extends Player> {
     protected int manaCost;
     protected int cooldown;
     protected int currentCoolDown = 0;
+    protected Player player = Minecraft.getInstance().player;
 
     public Skill(String name, int manaCost, int cooldown) {
         this.name = name;
@@ -25,9 +27,9 @@ public abstract class Skill<T extends Player> {
     public abstract void activate(Player player);
 
     public boolean canActivate() {
-        if (PlayerSkillManager.getCurrentMana() >= manaCost && currentCoolDown >= cooldown) {
+        if (PlayerSkillManager.getCurrentMana(player) >= manaCost && currentCoolDown >= cooldown) {
             currentCoolDown = 0;
-            PlayerSkillManager.reduceMana(manaCost); // Reduce mana via PlayerSkillManager
+            PlayerSkillManager.reduceMana(player, manaCost); // Reduce mana via PlayerSkillManager
             return true;
         }
         return false;

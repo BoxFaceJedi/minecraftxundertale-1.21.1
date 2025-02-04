@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.skill;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
@@ -12,14 +13,13 @@ import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
 import net.team.mxumod.minecraftxundertale.skill.special.BoneSpikeSkill;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @EventBusSubscriber(modid = Minecraftxundertale.MODID, value = Dist.CLIENT)
 public class PlayerSkillManager {
 
     private static final List<Skill> skills = new ArrayList<>();
-    private static int currentMana = 200; // Shared mana pool for simplicity
+    private static final Map<UUID, Integer> manaMap = new HashMap<>();
     private static final int TOTAL_MANA = 200;
 
     public PlayerSkillManager() {
@@ -30,12 +30,14 @@ public class PlayerSkillManager {
         skills.add(new BoneBarrageSKill());
     }
 
-    public static int getCurrentMana() {
-        return currentMana;
+    public static int getCurrentMana(Player player) {
+        return manaMap.getOrDefault(player.getUUID(), TOTAL_MANA);
     }
 
-    public static void reduceMana(int amount) {
-        currentMana = Math.max(0, currentMana - amount); // Prevent negative mana
+    public static void reduceMana(Player player, int amount) {
+        UUID uuid = player.getUUID();
+        int currentMana = manaMap.getOrDefault(uuid, TOTAL_MANA);
+        manaMap.put(uuid, Math.max(0, currentMana - amount)); // Prevent negative mana
     }
 
     public void activateSkill(String skillName, Player player) {
@@ -52,8 +54,11 @@ public class PlayerSkillManager {
 
     @SubscribeEvent
     public static void onTick(ClientTickEvent.Post event) {
-        if (currentMana < TOTAL_MANA) {
-            currentMana++;
+        for (UUID uuid : manaMap.keySet()) {
+            int currentMana = manaMap.get(uuid);
+            if (currentMana < TOTAL_MANA) {
+                manaMap.put(uuid, currentMana + 1);
+            }
         }
 
         // Tick cooldown for all skills
