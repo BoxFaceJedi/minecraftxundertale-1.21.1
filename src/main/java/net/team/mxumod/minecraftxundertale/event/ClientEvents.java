@@ -66,6 +66,7 @@ public class ClientEvents {
                             PacketDistributor.sendToServer(new BoneBarrageC2SPacket());
                         }
                     }
+                    minecraft.player.displayClientMessage(Component.literal("Mana:" + PlayerSkillManager.getCurrentMana(minecraft.player)), true);
                 }
                 if (minecraft.screen == null) { // Only detect when no GUI is open
                     KeyMapping key = Keybinding.BLOCKING; // Replace with your keybind reference
