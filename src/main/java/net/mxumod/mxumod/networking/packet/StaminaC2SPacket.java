@@ -2,8 +2,6 @@ package net.mxumod.mxumod.networking.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.mxumod.mxumod.skill.PlayerSkillManager;
 import net.mxumod.mxumod.skill.basic.BoneBarrageSKill;
