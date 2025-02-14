@@ -1,6 +1,7 @@
 package net.mxumod.mxumod;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,6 +15,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mxumod.mxumod.entities.ModEntities;
+import net.mxumod.mxumod.entities.bone.BoneProjectileEntity;
+import net.mxumod.mxumod.entities.client.renderers.BoneProjectileRenderer;
+import net.mxumod.mxumod.entities.models.BoneProjectileModel;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.skill.PlayerSkillManager;
 import org.slf4j.Logger;
@@ -29,12 +33,12 @@ public class MxuMod {
     public MxuMod(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
+        ModEntities.ENTITY_TYPE_DEFERRED_REGISTER.register(modEventBus);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
-
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -64,7 +68,12 @@ public class MxuMod {
 
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerEntityRenderer(ModEntities.BoneEntity.get(), CustomArrowRenderer::new);
+            event.registerEntityRenderer(ModEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+            event.registerLayerDefinition(BoneProjectileModel.LAYER_LOCATION, BoneProjectileModel::createBodyLayer);
         }
     }
 }

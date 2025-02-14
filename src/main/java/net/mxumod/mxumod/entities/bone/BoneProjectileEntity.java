@@ -8,13 +8,15 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class BoneEntity extends AbstractArrow {
-    public BoneEntity(EntityType<? extends BoneEntity> entityType, Level world) {
+import static net.mxumod.mxumod.entities.ModEntities.*;
+
+public class BoneProjectileEntity extends AbstractArrow {
+    public BoneProjectileEntity(EntityType<? extends AbstractArrow> entityType, Level world) {
         super(entityType, world);
     }
 
-    public BoneEntity(Level world, LivingEntity shooter) {
-        super(EntityType.ARROW, world);
+    public BoneProjectileEntity(Level world, LivingEntity shooter) {
+        super(BONE_PROJECTILE.get(), shooter, world, new ItemStack(Items.AIR), new ItemStack(Items.AIR));
     }
 
     @Override
