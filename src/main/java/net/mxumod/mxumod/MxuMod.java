@@ -2,6 +2,7 @@ package net.mxumod.mxumod;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -12,6 +13,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.mxumod.mxumod.entities.ModEntities;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.skill.PlayerSkillManager;
 import org.slf4j.Logger;
@@ -58,6 +60,11 @@ public class MxuMod {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             new PlayerSkillManager();
+        }
+
+        @SubscribeEvent
+        public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(ModEntities.BoneEntity.get(), CustomArrowRenderer::new);
         }
     }
 }

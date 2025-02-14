@@ -9,7 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.entities.bone.BoneEntity;
 
-public class EntityRegistry {
+public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPE_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MxuMod.MOD_ID);
 
     public static final RegistryObject<EntityType<BoneEntity>> BoneEntity =
