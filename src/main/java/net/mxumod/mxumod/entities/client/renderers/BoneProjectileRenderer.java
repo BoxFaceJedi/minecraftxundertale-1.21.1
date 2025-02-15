@@ -5,7 +5,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.OverlayMetadataSection;
 import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.entities.bone.BoneProjectileEntity;
 import net.mxumod.mxumod.entities.models.BoneProjectileModel;
@@ -22,7 +24,7 @@ public class BoneProjectileRenderer extends EntityRenderer<BoneProjectileEntity>
     @Override
     public void render(BoneProjectileEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         VertexConsumer vertexConsumer = buffer.getBuffer(model.renderType(getTextureLocation(entity)));
-        model.renderToBuffer(poseStack, vertexConsumer, packedLight, 0xFFFFFF);
+        model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -1);
     }
 
     @Override
