@@ -11,7 +11,7 @@ import net.mxumod.mxumod.entities.bone.BoneProjectileEntity;
 import net.mxumod.mxumod.entities.models.BoneProjectileModel;
 
 public class BoneProjectileRenderer extends EntityRenderer<BoneProjectileEntity> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "textures/Entities/BoneProjectileTexture.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "textures/entities/bone_projectile_texture.png");
     private final BoneProjectileModel model;
 
     public BoneProjectileRenderer(EntityRendererProvider.Context context) {
