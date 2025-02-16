@@ -43,5 +43,8 @@ public class BoneProjectileEntity extends AbstractArrow {
     @Override
     public void tick() {
         super.tick();
+        if (this.inGround) {
+            this.discard();
+        }
    }
 }
