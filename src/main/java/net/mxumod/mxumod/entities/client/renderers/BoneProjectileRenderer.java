@@ -32,7 +32,6 @@ public class BoneProjectileRenderer extends EntityRenderer<BoneProjectileEntity>
 
     @Override
     public void render(BoneProjectileEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-
         // Apply entity rotation
         poseStack.mulPose(Axis.YP.rotationDegrees(-entity.getYRot()));
         poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));

@@ -38,7 +38,7 @@ public class BoneBarrageSKill extends Skill<ServerPlayer> {
         ServerLevel level = (ServerLevel) player.level();
         Vec3 randomPosition = getRandomPositionAroundHead((ServerPlayer) player);
 
-        BoneProjectileEntity bone = new BoneProjectileEntity(level,randomPosition.x, randomPosition.y, randomPosition.z, new ItemStack(Items.BONE), null);
+        BoneProjectileEntity bone = new BoneProjectileEntity(level,randomPosition.x, randomPosition.y, randomPosition.z, new ItemStack(Items.AIR), null);
 
         Vec3 lookVec = player.getLookAngle();
         bone.shoot(lookVec.x, lookVec.y, lookVec.z, 3.5f, 0.0f);
