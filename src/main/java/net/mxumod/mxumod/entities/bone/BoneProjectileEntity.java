@@ -36,7 +36,7 @@ public class BoneProjectileEntity extends AbstractArrow {
 
         if (!this.level().isClientSide) {
             this.level().broadcastEntityEvent(this, (byte)3);
-            this.discard();
+            //this.discard();
         }
     }
 
