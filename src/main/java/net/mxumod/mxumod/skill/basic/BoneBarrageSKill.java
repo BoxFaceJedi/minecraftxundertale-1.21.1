@@ -8,15 +8,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.common.Mod;
+import net.mxumod.mxumod.MxuMod;
 import net.mxumod.mxumod.entities.bone.BoneProjectileEntity;
 import net.mxumod.mxumod.skill.Skill;
 
 import java.util.Random;
-
+@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID)
 public class BoneBarrageSKill extends Skill<ServerPlayer> {
 
     public BoneBarrageSKill() {
-        super("Bone Barrage", 5, 1);
+        super("Bone Barrage", 5, 2);
     }
 
     private static Vec3 getRandomPositionAroundHead(ServerPlayer player) {
