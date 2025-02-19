@@ -3,6 +3,7 @@ package net.mxumod.mxumod.skill;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.mxumod.mxumod.libraries.ObservableNumber;
+import net.mxumod.mxumod.libraries.ObservableValue;
 import net.mxumod.mxumod.skill.basic.BoneBarrageSKill;
 import net.mxumod.mxumod.skill.block.BoneWallSkill;
 import net.mxumod.mxumod.skill.dodge.SideStepSkill;
@@ -43,6 +44,7 @@ public class PlayerSkillManager {
     public static int getCurrentMana() {
         return currentMana.getValue();
     }
+    public static int getMaxMana() { return TOTAL_MANA.getValue();}
 
     public static void reduceMana(int amount) {
         currentMana.setValue(Math.max(0, currentMana.getValue() - amount)); // Prevent negative mana
@@ -73,6 +75,10 @@ public class PlayerSkillManager {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public static void addManaChangeListener(ObservableValue.ChangeListener<Integer> listener) {
+        currentMana.addChangeListener(listener);
     }
 
     public static void ManaHandler(Integer oldValue, Integer newValue) {
