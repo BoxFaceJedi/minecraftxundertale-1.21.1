@@ -49,7 +49,7 @@ public class BoneProjectileEntity extends AbstractArrow {
         }
 
         Vec3 motion = this.getDeltaMovement();
-        if (!motion.equals(Vec3.ZERO)) {
+        if (!motion.equals(Vec3.ZERO) && !this.inGround) {
             float yaw = (float) (Math.atan2(-motion.x, motion.z) * (180F / Math.PI));
             float pitch = (float) (Math.asin(-motion.y / motion.length()) * (180F / Math.PI));
             this.setRot(yaw, pitch);
