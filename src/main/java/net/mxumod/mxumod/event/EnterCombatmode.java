@@ -9,6 +9,7 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.mxumod.mxumod.client.gui.ManaOverlay;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
 import net.mxumod.mxumod.skill.CameraLock;
@@ -29,6 +30,7 @@ public class EnterCombatmode {
         combatmode = true;
         CameraLock.enableEvent();
         minecraft.player.sendSystemMessage(Component.literal("entering combatmode"));
+        ManaOverlay.showManaOverlay();
     }
 
     public static void leaveCombatmode() {
@@ -39,6 +41,7 @@ public class EnterCombatmode {
         }
         combatmode = false;
         minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));
+        ManaOverlay.hideManaOverlay();
     }
     @SubscribeEvent
     public static void onLeftClickBlock (PlayerInteractEvent.LeftClickBlock event) {event.setCanceled(combatmode);}

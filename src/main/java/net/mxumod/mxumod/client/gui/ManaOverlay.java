@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
@@ -30,12 +31,16 @@ Coordinate diagram can be drawn like the following schematic diagram:
  */
 
 
-@Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ManaOverlay {
+
+    private static GuiGraphics guiGraphics;
+    private static int transparentColor = 0x00000000;
+    static Minecraft mc = Minecraft.getInstance();
+
+    static boolean isVisible = false;
 
     @SubscribeEvent
     public static void onRenderGui(CustomizeGuiOverlayEvent event) {
-        Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
         int y = event.getWindow().getGuiScaledHeight();
@@ -48,14 +53,26 @@ public class ManaOverlay {
         int barWidth = 100;
         int barHeight = 10;
 
-        GuiGraphics guiGraphics = event.getGuiGraphics();
+        guiGraphics = event.getGuiGraphics();
         RenderSystem.enableBlend();
-
-        int textWidth = mc.font.width(manaText);
 
         guiGraphics.fill(0, y, 100 * PlayerSkillManager.getCurrentMana() / PlayerSkillManager.getMaxMana(), y - barHeight, 0xFF0088FF);
         guiGraphics.drawCenteredString(mc.font, manaText, barWidth/2, y - 9, 000000);
 
         RenderSystem.disableBlend();
+    }
+
+    public static void showManaOverlay() {
+        MinecraftForge.EVENT_BUS.register(ManaOverlay.class);
+    }
+
+    public static void hideManaOverlay() {
+        MinecraftForge.EVENT_BUS.unregister(ManaOverlay.class);
+        guiGraphics.fill(0, 0, 0, 0, transparentColor);
+        guiGraphics.drawCenteredString(mc.font, "", 0, 0, transparentColor);
+    }
+
+    public static boolean IsVisible() {
+        return isVisible;
     }
 }
