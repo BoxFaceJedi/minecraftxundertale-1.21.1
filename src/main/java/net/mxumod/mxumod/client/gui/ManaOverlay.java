@@ -1,18 +1,34 @@
 package net.mxumod.mxumod.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.sun.jna.platform.win32.WinDef;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
-import net.mxumod.mxumod.libraries.ObservableValue;
 import net.mxumod.mxumod.skill.PlayerSkillManager;
 
-import java.util.EventListener;
+import java.awt.font.FontRenderContext;
+
+
+/*
+The center (0, 0) is on the top right of the screen.
+The screen is in the fourth quadrant.
+
+Coordinate diagram can be drawn like the following schematic diagram:
+
+    ●------------------------→ X
+    |
+    |
+    |   The screen is here.
+    |
+    |
+    -Y
+ */
+
 
 @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ManaOverlay {
@@ -22,25 +38,24 @@ public class ManaOverlay {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        int screenWidth = event.getWindow().getGuiScaledWidth();
-        int screenHeight = event.getWindow().getGuiScaledHeight();
+        int y = event.getWindow().getGuiScaledHeight();
 
         int currentMana = PlayerSkillManager.getCurrentMana();
         int maxMana = PlayerSkillManager.getMaxMana();
 
-        float manaPercentage = (float) PlayerSkillManager.getCurrentMana() /PlayerSkillManager.getMaxMana();
+        String manaText = currentMana + "/" + maxMana;
 
-        int barWidth = 100;  // 魔力條長度
-        int barHeight = 10;   // 魔力條高度
-        int x = (screenWidth - barWidth) / 2; // 置中
-        int y = screenHeight - 40; // 放在血條上方
+        int barWidth = 100;
+        int barHeight = 10;
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
         RenderSystem.enableBlend();
 
-        guiGraphics.fill(x, y - 54,x + barWidth, y + barHeight - 54, 696969);
+        int textWidth = mc.font.width(manaText);
 
-        int filledWidth = (int) (barWidth * manaPercentage);
-        guiGraphics.fill(x, y - 54, x + filledWidth, y + barHeight - 54, 0xFF0088FF);
+        guiGraphics.fill(0, y, 100 * PlayerSkillManager.getCurrentMana() / PlayerSkillManager.getMaxMana(), y - barHeight, 0xFF0088FF);
+        guiGraphics.drawCenteredString(mc.font, manaText, barWidth/2, y - 9, 000000);
+
+        RenderSystem.disableBlend();
     }
 }

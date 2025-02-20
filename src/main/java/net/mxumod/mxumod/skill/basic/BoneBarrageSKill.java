@@ -18,7 +18,7 @@ import java.util.Random;
 public class BoneBarrageSKill extends Skill<ServerPlayer> {
 
     public BoneBarrageSKill() {
-        super("Bone Barrage", 5, 2);
+        super("Bone Barrage", 2, 4);
     }
 
     private static Vec3 getRandomPositionAroundHead(ServerPlayer player) {
