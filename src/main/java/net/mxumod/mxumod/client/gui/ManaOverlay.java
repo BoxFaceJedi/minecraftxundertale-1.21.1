@@ -38,9 +38,9 @@ public class ManaOverlay {
         GuiGraphics guiGraphics = event.getGuiGraphics();
         RenderSystem.enableBlend();
 
-        guiGraphics.fill(x, y ,x + barWidth, y + barHeight , 696969);
+        guiGraphics.fill(x, y - 54,x + barWidth, y + barHeight - 54, 696969);
 
         int filledWidth = (int) (barWidth * manaPercentage);
-        guiGraphics.fill(x, y, x + filledWidth, y + barHeight, 0xFF0088FF);
+        guiGraphics.fill(x, y - 54, x + filledWidth, y + barHeight - 54, 0xFF0088FF);
     }
 }
