@@ -3,11 +3,16 @@ package net.mxumod.mxumod.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mxumod.mxumod.MxuMod;
+import net.mxumod.mxumod.libraries.ObservableValue;
 import net.mxumod.mxumod.skill.PlayerSkillManager;
+
+import java.util.EventListener;
 
 @Mod.EventBusSubscriber(modid = MxuMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ManaOverlay {
@@ -23,7 +28,7 @@ public class ManaOverlay {
         int currentMana = PlayerSkillManager.getCurrentMana();
         int maxMana = PlayerSkillManager.getMaxMana();
 
-        float manaPercentage = 1.0F;
+        float manaPercentage = (float) PlayerSkillManager.getCurrentMana() /PlayerSkillManager.getMaxMana();
 
         int barWidth = 100;  // 魔力條長度
         int barHeight = 10;   // 魔力條高度
@@ -35,7 +40,7 @@ public class ManaOverlay {
 
         guiGraphics.fill(x, y ,x + barWidth, y + barHeight , 696969);
 
-        int filledWidth = (int) (barWidth * manaPercent);
+        int filledWidth = (int) (barWidth * manaPercentage);
         guiGraphics.fill(x, y, x + filledWidth, y + barHeight, 0xFF0088FF);
     }
 }
