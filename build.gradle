@@ -8,16 +8,6 @@ plugins {
 version = mod_version
 group = mod_group_id
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        name 'Curios maven'
-        url = "https://maven.theillusivec4.top/"
-    }
-    maven { url = 'https://maven.blamejared.com/' }
-}
-
 base {
     archivesName = mod_id
 }
@@ -101,8 +91,22 @@ neoForge {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
+repositories {
+    flatDir {
+        dirs("lib")
+    }
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name 'Curios maven'
+        url = "https://maven.theillusivec4.top/"
+    }
+    maven { url = 'https://maven.blamejared.com/' }
+}
+
 dependencies {
-    implementation "team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}"
+    // https://mvnrepository.com/artifact/team.lodestar.lodestone/lodestone
+    implementation ("team.lodestar.lodestone:lodestone:${minecraft_version}-${lodestone_version}")
 
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}"

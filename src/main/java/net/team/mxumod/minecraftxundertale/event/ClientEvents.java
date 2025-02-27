@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.event;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -13,6 +14,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.team.mxumod.minecraftxundertale.Minecraftxundertale;
+import net.team.mxumod.minecraftxundertale.client.MxuClient;
 import net.team.mxumod.minecraftxundertale.networking.packets.BoneBarrageC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packets.BoneSpikeC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packets.BoneWallC2SPacket;
@@ -48,7 +50,7 @@ public class ClientEvents {
                             PacketDistributor.sendToServer((new BoneSpikeC2SPacket()));
                         }
                     }else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
-                        minecraft.player.sendSystemMessage(Component.literal("ult attack"));
+                        MxuClient.renderBlasterBeam(new PoseStack(), minecraft.player.getEyePosition(), minecraft.player.pick(10, 0, false).getLocation(), 1.0f);
                     }
                 }else {
                     if (Keybinding.SETTINGS.consumeClick()) {
