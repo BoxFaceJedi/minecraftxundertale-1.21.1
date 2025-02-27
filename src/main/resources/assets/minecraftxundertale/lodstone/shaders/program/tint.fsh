@@ -10,7 +10,7 @@ void main() {
 	// Extract the original color of the pixel from the DiffuseSampler
 	vec4 original = texture(DiffuseSampler, texCoord);
 	// Pink!
-	vec3 tintColor = vec3(1.0,0.0,1.0)
+	vec3 tintColor = vec3(1.0,0.0,1.0);
 	// Multiply each rgba value by the tint color.
 	vec4 result = original * vec4(tintColor, 1.0);
 
