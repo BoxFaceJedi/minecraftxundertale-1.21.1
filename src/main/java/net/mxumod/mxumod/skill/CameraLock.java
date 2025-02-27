@@ -9,6 +9,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.mxumod.mxumod.client.shaders.lodestone.post.CameraLockPostProcessor;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,14 @@ public class CameraLock {
         if (newTarget == Target) {
             Target = null;
         } else {
+            CameraLockPostProcessor.INSTANCE.setActive(true);
             Target = newTarget;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            CameraLockPostProcessor.INSTANCE.setActive(false);
         }
     }
 

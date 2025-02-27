@@ -14,6 +14,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.mxumod.mxumod.client.shaders.lodestone.post.CameraLockPostProcessor;
 import net.mxumod.mxumod.entities.ModEntities;
 import net.mxumod.mxumod.entities.bone.BoneProjectileEntity;
 import net.mxumod.mxumod.entities.client.renderers.BoneProjectileRenderer;
@@ -21,6 +22,7 @@ import net.mxumod.mxumod.entities.models.BoneProjectileModel;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.skill.PlayerSkillManager;
 import org.slf4j.Logger;
+import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MxuMod.MOD_ID)
@@ -64,6 +66,7 @@ public class MxuMod {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             new PlayerSkillManager();
+            PostProcessHandler.addInstance(CameraLockPostProcessor.INSTANCE);
         }
 
         @SubscribeEvent

@@ -74,7 +74,7 @@ public class ClientEvents {
             }
         }
         @SubscribeEvent
-        public static void onMouseInput(InputEvent.MouseButton event) {
+        public static void onMouseInput(InputEvent.MouseButton event) throws InterruptedException {
             if (minecraft.player != null) {
                 if (minecraft.player.getInventory().selected == 0) {
                     if (Keybinding.BLOCKING.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.BASIC_ATTACK.isDown()) {
