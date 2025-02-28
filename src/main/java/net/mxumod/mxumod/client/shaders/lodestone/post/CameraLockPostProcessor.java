@@ -16,7 +16,7 @@ public class CameraLockPostProcessor extends PostProcessor {
 
     @Override
     public ResourceLocation getPostChainLocation() {
-        return ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "lodstone/shaders/post/tint_post.json");
+        return ResourceLocation.fromNamespaceAndPath(MxuMod.MOD_ID, "tint");
     }
 
     @Override

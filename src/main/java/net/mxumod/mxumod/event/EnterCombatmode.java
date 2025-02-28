@@ -12,7 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.mxumod.mxumod.client.gui.ManaOverlay;
 import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
-import net.mxumod.mxumod.skill.CameraLock;
+import net.mxumod.mxumod.util.CameraLock;
 import net.mxumod.mxumod.skill.block.BoneWallSkill;
 
 

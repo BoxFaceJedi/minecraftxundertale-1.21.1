@@ -4,7 +4,7 @@
 	],
 	"passes": [
 		{
-			"name": "aspect:tint",
+			"name": "minecraftxundertale:tint",
 			"intarget": "minecraft:main",
 			"outtarget": "final"
 		},

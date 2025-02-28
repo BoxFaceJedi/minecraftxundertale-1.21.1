@@ -1,4 +1,4 @@
-package net.mxumod.mxumod.skill;
+package net.mxumod.mxumod.util;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -36,12 +36,6 @@ public class CameraLock {
         } else {
             CameraLockPostProcessor.INSTANCE.setActive(true);
             Target = newTarget;
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            CameraLockPostProcessor.INSTANCE.setActive(false);
         }
     }
 

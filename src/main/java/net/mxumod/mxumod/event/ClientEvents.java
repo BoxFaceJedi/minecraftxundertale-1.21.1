@@ -15,7 +15,7 @@ import net.mxumod.mxumod.networking.ModMessages;
 import net.mxumod.mxumod.networking.packet.BoneSpikeC2SPacket;
 import net.mxumod.mxumod.networking.packet.BoneWallC2SPacket;
 import net.mxumod.mxumod.networking.packet.BoneBarrageC2SPacket;
-import net.mxumod.mxumod.skill.CameraLock;
+import net.mxumod.mxumod.util.CameraLock;
 import net.mxumod.mxumod.skill.PlayerSkillManager;
 import net.mxumod.mxumod.skill.dodge.SideStepSkill;
 import net.mxumod.mxumod.util.Keybinding;

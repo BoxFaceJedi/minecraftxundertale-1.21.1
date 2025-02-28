@@ -5,7 +5,7 @@
     "dstrgb": "1-srcalpha"
   },
   "vertex": "blit",
-  "fragment": "aspect:tint",
+  "fragment": "minecraftxundertale:tint",
   "attributes": [ "Position" ],
   "samplers": [
     { "name": "DiffuseSampler" }
