@@ -1,16 +1,20 @@
 package net.team.mxumod.minecraftxundertale.event;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
+import net.team.mxumod.minecraftxundertale.client.MxuClient;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneBarrageC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneSpikeC2SPacket;
@@ -51,7 +55,7 @@ public class ClientEvents {
                             ModMessages.sendToServer((new BoneSpikeC2SPacket()));
                         }
                     }else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
-                        minecraft.player.sendSystemMessage(Component.literal("ult attack"));
+                        MxuClient.renderBlasterBeam(minecraft.player.getEyePosition(), minecraft.player.pick(10, 0, false).getLocation(), 1.0f);
                     }
                 }else {
                     if (Keybinding.SETTINGS.consumeClick()) {
