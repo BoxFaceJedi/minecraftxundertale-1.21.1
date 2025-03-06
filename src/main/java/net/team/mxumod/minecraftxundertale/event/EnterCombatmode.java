@@ -9,9 +9,10 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.team.mxumod.minecraftxundertale.client.gui.ManaOverlay;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneWallC2SPacket;
-import net.team.mxumod.minecraftxundertale.skill.CameraLock;
+import net.team.mxumod.minecraftxundertale.util.CameraLock;
 import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 
 public class EnterCombatmode {
@@ -27,6 +28,7 @@ public class EnterCombatmode {
         enableEvents();
         combatmode = true;
         CameraLock.enableEvent();
+        ManaOverlay.showManaOverlay();
         minecraft.player.sendSystemMessage(Component.literal("entering combatmode"));
     }
 
@@ -37,6 +39,7 @@ public class EnterCombatmode {
             ModMessages.sendToServer(new BoneWallC2SPacket());
         }
         combatmode = false;
+        ManaOverlay.hideManaOverlay();
         minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));
     }
     @SubscribeEvent

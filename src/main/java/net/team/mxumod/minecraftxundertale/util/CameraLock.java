@@ -1,4 +1,4 @@
-package net.team.mxumod.minecraftxundertale.skill;
+package net.team.mxumod.minecraftxundertale.util;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;

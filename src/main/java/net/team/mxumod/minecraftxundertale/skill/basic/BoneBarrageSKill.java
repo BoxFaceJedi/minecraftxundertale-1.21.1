@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.phys.Vec3;
+import net.team.mxumod.minecraftxundertale.entities.bone.BoneProjectileEntity;
 import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 import java.util.Random;
@@ -15,7 +16,7 @@ import java.util.Random;
 public class BoneBarrageSKill extends Skill<ServerPlayer> {
 
     public BoneBarrageSKill() {
-        super("Bone Barrage", 5, 1);
+        super("Bone Barrage", 1, 5);
     }
 
     public static void shootArrow(ServerPlayer player) {
@@ -39,15 +40,13 @@ public class BoneBarrageSKill extends Skill<ServerPlayer> {
         ServerLevel level = (ServerLevel) player.level();
         Vec3 randomPosition = getRandomPositionAroundHead((ServerPlayer) player);
 
-        Arrow arrow = new Arrow(level,randomPosition.x, randomPosition.y, randomPosition.z);
+        BoneProjectileEntity bone = new BoneProjectileEntity(level,randomPosition.x, randomPosition.y, randomPosition.z);
 
         Vec3 lookVec = player.getLookAngle();
-        arrow.shoot(lookVec.x, lookVec.y, lookVec.z, 3.5f, 0.0f);
-        arrow.setOwner(player);
-        arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
-        level.addFreshEntity(arrow);
-        arrow.playSound(SoundEvents.ARROW_SHOOT, 1.0f, 1.0f);
-
-
+        bone.shoot(lookVec.x, lookVec.y, lookVec.z, 3.5f, 0.0f);
+        bone.setOwner(player);
+        //bone.pickup = AbstractArrow.Pickup.DISALLOWED;
+        level.addFreshEntity(bone);
+        bone.playSound(SoundEvents.ARROW_SHOOT, 1.0f, 1.0f);
     }
 }

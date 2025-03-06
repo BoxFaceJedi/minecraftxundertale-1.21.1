@@ -1,14 +1,10 @@
 package net.team.mxumod.minecraftxundertale.event;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,7 +15,7 @@ import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneBarrageC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneSpikeC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneWallC2SPacket;
-import net.team.mxumod.minecraftxundertale.skill.CameraLock;
+import net.team.mxumod.minecraftxundertale.util.CameraLock;
 import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
 import net.team.mxumod.minecraftxundertale.util.Keybinding;
@@ -56,10 +52,6 @@ public class ClientEvents {
                         }
                     }else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
                         MxuClient.renderBlasterBeam(minecraft.player.getEyePosition(), minecraft.player.pick(10, 0, false).getLocation(), 1.0f);
-                    }
-                }else {
-                    if (Keybinding.SETTINGS.consumeClick()) {
-
                     }
                 }
             }
@@ -108,7 +100,6 @@ public class ClientEvents {
             event.register(Keybinding.BASIC_ATTACK);
             event.register(Keybinding.BLOCKING);
             event.register(Keybinding.LOCK_ON);
-            event.register(Keybinding.SETTINGS);
         }
     }
 

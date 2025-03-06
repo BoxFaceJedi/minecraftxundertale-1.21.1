@@ -14,7 +14,6 @@ public class Keybinding {
     public static final String KEY_BASIC_ATTACK = "key.minecraftxundertalemod.skill_basic_attack";
     public static final String KEY_BLOCKING = "key.minecraftxundertalemod.skill_block";
     public static final String KEY_LOCK_ON = "key.minecraftxundertalemod.skill_lock_on";
-    public static final String KEY_SETTINGS = "key.minecraftxundertalemod.settings";
 
     public static final KeyMapping COMBAT_MODE = new KeyMapping(KEY_COMBAT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, KEY_CATEGORY_MXU);
     public static final KeyMapping DODGE = new KeyMapping(KEY_DODGE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_SHIFT, KEY_CATEGORY_MXU);
@@ -23,5 +22,4 @@ public class Keybinding {
     public static final KeyMapping BASIC_ATTACK = new KeyMapping(KEY_BASIC_ATTACK, KeyConflictContext.IN_GAME, InputConstants.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_LEFT, KEY_CATEGORY_MXU);
     public static final KeyMapping BLOCKING = new KeyMapping(KEY_BLOCKING, KeyConflictContext.IN_GAME, InputConstants.Type.MOUSE,  GLFW.GLFW_MOUSE_BUTTON_RIGHT, KEY_CATEGORY_MXU);
     public static final KeyMapping LOCK_ON = new KeyMapping(KEY_LOCK_ON, KeyConflictContext.IN_GAME, InputConstants.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_MIDDLE, KEY_CATEGORY_MXU);
-    public static final KeyMapping SETTINGS = new KeyMapping(KEY_SETTINGS, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, KEY_CATEGORY_MXU);
 }
