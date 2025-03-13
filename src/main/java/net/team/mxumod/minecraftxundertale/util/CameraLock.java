@@ -1,17 +1,27 @@
 package net.team.mxumod.minecraftxundertale.util;
 
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.*;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.awt.SystemColor.window;
 
 public class CameraLock {
     private static final Minecraft mc = Minecraft.getInstance();
@@ -28,14 +38,50 @@ public class CameraLock {
     }
 
     public static void toggleCameraLock(LocalPlayer player) {
-        LivingEntity newTarget = getEntityOnMouseIcon(player, 20);
+        Window window = mc.getWindow();
 
-        if (newTarget == Target) {
-            Target = null;
+        float screenWidth = window.getGuiScaledWidth();
+        float screenHeight = (float) window.getGuiScaledHeight();
+
+        float closiest = 9999;
+        LivingEntity newTarget = null;
+        Vec2 screenCenter = new Vec2(screenWidth/2, screenHeight/2);
+        List<LivingEntity> tmp_entities = getEntitiesOnScreen(Minecraft.getInstance().player, 20);
+        if (tmp_entities.isEmpty()) {
+            return;
+        }
+        for (LivingEntity entity : tmp_entities) {
+            Vec3 entityPos = entity.position().add(0, entity.getBbHeight() / 2, 0); // 取得生物中心點
+            Vec2 screenPos = worldToScreen(entityPos);
+            if (screenPos != null) {
+                float tmp_d = screenPos.distanceToSqr(screenCenter);
+                if (tmp_d < closiest) {
+                    closiest = tmp_d;
+                    newTarget = entity;
+                }
+            }
+        }
+
+        if (newTarget != null) {
+            Target = (newTarget == Target) ? null : newTarget;
         } else {
-            Target = newTarget;
+            Target = null;
         }
     }
+
+    public static Matrix4f getViewMatrix() {
+        Camera camera = mc.gameRenderer.getMainCamera();
+        Matrix4f viewMatrix = new Matrix4f();
+
+        // 旋轉與位移變換
+        viewMatrix.identity()
+                .rotateX((float) Math.toRadians(camera.getXRot()))
+                .rotateY((float) Math.toRadians(camera.getYRot()))
+                .translate((float) -camera.getPosition().x, (float) -camera.getPosition().y, (float) -camera.getPosition().z);
+
+        return viewMatrix;
+    }
+
 
     @SubscribeEvent
     public static void livingTargetDetect(LivingDeathEvent event) {
@@ -46,11 +92,10 @@ public class CameraLock {
 
     @SubscribeEvent
     public static void onClientTick(RenderLivingEvent.Pre<?, ?> event) {
-        if (Target == null) {
-            return;
+        if (Target != null && (!Target.isAlive() || mc.player.distanceTo(Target) > 25)) {
+            Target = null;
         }
-
-        if (mc.player != null) {
+        if (mc.player != null && Target != null) {
             smoothLookAt(mc.player, Target);
         }
     }
@@ -68,8 +113,10 @@ public class CameraLock {
         float targetPitch = (float) -Math.toDegrees(Math.atan2(dy, distanceXZ));
 
         // Smoothly interpolate yaw and pitch
-        float newYaw = interpolateAngle(player.getYRot(), targetYaw, SMOOTH_FACTOR);
-        float newPitch = interpolateAngle(player.getXRot(), targetPitch, SMOOTH_FACTOR);
+        float distanceFactor = Math.min(0.4f, Math.abs(targetYaw - player.getYRot()) * 0.005f);
+        float smoothFactor = Math.max(SMOOTH_FACTOR, distanceFactor);
+        float newYaw = interpolateAngle(player.getYRot(), targetYaw, smoothFactor);
+        float newPitch = interpolateAngle(player.getXRot(), targetPitch, smoothFactor);
 
         player.setYRot(newYaw);
         player.setXRot(newPitch);
@@ -100,35 +147,48 @@ public class CameraLock {
         );
     }
 
-    private static LivingEntity getEntityOnMouseIcon(LocalPlayer player, double distance) {
-        Camera camera = mc.gameRenderer.getMainCamera();
-        Vec3 lookVector = new Vec3(camera.getLookVector().x(), camera.getLookVector().y(), camera.getLookVector().z()).normalize();
+    public static List<LivingEntity> getEntitiesOnScreen(LocalPlayer player, double range) {
+        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
         Vec3 cameraPos = camera.getPosition();
 
-        AABB rangeBox = new AABB(
-                cameraPos.x, cameraPos.y, cameraPos.z,
-                cameraPos.x + lookVector.x * distance,
-                cameraPos.y + lookVector.y * distance,
-                cameraPos.z + lookVector.z * distance
-        );
+        // 取得投影與視圖矩陣
+        float fov = Minecraft.getInstance().options.fov().get().floatValue();
+        Matrix4f projectionMatrix = Minecraft.getInstance().gameRenderer.getProjectionMatrix(fov);
+        PoseStack poseStack = new PoseStack();
+        poseStack.pushPose();
+        poseStack.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+        Matrix4f viewMatrix = getViewMatrix();
 
-        List<LivingEntity> entities = player.level().getEntitiesOfClass(LivingEntity.class, rangeBox).stream()
-                .filter(entity -> entity != player)
-                .toList();
+        // 建立視錐體
+        Frustum frustum = new Frustum(viewMatrix, projectionMatrix);
+        frustum.prepare(cameraPos.x, cameraPos.y, cameraPos.z);
 
-        double nearestDistance = distance;
-        LivingEntity nearestEntity = null;
+        // 設定搜尋範圍 (AABB)
+        AABB boundingBox = new AABB(cameraPos.add(-range, -range, -range), cameraPos.add(range, range, range));
 
-        for (LivingEntity entity : entities) {
-            if (entity.isDeadOrDying()) continue;
-            AABB entityBox = scaleAABB(entity.getBoundingBox(), 7.5);
-            Optional<Vec3> result = entityBox.clip(cameraPos, cameraPos.add(lookVector.scale(distance)));
+        return Minecraft.getInstance().level.getEntitiesOfClass(LivingEntity.class, boundingBox)
+                .stream()
+                .filter(entity -> frustum.isVisible(entity.getBoundingBox()) && player.distanceTo(entity) < range)
+                .collect(Collectors.toList());
+    }
 
-            if (result.isPresent() && result.get().distanceTo(cameraPos) < nearestDistance) {
-                nearestEntity = entity;
-                nearestDistance = result.get().distanceTo(cameraPos);
-            }
-        }
-        return nearestEntity;
+    public static Vec2 worldToScreen(Vec3 worldPos) {
+        Minecraft mc = Minecraft.getInstance();
+        Window window = mc.getWindow();
+
+        float fov = mc.options.fov().get().floatValue();
+        Matrix4f projectionMatrix = mc.gameRenderer.getProjectionMatrix(fov);
+        Matrix4f viewMatrix = getViewMatrix();
+
+        Vector4f vec = new Vector4f((float) worldPos.x, (float) worldPos.y, (float) worldPos.z, 1.0f);
+        viewMatrix.transform(vec);
+        projectionMatrix.transform(vec);
+
+        if (vec.w() == 0) return null; // 防止除以0
+
+        float x = (vec.x() / vec.w() * 0.5f + 0.5f) * window.getGuiScaledWidth();
+        float y = (1 - (vec.y() / vec.w() * 0.5f + 0.5f)) * window.getGuiScaledHeight();
+
+        return new Vec2(x, y);
     }
 }
