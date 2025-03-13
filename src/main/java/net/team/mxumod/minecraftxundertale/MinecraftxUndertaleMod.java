@@ -14,6 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,12 +27,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.team.mxumod.minecraftxundertale.effects.TintPostProcessor;
 import net.team.mxumod.minecraftxundertale.entities.ModEntities;
 import net.team.mxumod.minecraftxundertale.entities.client.renderers.BoneProjectileRenderer;
 import net.team.mxumod.minecraftxundertale.entities.models.BoneProjectileModel;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import org.slf4j.Logger;
+import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MinecraftxUndertaleMod.MOD_ID)
@@ -98,8 +101,7 @@ public class MinecraftxUndertaleMod {
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+        TintPostProcessor.INSTANCE.setActive(false);
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -109,6 +111,7 @@ public class MinecraftxUndertaleMod {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             new PlayerSkillManager();
+            PostProcessHandler.addInstance(TintPostProcessor.INSTANCE);
         }
 
         @SubscribeEvent
