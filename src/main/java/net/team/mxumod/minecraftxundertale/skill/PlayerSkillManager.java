@@ -99,4 +99,12 @@ public class PlayerSkillManager {
             startRecover(tmp_Id);
         }
     }
+    @SubscribeEvent
+    public static void tick(TickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            for (Skill skill : skills) {
+                skill.tickCoolDown();
+            }
+        }
+    }
 }
