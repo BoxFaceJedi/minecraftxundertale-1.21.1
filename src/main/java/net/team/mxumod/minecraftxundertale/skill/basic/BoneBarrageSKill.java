@@ -36,7 +36,7 @@ public class BoneBarrageSKill extends Skill<ServerPlayer> {
     }
 
     @Override
-    public void activate(Player player) {
+    public void executeSkill(Player player) {
         ServerLevel level = (ServerLevel) player.level();
         Vec3 randomPosition = getRandomPositionAroundHead((ServerPlayer) player);
 

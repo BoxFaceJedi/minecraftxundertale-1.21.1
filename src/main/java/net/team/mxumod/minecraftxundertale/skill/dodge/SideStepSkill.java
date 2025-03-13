@@ -25,7 +25,7 @@ public class SideStepSkill extends Skill<Player> {
     }
 
     @Override
-    public void activate(Player player) {
+    public void executeSkill(Player player) {
         // Apply dodge movement
         player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(1.5, 0.0, 1.5));
 

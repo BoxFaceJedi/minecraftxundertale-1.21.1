@@ -57,7 +57,7 @@ public class BoneSpikeSkill extends Skill<ServerPlayer> {
     }
 
     @Override
-    public void activate(Player player) {
+    public void executeSkill(Player player) {
         ServerLevel level = ((ServerLevel) player.level());
         posInFront = getPositionInFrontOfPlayer((ServerPlayer) player, 1.5);
 

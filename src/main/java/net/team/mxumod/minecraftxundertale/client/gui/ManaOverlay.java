@@ -8,6 +8,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 
+import java.awt.*;
+
 public class ManaOverlay {
     private static GuiGraphics guiGraphics;
     private static int transparentColor = 0x00000000;
@@ -32,6 +34,7 @@ public class ManaOverlay {
         guiGraphics = event.getGuiGraphics();
         RenderSystem.enableBlend();
 
+        guiGraphics.fill(0, y, 100, y - barHeight, 0xFFbbbbbb);
         guiGraphics.fill(0, y, 100 * PlayerSkillManager.getCurrentMana() / PlayerSkillManager.getMaxMana(), y - barHeight, 0xFF0088FF);
         guiGraphics.drawCenteredString(mc.font, manaText, barWidth/2, y - 9, 000000);
 

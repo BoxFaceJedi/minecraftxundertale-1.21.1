@@ -22,16 +22,17 @@ public abstract class Skill<T extends Player> {
         }
     }
 
-    public abstract void activate(Player player);
-
     public boolean canActivate() {
-        if (PlayerSkillManager.getCurrentMana() >= manaCost && currentCoolDown >= cooldown) {
-            currentCoolDown = 0;
-            PlayerSkillManager.reduceMana(manaCost); // Reduce mana via PlayerSkillManager
-            return true;
-        }
-        return false;
+        return PlayerSkillManager.getCurrentMana() >= manaCost && currentCoolDown >= cooldown;
     }
+
+    public void activate(Player player) {
+        currentCoolDown = 0;
+        PlayerSkillManager.reduceMana(manaCost);
+        executeSkill(player);
+    }
+
+    protected abstract void executeSkill(Player player);
 
     public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
         Vec3 playerPos = player.position();
