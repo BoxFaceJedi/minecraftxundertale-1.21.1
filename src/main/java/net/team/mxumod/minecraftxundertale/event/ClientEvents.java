@@ -51,7 +51,7 @@ public class ClientEvents {
                             ModMessages.sendToServer((new BoneSpikeC2SPacket()));
                         }
                     }else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
-                        MxuClient.renderBlasterBeam(minecraft.player.getEyePosition(), minecraft.player.pick(10, 0, false).getLocation(), 1.0f);
+
                     }
                 }
             }
