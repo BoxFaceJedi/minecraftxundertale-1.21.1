@@ -3,14 +3,18 @@ package net.team.mxumod.minecraftxundertale.skill;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 
-public abstract class Skill<T extends Player> {
+public abstract class tmp_Skill<T extends Player> {
     protected String name;
     protected int manaCost;
     protected int cooldown;
     protected int currentCoolDown = 0;
 
-    public Skill(String name, int manaCost, int cooldown) {
+    public tmp_Skill(String name, int manaCost, int cooldown) {
         this.name = name;
         this.manaCost = manaCost;
         this.cooldown = cooldown;
@@ -22,9 +26,7 @@ public abstract class Skill<T extends Player> {
         }
     }
 
-    public boolean canActivate() {
-        return PlayerSkillManager.getCurrentMana() >= manaCost && currentCoolDown >= cooldown;
-    }
+    public boolean canActivate() { return PlayerSkillManager.getCurrentMana() >= manaCost && currentCoolDown >= cooldown;}
 
     public void activate(Player player) {
         currentCoolDown = 0;
