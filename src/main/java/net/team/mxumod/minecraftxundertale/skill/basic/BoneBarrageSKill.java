@@ -3,10 +3,7 @@ package net.team.mxumod.minecraftxundertale.skill.basic;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.phys.Vec3;
 import net.team.mxumod.minecraftxundertale.entities.bone.BoneProjectileEntity;
 import net.team.mxumod.minecraftxundertale.skill.Skill;
@@ -17,10 +14,6 @@ public class BoneBarrageSKill extends Skill<ServerPlayer> {
 
     public BoneBarrageSKill() {
         super("Bone Barrage", 1, 5);
-    }
-
-    public static void shootArrow(ServerPlayer player) {
-
     }
 
     private static Vec3 getRandomPositionAroundHead(ServerPlayer player) {
