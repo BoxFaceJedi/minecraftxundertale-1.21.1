@@ -91,7 +91,7 @@ public class PlayerSkillManager {
         if (newValue < oldValue) {
 
             Integer tmp_Id = null;
-            while (tmp_Id == null && WaitingList.contains(tmp_Id)) {
+            while (tmp_Id == null || WaitingList.contains(tmp_Id)) {
                 tmp_Id = new Random().nextInt(1000);
             }
             WaitingList.add(tmp_Id);
@@ -99,6 +99,7 @@ public class PlayerSkillManager {
             startRecover(tmp_Id);
         }
     }
+
     @SubscribeEvent
     public static void tick(TickEvent event) {
         if (event.phase == TickEvent.Phase.END) {

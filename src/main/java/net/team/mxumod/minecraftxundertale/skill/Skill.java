@@ -18,7 +18,7 @@ public abstract class Skill<T extends Player> {
 
     public void tickCoolDown() {
         if (currentCoolDown < cooldown) {
-            currentCoolDown++;
+            currentCoolDown += 1;
         }
     }
 
