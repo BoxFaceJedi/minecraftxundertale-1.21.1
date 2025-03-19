@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class CameraLock {
     private static final Minecraft mc = Minecraft.getInstance();
     private static LivingEntity Target = null;
-    private static final float SMOOTH_FACTOR = 0.2f; // Controls smoothness of rotation (0.1-0.3 recommended).
+    private static final float SMOOTH_FACTOR = 0.03f; // Controls smoothness of rotation (0.1-0.3 recommended).
 
     public static void enableEvent() {
         MinecraftForge.EVENT_BUS.register(CameraLock.class);
@@ -45,7 +45,7 @@ public class CameraLock {
     }
 
     @SubscribeEvent
-    public static void onClientTick(RenderLivingEvent.Pre<?, ?> event) {
+    public static void onClientTick(RenderLevelStageEvent event) {
         if (Target == null) {
             return;
         }
