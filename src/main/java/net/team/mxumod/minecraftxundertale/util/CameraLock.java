@@ -88,29 +88,16 @@ public class CameraLock {
     }
 
     private static AABB scaleAABB(AABB boundingBox, double scale) {
-        Vec3 center = boundingBox.getCenter();
-
-        return new AABB(
-                center.x - boundingBox.getXsize() * scale / 2,
-                center.y - boundingBox.getYsize() * scale / 2,
-                center.z - boundingBox.getZsize() * scale / 2,
-                center.x + boundingBox.getXsize() * scale / 2,
-                center.y + boundingBox.getYsize() * scale / 2,
-                center.z + boundingBox.getZsize() * scale / 2
-        );
+        return boundingBox.inflate(scale);
     }
 
     private static LivingEntity getEntityOnMouseIcon(LocalPlayer player, double distance) {
         Camera camera = mc.gameRenderer.getMainCamera();
-        Vec3 lookVector = new Vec3(camera.getLookVector().x(), camera.getLookVector().y(), camera.getLookVector().z()).normalize();
+        Vec3 lookVector = camera.getEntity().getViewVector(0.0f).normalize();
         Vec3 cameraPos = camera.getPosition();
 
-        AABB rangeBox = new AABB(
-                cameraPos.x, cameraPos.y, cameraPos.z,
-                cameraPos.x + lookVector.x * distance,
-                cameraPos.y + lookVector.y * distance,
-                cameraPos.z + lookVector.z * distance
-        );
+        // Create a ray-trace box along the look direction
+        AABB rangeBox = new AABB(cameraPos, cameraPos.add(lookVector.scale(distance))).inflate(1.0);
 
         List<LivingEntity> entities = player.level().getEntitiesOfClass(LivingEntity.class, rangeBox).stream()
                 .filter(entity -> entity != player)
@@ -121,14 +108,21 @@ public class CameraLock {
 
         for (LivingEntity entity : entities) {
             if (entity.isDeadOrDying()) continue;
-            AABB entityBox = scaleAABB(entity.getBoundingBox(), 7.5);
-            Optional<Vec3> result = entityBox.clip(cameraPos, cameraPos.add(lookVector.scale(distance)));
 
-            if (result.isPresent() && result.get().distanceTo(cameraPos) < nearestDistance) {
-                nearestEntity = entity;
-                nearestDistance = result.get().distanceTo(cameraPos);
+            AABB entityBox = scaleAABB(entity.getBoundingBox(), 1.5); // Scale factor 1.5 is more reasonable
+
+            // Check if the entity is already in range or if the ray intersects it
+            boolean isHit = entityBox.contains(cameraPos) || entityBox.clip(cameraPos, cameraPos.add(lookVector.scale(distance))).isPresent();
+
+            if (isHit) {
+                double hitDistance = entityBox.getCenter().distanceTo(cameraPos);
+                if (hitDistance < nearestDistance) {
+                    nearestEntity = entity;
+                    nearestDistance = hitDistance;
+                }
             }
         }
+
         return nearestEntity;
     }
 }
