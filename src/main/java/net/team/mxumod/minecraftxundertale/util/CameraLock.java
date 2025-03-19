@@ -11,7 +11,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CameraLock {
     private static final Minecraft mc = Minecraft.getInstance();
