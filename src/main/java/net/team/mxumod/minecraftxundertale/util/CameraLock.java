@@ -14,6 +14,11 @@ import java.util.List;
 
 public class CameraLock {
     private static final Minecraft mc = Minecraft.getInstance();
+
+    public static LivingEntity getTarget() {
+        return Target;
+    }
+
     private static LivingEntity Target = null;
     private static final float SMOOTH_FACTOR = 0.03f; // Controls smoothness of rotation (0.1-0.3 recommended).
 
