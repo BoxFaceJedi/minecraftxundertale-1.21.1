@@ -15,9 +15,7 @@ public class PlayerMana extends ObservableNumber<Integer> {
         this.value = source.value;
     }
 
-    public void saveNBTData(CompoundTag nbtData) {
-        nbtData.putInt(MinecraftxUndertaleMod.MOD_ID + "_Mana", this.value);
-    }
+    public void saveNBTData(CompoundTag nbtData) {nbtData.putInt(MinecraftxUndertaleMod.MOD_ID + "_Mana", this.value);}
 
     public void loadNBTData(CompoundTag nbtData) {
         nbtData.getInt(MinecraftxUndertaleMod.MOD_ID + "_Mana");

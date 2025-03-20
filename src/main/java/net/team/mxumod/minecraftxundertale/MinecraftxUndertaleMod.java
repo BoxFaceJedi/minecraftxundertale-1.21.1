@@ -2,6 +2,7 @@ package net.team.mxumod.minecraftxundertale;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -15,6 +16,8 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,11 +30,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.team.mxumod.minecraftxundertale.capabilities.mana.PlayerManaProvider;
 import net.team.mxumod.minecraftxundertale.effects.TintPostProcessor;
 import net.team.mxumod.minecraftxundertale.entities.ModEntities;
 import net.team.mxumod.minecraftxundertale.entities.client.renderers.BoneProjectileRenderer;
 import net.team.mxumod.minecraftxundertale.entities.models.BoneProjectileModel;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
+import net.team.mxumod.minecraftxundertale.networking.packet.ManaS2CPacket;
 import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import org.slf4j.Logger;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
@@ -102,6 +107,17 @@ public class MinecraftxUndertaleMod {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         TintPostProcessor.INSTANCE.setActive(false);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
+        if (!event.getLevel().isClientSide) {
+            if (event.getEntity() instanceof ServerPlayer player) {
+                player.getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(playerMana -> {
+                    ModMessages.sendToClient(new ManaS2CPacket(playerMana.getValue()), );
+                });
+            }
+        }
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
