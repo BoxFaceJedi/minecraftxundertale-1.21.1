@@ -10,6 +10,7 @@ import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneBarrageC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneSpikeC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneWallC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.packet.ManaS2CPacket;
 
 import java.util.function.Supplier;
 
@@ -50,6 +51,11 @@ public class ModMessages {
                 .consumerMainThread(BoneSpikeC2SPacket::handle)
                 .add();
 
+        net.messageBuilder(ManaS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ManaS2CPacket::new)
+                .encoder(ManaS2CPacket::toBytes)
+                .consumerMainThread(ManaS2CPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {
