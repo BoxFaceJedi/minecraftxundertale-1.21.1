@@ -28,16 +28,33 @@ public class LockOnOverlay{
         if (mc.player == null || CameraLock.getTarget() == null) return;
 
         Vec3 targetPos = CameraLock.getTarget().position();
-        Vec2 screenPos = projectToScreen(targetPos, event.getGuiGraphics().pose());
+        Vec2 screenPos = testWorldToScreen(targetPos); //projectToScreen(targetPos, event.getGuiGraphics().pose());
 
         if (screenPos != null) {
             GuiGraphics guiGraphics = event.getGuiGraphics();
-            guiGraphics.blit(
-                    new ResourceLocation(MinecraftxUndertaleMod.MOD_ID, "textures/effects/heart.png"),
+            guiGraphics.blit(new ResourceLocation(MinecraftxUndertaleMod.MOD_ID,
+                    "textures/effects/heart.png"),
                     (int) screenPos.x, (int) screenPos.y,
                     0, 0, 16, 16  // Change 16x16 if the heart texture is a different size
             );
         }
+    }
+
+    public static Matrix4f getViewMatrix() {
+        Camera camera = mc.gameRenderer.getMainCamera();
+        return new Matrix4f().identity().rotateX((float) Math.toRadians(camera.getXRot()))  // X 軸旋轉 (俯仰角 Pitch)
+                .rotateY((float) Math.toRadians(camera.getYRot()))  // Y 軸旋轉 (偏航角 Yaw)
+                .translate((float) -camera.getPosition().x, (float) -camera.getPosition().y, (float) -camera.getPosition().z);
+    }
+
+    public static Vec2 testWorldToScreen(Vec3 worldPos) {
+        Vector4f transformedPos = new Vector4f((float) worldPos.x, (float) worldPos.y, (float) worldPos.z, 1.0f);
+
+        Matrix4f projectionMatrix = mc.gameRenderer.getProjectionMatrix(mc.options.fov().get().floatValue());
+        Matrix4f viewMatrix = getViewMatrix();
+        viewMatrix.transform(transformedPos);
+
+        return new Vec2((transformedPos.x/transformedPos.w * 0.5f + 0.5f) * mc.getWindow().getGuiScaledWidth(), (0.5f - transformedPos.y/transformedPos.w * 0.5f) * mc.getWindow().getGuiScaledHeight());
     }
 
     public static Vec2 projectToScreen(Vec3 worldPos, PoseStack poseStack) {
