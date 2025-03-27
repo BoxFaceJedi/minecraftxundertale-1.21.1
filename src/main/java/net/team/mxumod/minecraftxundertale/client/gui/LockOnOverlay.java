@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -27,21 +28,21 @@ public class LockOnOverlay{
         if (mc.player == null || CameraLock.getTarget() == null) return;
 
         Vec3 targetPos = CameraLock.getTarget().position();
-        Vec2 screenPos = projectToScreen(targetPos, event.getGuiGraphics().pose()); //projectToScreen(targetPos, event.getGuiGraphics().pose());
+        Vec2 screenPos = projectToScreen(targetPos, event.getGuiGraphics().pose());
+
+        Window window = mc.getWindow();
+
+        int centerX = window.getGuiScaledWidth()/2;
+        int centerY = window.getGuiScaledHeight()/2;
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
-        guiGraphics.blit(new ResourceLocation(MinecraftxUndertaleMod.MOD_ID,
-                "textures/effects/heart.png"),
-                (int) screenPos.x, (int) screenPos.y,
-                0, 0, 16, 16  // Change 16x16 if the heart texture is a different size
-        );
-    }
-
-    public static Matrix4f getViewMatrix() {
-        Camera camera = mc.gameRenderer.getMainCamera();
-        return new Matrix4f().identity().rotateX((float) Math.toRadians(camera.getXRot()))  // X 軸旋轉 (俯仰角 Pitch)
-                .rotateY((float) Math.toRadians(camera.getYRot()))  // Y 軸旋轉 (偏航角 Yaw)
-                .translate((float) -camera.getPosition().x, (float) -camera.getPosition().y, (float) -camera.getPosition().z);
+        if (screenPos != null) {
+            guiGraphics.blit(new ResourceLocation(MinecraftxUndertaleMod.MOD_ID,
+                    "textures/effects/heart.png"),
+                    (int) screenPos.x - 8 + centerX, (int) screenPos.y - 8 + centerY,
+                    0, 0, 16, 16, 16, 16
+            );
+        }
     }
 
     public static Vec2 projectToScreen(Vec3 worldPos, PoseStack poseStack) {
@@ -49,27 +50,23 @@ public class LockOnOverlay{
         Vec3 camPos = camera.getPosition();
         Vec3 relativePos = worldPos.subtract(camPos);
 
-        // Get projection and model-view matrices
         Matrix4f projMatrix = RenderSystem.getProjectionMatrix();
-        Matrix4f modelViewMatrix = poseStack.last().pose();
+        Matrix4f modelViewMatrix = RenderSystem.getModelViewMatrix();
 
-        // Convert world position to clip space
         Vector4f clipPos = new Vector4f((float) relativePos.x, (float) relativePos.y, (float) relativePos.z, 1.0f);
         clipPos.mul(modelViewMatrix);
         clipPos.mul(projMatrix);
 
-        // If W component is negative, entity is behind the camera
-        if (clipPos.w <= 0) return null;
-
-        // Convert clip space to NDC (Normalized Device Coordinates)
+        if (clipPos.w == 0.0f) return null;
         clipPos.x /= clipPos.w;
         clipPos.y /= clipPos.w;
+        clipPos.z /= clipPos.w;
 
-        // Convert NDC to screen coordinates
         Window window = mc.getWindow();
-        float screenX = (clipPos.x + 1.0f) * 0.5f * window.getGuiScaledWidth();
-        float screenY = (1.0f - clipPos.y) * 0.5f * window.getGuiScaledHeight();
+        float screenX = (clipPos.x * 0.5f + 0.5f) * window.getGuiScaledWidth();
+        float screenY = (1.0f - (clipPos.y * 0.5f + 0.5f)) * window.getGuiScaledHeight();
 
         return new Vec2(screenX, screenY);
     }
+
 }
