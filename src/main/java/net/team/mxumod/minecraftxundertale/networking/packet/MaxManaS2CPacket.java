@@ -24,7 +24,7 @@ public class MaxManaS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            PlayerSkillManager.setMaxMana(maxMana);
+
         });
     }
 }

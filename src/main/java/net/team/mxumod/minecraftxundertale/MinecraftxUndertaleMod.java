@@ -41,6 +41,8 @@ import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import org.slf4j.Logger;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
 
+import java.util.function.Supplier;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MinecraftxUndertaleMod.MOD_ID)
 public class MinecraftxUndertaleMod {
@@ -109,12 +111,29 @@ public class MinecraftxUndertaleMod {
         TintPostProcessor.INSTANCE.setActive(false);
     }
 
+    /*
     @SubscribeEvent
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide) {
             if (event.getEntity() instanceof ServerPlayer player) {
                 player.getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(playerMana -> {
                     ModMessages.sendToClient(new ManaS2CPacket(playerMana.getValue()), );
+                });
+            }
+        }
+    }
+    /*
+     */
+
+    @Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
+    public class ServerModEvents {
+
+        @SubscribeEvent
+        public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player) {
+                player.getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(playerMana -> {
+                    Supplier<ServerPlayer> sp = () -> player;
+                    ModMessages.sendToClient(new ManaS2CPacket(playerMana.getValue()), sp);
                 });
             }
         }

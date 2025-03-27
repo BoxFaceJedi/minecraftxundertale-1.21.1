@@ -18,17 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/*
-    This is a map that describe the Max Mana Value of each characters
-    ManaMap = {
-        ["Sans"] = 200;
-        ["Chara"] = 200;
-    }
-*/
-
 @Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID, value = Dist.CLIENT)
-public class JustSaveTheLogicOfMagic {
-
+public class SavedPlayerSkillManager {
     private static final List<Skill> skills = new ArrayList<>();
     private static final ArrayList<Integer> WaitingList = new ArrayList<>();
 
@@ -37,14 +28,14 @@ public class JustSaveTheLogicOfMagic {
 
     private static Integer lastActionId = null;
 
-    public JustSaveTheLogicOfMagic() {
+    public SavedPlayerSkillManager() {
         // Add all skills here
         skills.add(new SideStepSkill());
         skills.add(new BoneSpikeSkill());
         skills.add(new BoneWallSkill());
         skills.add(new BoneBarrageSKill());
 
-        currentMana.addChangeListener(JustSaveTheLogicOfMagic::ManaHandler);
+        currentMana.addChangeListener(PlayerSkillManager::ManaHandler);
     }
 
     public static int getCurrentMana() {
