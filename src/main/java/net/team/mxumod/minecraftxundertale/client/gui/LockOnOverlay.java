@@ -1,12 +1,9 @@
 package net.team.mxumod.minecraftxundertale.client.gui;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -28,30 +25,30 @@ public class LockOnOverlay{
         if (mc.player == null || CameraLock.getTarget() == null) return;
 
         Vec3 targetPos = CameraLock.getTarget().position();
-        Vec2 screenPos = projectToScreen(targetPos, event.getGuiGraphics().pose());
-
-        Window window = mc.getWindow();
-
-        int centerX = window.getGuiScaledWidth()/2;
-        int centerY = window.getGuiScaledHeight()/2;
+        Vec2 screenPos = projectToScreen(targetPos);
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
         if (screenPos != null) {
             guiGraphics.blit(new ResourceLocation(MinecraftxUndertaleMod.MOD_ID,
                     "textures/effects/heart.png"),
-                    (int) screenPos.x - 8 + centerX, (int) screenPos.y - 8 + centerY,
+                    (int) screenPos.x - 8, (int) screenPos.y - 8,
                     0, 0, 16, 16, 16, 16
             );
         }
     }
 
-    public static Vec2 projectToScreen(Vec3 worldPos, PoseStack poseStack) {
+    public static Matrix4f getViewMatrix() {
         Camera camera = mc.gameRenderer.getMainCamera();
-        Vec3 camPos = camera.getPosition();
+        return new Matrix4f().identity().rotateX((float) Math.toRadians(camera.getXRot()))
+                .rotateY((float) Math.toRadians(camera.getYRot()));
+    }
+
+    public static Vec2 projectToScreen(Vec3 worldPos) {
+        Vec3 camPos = mc.gameRenderer.getMainCamera().getPosition();
         Vec3 relativePos = worldPos.subtract(camPos);
 
-        Matrix4f projMatrix = RenderSystem.getProjectionMatrix();
-        Matrix4f modelViewMatrix = RenderSystem.getModelViewMatrix();
+        Matrix4f projMatrix = mc.gameRenderer.getProjectionMatrix(mc.options.fov().get().floatValue());
+        Matrix4f modelViewMatrix = getViewMatrix();
 
         Vector4f clipPos = new Vector4f((float) relativePos.x, (float) relativePos.y, (float) relativePos.z, 1.0f);
         clipPos.mul(modelViewMatrix);
@@ -60,7 +57,6 @@ public class LockOnOverlay{
         if (clipPos.w == 0.0f) return null;
         clipPos.x /= clipPos.w;
         clipPos.y /= clipPos.w;
-        clipPos.z /= clipPos.w;
 
         Window window = mc.getWindow();
         float screenX = (clipPos.x * 0.5f + 0.5f) * window.getGuiScaledWidth();
