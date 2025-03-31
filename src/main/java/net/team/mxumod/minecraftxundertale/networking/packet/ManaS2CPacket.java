@@ -1,11 +1,8 @@
 package net.team.mxumod.minecraftxundertale.networking.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
-import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
-
+import net.team.mxumod.minecraftxundertale.client.gui.ManaOverlay;
 import java.util.function.Supplier;
 
 public class ManaS2CPacket {
@@ -26,6 +23,7 @@ public class ManaS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
+            ManaOverlay.currentMana = mana;
         });
     }
 }

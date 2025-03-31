@@ -53,12 +53,6 @@ public class ModMessages {
                 .encoder(ManaS2CPacket::toBytes)
                 .consumerMainThread(ManaS2CPacket::handle)
                 .add();
-
-        net.messageBuilder(MaxManaS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(MaxManaS2CPacket::new)
-                .encoder(MaxManaS2CPacket::toBytes)
-                .consumerMainThread(MaxManaS2CPacket::handle)
-                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {

@@ -6,16 +6,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
-
-import java.awt.*;
 
 public class ManaOverlay {
     private static GuiGraphics guiGraphics;
     private static int transparentColor = 0x00000000;
     static Minecraft mc = Minecraft.getInstance();
 
-    static boolean isVisible = false;
+    private static boolean isVisible = false;
+    public static int currentMana = 0;
 
     @SubscribeEvent
     public static void onRenderGui(CustomizeGuiOverlayEvent event) {
@@ -23,10 +21,7 @@ public class ManaOverlay {
 
         int y = event.getWindow().getGuiScaledHeight();
 
-        int currentMana = PlayerSkillManager.getCurrentMana();
-        int maxMana = PlayerSkillManager.getMaxMana();
-
-        String manaText = currentMana + "/" + maxMana;
+        String manaText = currentMana + "/" + 200;
 
         int barWidth = 100;
         int barHeight = 10;
@@ -35,7 +30,7 @@ public class ManaOverlay {
         RenderSystem.enableBlend();
 
         guiGraphics.fill(0, y, 100, y - barHeight, 0xFFbbbbbb);
-        guiGraphics.fill(0, y, 100 * PlayerSkillManager.getCurrentMana() / PlayerSkillManager.getMaxMana(), y - barHeight, 0xFF0088FF);
+        guiGraphics.fill(0, y, 100 * currentMana / 200, y - barHeight, 0xFF0088FF);
         guiGraphics.drawCenteredString(mc.font, manaText, barWidth/2, y - 9, 000000);
 
         RenderSystem.disableBlend();

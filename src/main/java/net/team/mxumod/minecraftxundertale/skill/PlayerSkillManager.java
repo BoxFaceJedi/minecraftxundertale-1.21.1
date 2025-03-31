@@ -24,7 +24,7 @@ public class PlayerSkillManager {
     private static final ArrayList<Integer> WaitingList = new ArrayList<>();
 
     private static int currentMana; // Shared mana pool for simplicity
-    private static int TOTAL_MANA;
+    private static int TOTAL_MANA = 200;
 
     private static Integer lastActionId = null;
 

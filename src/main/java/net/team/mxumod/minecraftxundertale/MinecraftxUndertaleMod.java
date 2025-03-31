@@ -15,8 +15,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,18 +28,15 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.team.mxumod.minecraftxundertale.capabilities.mana.PlayerManaProvider;
 import net.team.mxumod.minecraftxundertale.effects.TintPostProcessor;
 import net.team.mxumod.minecraftxundertale.entities.ModEntities;
 import net.team.mxumod.minecraftxundertale.entities.client.renderers.BoneProjectileRenderer;
 import net.team.mxumod.minecraftxundertale.entities.models.BoneProjectileModel;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
-import net.team.mxumod.minecraftxundertale.networking.packet.ManaS2CPacket;
+import net.team.mxumod.minecraftxundertale.skill.ServerSideSkillManager;
 import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import org.slf4j.Logger;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
-
-import java.util.function.Supplier;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MinecraftxUndertaleMod.MOD_ID)
@@ -91,12 +86,12 @@ public class MinecraftxUndertaleMod {
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
-
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        new ServerSideSkillManager();
         ModMessages.register();
     }
 
@@ -111,31 +106,16 @@ public class MinecraftxUndertaleMod {
         TintPostProcessor.INSTANCE.setActive(false);
     }
 
-    /*
     @SubscribeEvent
-    public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
-        if (!event.getLevel().isClientSide) {
-            if (event.getEntity() instanceof ServerPlayer player) {
-                player.getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(playerMana -> {
-                    ModMessages.sendToClient(new ManaS2CPacket(playerMana.getValue()), );
-                });
-            }
+    public void onPlayerJoining(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            ServerSideSkillManager.addPlayer(player);
         }
     }
-    /*
-     */
-
-    @Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
-    public class ServerModEvents {
-
-        @SubscribeEvent
-        public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-            if (event.getEntity() instanceof ServerPlayer player) {
-                player.getCapability(PlayerManaProvider.PLAYER_MANA).ifPresent(playerMana -> {
-                    Supplier<ServerPlayer> sp = () -> player;
-                    ModMessages.sendToClient(new ManaS2CPacket(playerMana.getValue()), sp);
-                });
-            }
+    @SubscribeEvent
+    public void onPlayerLeaving(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            ServerSideSkillManager.removePlayer(player);
         }
     }
 

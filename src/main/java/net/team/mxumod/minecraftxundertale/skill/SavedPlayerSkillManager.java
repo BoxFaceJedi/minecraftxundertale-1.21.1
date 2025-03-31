@@ -35,7 +35,7 @@ public class SavedPlayerSkillManager {
         skills.add(new BoneWallSkill());
         skills.add(new BoneBarrageSKill());
 
-        currentMana.addChangeListener(PlayerSkillManager::ManaHandler);
+        currentMana.addChangeListener(SavedPlayerSkillManager::ManaHandler);
     }
 
     public static int getCurrentMana() {
