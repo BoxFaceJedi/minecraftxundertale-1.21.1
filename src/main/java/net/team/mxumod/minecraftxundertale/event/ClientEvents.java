@@ -4,15 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
-import net.team.mxumod.minecraftxundertale.client.MxuClient;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
-import net.team.mxumod.minecraftxundertale.networking.packet.BoneBarrageC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneSpikeC2SPacket;
 import net.team.mxumod.minecraftxundertale.networking.packet.BoneWallC2SPacket;
 import net.team.mxumod.minecraftxundertale.util.CameraLock;
@@ -57,18 +53,6 @@ public class ClientEvents {
             }
         }
         @SubscribeEvent
-        public static void onClientTick(TickEvent.ClientTickEvent event) {
-            if (minecraft.player != null) {
-                if (event.phase == TickEvent.Phase.END && EnterCombatmode.isCombatmode()) {
-                    if (minecraft.player.getInventory().selected == 0) {
-                        if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown()) {
-                            ModMessages.sendToServer(new BoneBarrageC2SPacket());
-                        }
-                    }
-                }
-            }
-        }
-        @SubscribeEvent
         public static void onMouseInput(InputEvent.MouseButton event) {
             if (minecraft.player != null) {
                 if (minecraft.player.getInventory().selected == 0) {
@@ -88,19 +72,4 @@ public class ClientEvents {
             }
         }
     }
-
-    @Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID, value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class ClientModBusEvents {
-        @SubscribeEvent
-        public  static void onKeyRegister(RegisterKeyMappingsEvent event) {
-            event.register(Keybinding.COMBAT_MODE);
-            event.register(Keybinding.DODGE);
-            event.register(Keybinding.SPECIAL_ATTACK);
-            event.register(Keybinding.ULTIMATE_ATTACK);
-            event.register(Keybinding.BASIC_ATTACK);
-            event.register(Keybinding.BLOCKING);
-            event.register(Keybinding.LOCK_ON);
-        }
-    }
-
 }

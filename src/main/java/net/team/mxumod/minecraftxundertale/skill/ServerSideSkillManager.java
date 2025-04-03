@@ -5,6 +5,8 @@ import net.team.mxumod.minecraftxundertale.libraries.ObservableNumber;
 import net.team.mxumod.minecraftxundertale.libraries.ObservableValue;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.ManaS2CPacket;
+import net.team.mxumod.minecraftxundertale.skill.basic.BoneBarrageSkill;
+import net.team.mxumod.minecraftxundertale.skill.block.TestBoneWallSkill;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +23,8 @@ public class ServerSideSkillManager {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(999);
     private static final HashMap<ServerPlayer, HashMap<String, ScheduledFuture<?>>> cooldownTasks = new HashMap<>();
     private final static ArrayList<TemporarySkill> availableSkills = new ArrayList<>() {{
-
+        add(new BoneBarrageSkill());
+        add(new TestBoneWallSkill());
     }};
 
     //tmp_DataList = [playerMana, lastActionId];
@@ -36,13 +39,13 @@ public class ServerSideSkillManager {
         tmp_Mana.addChangeListener(((oldValue, newValue) -> {if (newValue < oldValue) startRecover(player);}));
     }
 
-    public static void playerUseSkillRequire(String SkillName, ServerPlayer player) {
+    public static void playerUseSkillRequire(String skillName, ServerPlayer player, Object data) {
         if (!isPlayerContained(player)) return;
         for (TemporarySkill skill : availableSkills) {
-            if (!skill.getName().equals(SkillName)) continue;
+            if (!skill.getName().equals(skillName)) continue;
             if (!isSkillUsable(skill, player)) return;
 
-            skill.executeSkill();
+            skill.executeSkill(player, data);
             playersCooldownSkillsMap.get(player).add(skill.getName());
             playersManaMap.get(player).reduceValue(skill.getManaCost());
 
@@ -50,7 +53,6 @@ public class ServerSideSkillManager {
                 playersCooldownSkillsMap.get(player).remove(skill.getName());
             }, skill.getCooldown(), TimeUnit.MILLISECONDS);
             cooldownTasks.computeIfAbsent(player, k -> new HashMap<>()).put(skill.getName(), cooldownTask);
-            return;
         }
     }
 

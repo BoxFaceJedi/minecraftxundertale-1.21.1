@@ -2,7 +2,12 @@ package net.team.mxumod.minecraftxundertale.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import org.lwjgl.glfw.GLFW;
 
 public class Keybinding {
@@ -22,4 +27,18 @@ public class Keybinding {
     public static final KeyMapping BASIC_ATTACK = new KeyMapping(KEY_BASIC_ATTACK, KeyConflictContext.IN_GAME, InputConstants.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_LEFT, KEY_CATEGORY_MXU);
     public static final KeyMapping BLOCKING = new KeyMapping(KEY_BLOCKING, KeyConflictContext.IN_GAME, InputConstants.Type.MOUSE,  GLFW.GLFW_MOUSE_BUTTON_RIGHT, KEY_CATEGORY_MXU);
     public static final KeyMapping LOCK_ON = new KeyMapping(KEY_LOCK_ON, KeyConflictContext.IN_GAME, InputConstants.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_MIDDLE, KEY_CATEGORY_MXU);
+
+    @Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID, value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientModBusEvents {
+        @SubscribeEvent
+        public  static void onKeyRegister(RegisterKeyMappingsEvent event) {
+            event.register(Keybinding.COMBAT_MODE);
+            event.register(Keybinding.DODGE);
+            event.register(Keybinding.SPECIAL_ATTACK);
+            event.register(Keybinding.ULTIMATE_ATTACK);
+            event.register(Keybinding.BASIC_ATTACK);
+            event.register(Keybinding.BLOCKING);
+            event.register(Keybinding.LOCK_ON);
+        }
+    }
 }

@@ -1,7 +1,11 @@
 package net.team.mxumod.minecraftxundertale.skill;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class TemporarySkill {
     protected String skillName;
@@ -13,7 +17,7 @@ public abstract class TemporarySkill {
         this.manaCost = manaCost;
     }
 
-    public abstract void executeSkill();
+    public abstract void executeSkill(ServerPlayer player, Object data);;
 
     public static Vec3 getPositionInFrontOfPlayer(Player player, double distance) {
         Vec3 playerPos = player.position();
@@ -28,13 +32,13 @@ public abstract class TemporarySkill {
     }
 
     public String getName() {
-        return skillName;
+        return this.skillName;
     }
     public int getManaCost() {
-        return manaCost;
+        return this.manaCost;
     }
     public int getCooldown() {
-        return cooldown;
+        return this.cooldown;
     }
 
 }

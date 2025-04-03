@@ -91,7 +91,7 @@ public class MinecraftxUndertaleMod {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        new ServerSideSkillManager();
+        //new ServerSideSkillManager();
         ModMessages.register();
     }
 

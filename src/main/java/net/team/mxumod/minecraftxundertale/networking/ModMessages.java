@@ -30,12 +30,6 @@ public class ModMessages {
 
         INSTANCE = net;
 
-        net.messageBuilder(BoneBarrageC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(BoneBarrageC2SPacket::new)
-                .encoder(BoneBarrageC2SPacket::toBytes)
-                .consumerMainThread(BoneBarrageC2SPacket::handle)
-                .add();
-
         net.messageBuilder(BoneWallC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(BoneWallC2SPacket::new)
                 .encoder(BoneWallC2SPacket::toBytes)
@@ -52,6 +46,12 @@ public class ModMessages {
                 .decoder(ManaS2CPacket::new)
                 .encoder(ManaS2CPacket::toBytes)
                 .consumerMainThread(ManaS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(SkillsC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SkillsC2SPacket::new)
+                .encoder(SkillsC2SPacket::toBytes)
+                .consumerMainThread(SkillsC2SPacket::handle)
                 .add();
     }
 
