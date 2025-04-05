@@ -1,13 +1,14 @@
 package net.team.mxumod.minecraftxundertale.client.events;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
-import net.team.mxumod.minecraftxundertale.event.EnterCombatmode;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.SkillsC2SPacket;
 import net.team.mxumod.minecraftxundertale.util.CameraLock;
@@ -21,7 +22,7 @@ public class SkillsEvent {
     public static void onClientTick(TickEvent.RenderTickEvent event) {
         if (Minecraft.getInstance().player == null) return;
         if (!EnterCombatmode.isCombatmode()) return;
-        if (Keybinding.BASIC_ATTACK.isDown() && !Keybinding.BLOCKING.isDown() && minecraft.player.getInventory().selected == 0) {
+        if (Keybinding.BASIC_ATTACK.isDown() && minecraft.player.getInventory().selected == 0) {
             ModMessages.sendToServer(new SkillsC2SPacket("Bone Barrage"));
         }
     }
@@ -39,4 +40,10 @@ public class SkillsEvent {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof Player) {
+            EnterCombatmode.leaveCombatmode();
+        }
+    }
 }

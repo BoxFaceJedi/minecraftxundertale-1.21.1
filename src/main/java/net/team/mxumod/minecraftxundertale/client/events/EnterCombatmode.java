@@ -1,4 +1,4 @@
-package net.team.mxumod.minecraftxundertale.event;
+package net.team.mxumod.minecraftxundertale.client.events;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -11,9 +11,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.team.mxumod.minecraftxundertale.client.gui.ManaOverlay;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
-import net.team.mxumod.minecraftxundertale.networking.packet.BoneWallC2SPacket;
+import net.team.mxumod.minecraftxundertale.networking.packet.CombatmodeC2SPacket;
 import net.team.mxumod.minecraftxundertale.util.CameraLock;
-import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 
 public class EnterCombatmode {
     private static boolean combatmode = false;
@@ -35,9 +34,7 @@ public class EnterCombatmode {
     public static void leaveCombatmode() {
         disableEvents();
         CameraLock.disableEvent();
-        if (BoneWallSkill.isBlocking()) {
-            ModMessages.sendToServer(new BoneWallC2SPacket());
-        }
+        ModMessages.sendToServer(new CombatmodeC2SPacket(true));
         combatmode = false;
         ManaOverlay.hideManaOverlay();
         minecraft.player.sendSystemMessage(Component.literal("leaving combatmode"));

@@ -15,31 +15,26 @@ public class SkillsC2SPacket {
     private final String skillName;
     private final JsonElement jsonData; // 讓 Forge 能解析 JSON
 
-    // **發送技能名稱 + 任何資料**
     public SkillsC2SPacket(String skillName, Object data) {
         this.skillName = skillName;
         this.jsonData = GSON.toJsonTree(data); // 轉換為 JSON
     }
 
-    // **發送只有技能名稱的封包**
     public SkillsC2SPacket(String skillName) {
         this.skillName = skillName;
         this.jsonData = JsonParser.parseString("{}"); // 預設為空 JSON
     }
 
-    // **從封包讀取數據**
     public SkillsC2SPacket(FriendlyByteBuf buf) {
         this.skillName = buf.readUtf();
         this.jsonData = JsonParser.parseString(buf.readUtf());
     }
 
-    // **將數據寫入封包**
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeUtf(this.skillName);
         buf.writeUtf(this.jsonData.toString());
     }
 
-    // **處理封包**
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {

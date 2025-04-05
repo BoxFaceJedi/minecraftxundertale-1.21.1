@@ -4,9 +4,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 public abstract class TemporarySkill {
     protected String skillName;
     protected int manaCost, cooldown;

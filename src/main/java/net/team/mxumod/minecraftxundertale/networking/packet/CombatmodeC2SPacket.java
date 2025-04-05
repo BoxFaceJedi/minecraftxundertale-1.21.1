@@ -4,32 +4,31 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
-import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
+import net.team.mxumod.minecraftxundertale.skill.ServerSideSkillManager;
+import net.team.mxumod.minecraftxundertale.skill.special.BoneSpikeSkill;
 
 import java.util.function.Supplier;
 
-public class BoneWallC2SPacket {
-    public BoneWallC2SPacket() {
-
+public class CombatmodeC2SPacket {
+    boolean isLeft;
+    public CombatmodeC2SPacket(boolean isLeft) {
+        this.isLeft = isLeft;
     }
 
-    public BoneWallC2SPacket(FriendlyByteBuf buf) {
-
+    public CombatmodeC2SPacket(FriendlyByteBuf buf) {
+        isLeft = buf.readBoolean();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-
+        buf.writeBoolean(this.isLeft);
     }
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
 
-
             ServerPlayer player = context.getSender();
-
-            new PlayerSkillManager().activateSkill(new BoneWallSkill().getName(),player);
-
+            if (isLeft) ServerSideSkillManager.playerLeftCombatmode(player);
         });
     }
 }

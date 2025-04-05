@@ -9,7 +9,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import net.team.mxumod.minecraftxundertale.libraries.ObservableNumber;
 import net.team.mxumod.minecraftxundertale.libraries.ObservableValue;
-import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
 import net.team.mxumod.minecraftxundertale.skill.special.BoneSpikeSkill;
 
@@ -31,7 +30,6 @@ public class PlayerSkillManager {
         // Add all skills here
         skills.add(new SideStepSkill());
         skills.add(new BoneSpikeSkill());
-        //skills.add(new BoneWallSkill());
 
         currentMana.addChangeListener(PlayerSkillManager::ManaHandler);
     }

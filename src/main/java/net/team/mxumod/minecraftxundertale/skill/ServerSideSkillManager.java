@@ -6,7 +6,7 @@ import net.team.mxumod.minecraftxundertale.libraries.ObservableValue;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.ManaS2CPacket;
 import net.team.mxumod.minecraftxundertale.skill.basic.BoneBarrageSkill;
-import net.team.mxumod.minecraftxundertale.skill.block.TestBoneWallSkill;
+import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,21 +16,23 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class ServerSideSkillManager {
-    private static int maxMana = 200;
+    private final static int maxMana = 200;
 
     private final static HashMap<ServerPlayer, ObservableNumber<Integer>> playersManaMap = new HashMap<>();
     private final static HashMap<ServerPlayer, ArrayList<String>> playersCooldownSkillsMap = new HashMap<>();
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(999);
     private static final HashMap<ServerPlayer, HashMap<String, ScheduledFuture<?>>> cooldownTasks = new HashMap<>();
-    private final static ArrayList<TemporarySkill> availableSkills = new ArrayList<>() {{
-        add(new BoneBarrageSkill());
-        add(new TestBoneWallSkill());
-    }};
+    private static final HashMap<ServerPlayer, ArrayList<TemporarySkill>> playersSkillsMap = new HashMap<>();
 
-    //tmp_DataList = [playerMana, lastActionId];
     public static void addPlayer(ServerPlayer player) {
         ObservableNumber<Integer> tmp_Mana = new ObservableNumber<>(0);
         playersManaMap.putIfAbsent(player, tmp_Mana);
+
+        playersSkillsMap.putIfAbsent(player, new ArrayList<>());
+
+        playersSkillsMap.get(player).add(new BoneBarrageSkill());
+        playersSkillsMap.get(player).add(new BoneWallSkill());
+
         playersCooldownSkillsMap.putIfAbsent(player,new ArrayList<>());
         startRecover(player);
         tmp_Mana.addChangeListener((oldValue, newValue) -> {
@@ -39,9 +41,21 @@ public class ServerSideSkillManager {
         tmp_Mana.addChangeListener(((oldValue, newValue) -> {if (newValue < oldValue) startRecover(player);}));
     }
 
-    public static void playerUseSkillRequire(String skillName, ServerPlayer player, Object data) {
+    public static void playerLeftCombatmode(ServerPlayer player) {
         if (!isPlayerContained(player)) return;
-        for (TemporarySkill skill : availableSkills) {
+        for (TemporarySkill temporarySkill : playersSkillsMap.get(player)) {
+            if (temporarySkill instanceof BoneWallSkill skill) {
+                if (skill.isBlocking()) skill.executeSkill(player, null);
+                return;
+            }
+        }
+    }
+
+    public static void playerUseSkillRequire(String skillName, ServerPlayer player, Object data) {
+        System.out.println("playerUseSkillRequire 呼叫成功: " + skillName);
+        if (!isPlayerContained(player)) return;
+        for (TemporarySkill skill : playersSkillsMap.get(player)) {
+            System.out.println("比較技能名: 需要的是 " + skillName + "，當前是 " + skill.getName());
             if (!skill.getName().equals(skillName)) continue;
             if (!isSkillUsable(skill, player)) return;
 
@@ -105,6 +119,7 @@ public class ServerSideSkillManager {
     public static void removePlayer(ServerPlayer player) {
         playersManaMap.remove(player);
         playersCooldownSkillsMap.remove(player);
+        playersSkillsMap.remove(player);
 
         if (cooldownTasks.containsKey(player)) {
             cooldownTasks.get(player).values().forEach(task -> task.cancel(false));
@@ -113,6 +128,6 @@ public class ServerSideSkillManager {
     }
 
     public static boolean isPlayerContained(ServerPlayer player) {
-        return (playersManaMap.containsKey(player) && playersCooldownSkillsMap.containsKey(player));
+        return playersManaMap.containsKey(player) && playersCooldownSkillsMap.containsKey(player) && playersSkillsMap.containsKey(player);
     }
 }

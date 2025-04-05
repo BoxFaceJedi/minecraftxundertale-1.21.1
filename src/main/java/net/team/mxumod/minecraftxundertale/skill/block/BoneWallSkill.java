@@ -9,24 +9,24 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.team.mxumod.minecraftxundertale.skill.Skill;
+import net.team.mxumod.minecraftxundertale.skill.TemporarySkill;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class BoneWallSkill extends Skill<ServerPlayer> {
+public class BoneWallSkill extends TemporarySkill {
 
     public BoneWallSkill() {
-        super("Bone Wall", 0, 5);
+        super("Bone Wall", 0, 100);
     }
 
-    public static boolean isBlocking() {
+    public boolean isBlocking() {
         return blocking;
     }
 
-    public static boolean blocking;
-    private static IronGolem blockingGolem;
-    private static final UUID SPEED_MODIFIER_ID = UUID.fromString("be386a3e-e2d6-4e9e-8c8f-24df028f546a"); // Unique ID
-
+    private boolean blocking;
+    private IronGolem blockingGolem;
+    private static final UUID SPEED_MODIFIER_ID = UUID.fromString("be386a3e-e2d6-4e9e-8c8f-24df028f546a");
     private static void applySpeedModifier (Player player, double multiplier) {
         var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attributes == null) return;
@@ -51,25 +51,28 @@ public class BoneWallSkill extends Skill<ServerPlayer> {
     }
 
     @Override
-    public void executeSkill(Player player) {
+    public void executeSkill(ServerPlayer player, @Nullable Object data) {
         ServerLevel level = (ServerLevel) player.level();
-        Vec3 posInFront = getPositionInFrontOfPlayer((ServerPlayer) player, 1);
+        Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 
         if (!blocking) {
-            blockingGolem = new IronGolem(EntityType.IRON_GOLEM, level);
-            blockingGolem.setNoAi(true);
-            blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
-            level.addFreshEntity(blockingGolem);
+            if (this.blockingGolem != null) {
+                this.blockingGolem.remove(Entity.RemovalReason.KILLED);
+            }
+            this.blockingGolem = new IronGolem(EntityType.IRON_GOLEM, level);
+            this.blockingGolem.setNoAi(true);
+            this.blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
+            level.addFreshEntity(this.blockingGolem);
 
             applySpeedModifier(player, 0.35);
-            blocking = true;
+            this.blocking = true;
         } else {
-            if (blockingGolem != null) {
-                blockingGolem.remove(Entity.RemovalReason.KILLED);
-                removeModifier((ServerPlayer) player);
+            if (this.blockingGolem != null) {
+                this.blockingGolem.remove(Entity.RemovalReason.KILLED);
+                removeModifier(player);
             }
-            blockingGolem = null;
-            blocking = false;
+            this.blockingGolem = null;
+            this.blocking = false;
         }
     }
 }
