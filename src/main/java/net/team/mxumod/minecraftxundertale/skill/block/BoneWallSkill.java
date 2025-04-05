@@ -9,12 +9,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.team.mxumod.minecraftxundertale.skill.TemporarySkill;
+import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class BoneWallSkill extends TemporarySkill {
+public class BoneWallSkill extends Skill {
 
     public BoneWallSkill() {
         super("Bone Wall", 0, 100);

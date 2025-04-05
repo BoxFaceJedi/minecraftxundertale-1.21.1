@@ -1,6 +1,7 @@
 package net.team.mxumod.minecraftxundertale.client.events;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -44,6 +45,31 @@ public class SkillsEvent {
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof Player) {
             EnterCombatmode.leaveCombatmode();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.Key event) {
+        if (minecraft.player == null) return;
+        LocalPlayer player = minecraft.player;
+        if (Keybinding.COMBAT_MODE.consumeClick()) {
+            if (EnterCombatmode.isCombatmode()) {
+                EnterCombatmode.leaveCombatmode();
+            }else {
+                EnterCombatmode.enterCombatmode();
+            }
+        } else if (EnterCombatmode.isCombatmode() && (minecraft.player.getInventory().selected == 0 || minecraft.player.getInventory().selected == 1)) {
+            if (Keybinding.DODGE.consumeClick() && minecraft.player.onGround()) {
+                ModMessages.sendToServer(new SkillsC2SPacket("Side Step"));
+                player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(1.5, 0.0, 1.5));
+            }
+        }
+        if (EnterCombatmode.isCombatmode() && minecraft.player.getInventory().selected == 0) {
+            if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
+                ModMessages.sendToServer(new SkillsC2SPacket("Bone Spike"));
+            }/*else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
+                Skip
+            }*/
         }
     }
 }

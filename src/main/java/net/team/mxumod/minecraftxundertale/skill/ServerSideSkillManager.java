@@ -7,6 +7,8 @@ import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.ManaS2CPacket;
 import net.team.mxumod.minecraftxundertale.skill.basic.BoneBarrageSkill;
 import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
+import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
+import net.team.mxumod.minecraftxundertale.skill.special.BoneSpikeSkill;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class ServerSideSkillManager {
     private final static HashMap<ServerPlayer, ArrayList<String>> playersCooldownSkillsMap = new HashMap<>();
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(999);
     private static final HashMap<ServerPlayer, HashMap<String, ScheduledFuture<?>>> cooldownTasks = new HashMap<>();
-    private static final HashMap<ServerPlayer, ArrayList<TemporarySkill>> playersSkillsMap = new HashMap<>();
+    private static final HashMap<ServerPlayer, ArrayList<Skill>> playersSkillsMap = new HashMap<>();
 
     public static void addPlayer(ServerPlayer player) {
         ObservableNumber<Integer> tmp_Mana = new ObservableNumber<>(0);
@@ -32,6 +34,8 @@ public class ServerSideSkillManager {
 
         playersSkillsMap.get(player).add(new BoneBarrageSkill());
         playersSkillsMap.get(player).add(new BoneWallSkill());
+        playersSkillsMap.get(player).add(new SideStepSkill());
+        playersSkillsMap.get(player).add(new BoneSpikeSkill());
 
         playersCooldownSkillsMap.putIfAbsent(player,new ArrayList<>());
         startRecover(player);
@@ -43,7 +47,7 @@ public class ServerSideSkillManager {
 
     public static void playerLeftCombatmode(ServerPlayer player) {
         if (!isPlayerContained(player)) return;
-        for (TemporarySkill temporarySkill : playersSkillsMap.get(player)) {
+        for (Skill temporarySkill : playersSkillsMap.get(player)) {
             if (temporarySkill instanceof BoneWallSkill skill) {
                 if (skill.isBlocking()) skill.executeSkill(player, null);
                 return;
@@ -54,11 +58,12 @@ public class ServerSideSkillManager {
     public static void playerUseSkillRequire(String skillName, ServerPlayer player, Object data) {
         System.out.println("playerUseSkillRequire 呼叫成功: " + skillName);
         if (!isPlayerContained(player)) return;
-        for (TemporarySkill skill : playersSkillsMap.get(player)) {
+        for (Skill skill : playersSkillsMap.get(player)) {
             System.out.println("比較技能名: 需要的是 " + skillName + "，當前是 " + skill.getName());
             if (!skill.getName().equals(skillName)) continue;
+            System.out.println("比較成功：" + skillName);
             if (!isSkillUsable(skill, player)) return;
-
+            System.out.println("可使用：" + skillName);
             skill.executeSkill(player, data);
             playersCooldownSkillsMap.get(player).add(skill.getName());
             playersManaMap.get(player).reduceValue(skill.getManaCost());
@@ -70,7 +75,7 @@ public class ServerSideSkillManager {
         }
     }
 
-    public static boolean isSkillUsable(TemporarySkill skill, ServerPlayer player) {
+    public static boolean isSkillUsable(Skill skill, ServerPlayer player) {
         return playersManaMap.get(player).getValue() >= skill.getManaCost() &&
                 !playersCooldownSkillsMap.get(player).contains(skill.getName());
     }

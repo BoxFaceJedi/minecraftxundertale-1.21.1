@@ -5,11 +5,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.phys.Vec3;
 import net.team.mxumod.minecraftxundertale.entities.bone.BoneProjectileEntity;
-import net.team.mxumod.minecraftxundertale.skill.TemporarySkill;
+import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 import java.util.Random;
 
-public class BoneBarrageSkill extends TemporarySkill {
+public class BoneBarrageSkill extends Skill {
     public BoneBarrageSkill() {
         super("Bone Barrage", 1, 100);
     }

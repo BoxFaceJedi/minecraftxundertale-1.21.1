@@ -4,10 +4,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,26 +13,24 @@ import net.minecraftforge.fml.common.Mod;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import net.team.mxumod.minecraftxundertale.skill.Skill;
 
-import java.util.WeakHashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID, value = Dist.CLIENT)
-public class BoneSpikeSkill extends Skill<ServerPlayer> {
-    private static final WeakHashMap<LivingEntity, Boolean> attackFlagMap = new WeakHashMap<>();
+@Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID) // 默認伺服器端
+public class BoneSpikeSkill extends Skill {
 
-    static Vec3 posInFront;
+    private static final Set<LivingEntity> noKnockbackTargets = new HashSet<>();
 
     public BoneSpikeSkill() {
-        super("Bone Spike", 50, 15);
+        super("Bone Spike", 25, 1000);
     }
 
     @SubscribeEvent
     public static void onLivingAttack(LivingAttackEvent event) {
-        // Check if the source is EvokerFangs
         if (event.getSource().getDirectEntity() instanceof EvokerFangs fangs) {
-            // Ensure the fangs' owner is a player
-            if (fangs.getOwner() instanceof ServerPlayer player) {
-                // Mark the entity in the map
-                attackFlagMap.put(event.getEntity(), true); // Mark the entity for special treatment
+            if (fangs.getOwner() instanceof ServerPlayer) {
+                // 標記：這個實體不要被擊退
+                noKnockbackTargets.add(event.getEntity());
             }
         }
     }
@@ -42,28 +38,20 @@ public class BoneSpikeSkill extends Skill<ServerPlayer> {
     @SubscribeEvent
     public static void onLivingKnockback(LivingKnockBackEvent event) {
         LivingEntity entity = event.getEntity();
-
-        // Check if the entity was marked in the attack event
-        if (attackFlagMap.getOrDefault(entity, false)) {
-            // Cancel knockback
+        if (noKnockbackTargets.remove(entity)) {
             event.setCanceled(true);
-
-            //apply upward motion
-            entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, 1.5, 0.0));
-
-            // Optional: Remove the entity from the map after handling
-            attackFlagMap.remove(entity);
+            entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, 1.5, 0.0)); // 打飛
         }
     }
 
     @Override
-    public void executeSkill(Player player) {
-        ServerLevel level = ((ServerLevel) player.level());
-        posInFront = getPositionInFrontOfPlayer((ServerPlayer) player, 1.5);
+    public void executeSkill(ServerPlayer player, Object data) {
+        ServerLevel level = player.serverLevel();
+        Vec3 posInFront = getPositionInFrontOfPlayer(player, 1.5); // 區域變數 OK
 
-        EvokerFangs bone_spike = new EvokerFangs(EntityType.EVOKER_FANGS, level);
-        bone_spike.setPos(posInFront.x, posInFront.y, posInFront.z);
-        bone_spike.setOwner(player);
-        level.addFreshEntity(bone_spike);
+        EvokerFangs boneSpike = new EvokerFangs(EntityType.EVOKER_FANGS, level);
+        boneSpike.setPos(posInFront.x, posInFront.y, posInFront.z);
+        boneSpike.setOwner(player);
+        level.addFreshEntity(boneSpike);
     }
 }

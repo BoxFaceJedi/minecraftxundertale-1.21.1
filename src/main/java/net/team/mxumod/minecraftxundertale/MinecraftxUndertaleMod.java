@@ -34,7 +34,6 @@ import net.team.mxumod.minecraftxundertale.entities.client.renderers.BoneProject
 import net.team.mxumod.minecraftxundertale.entities.models.BoneProjectileModel;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.skill.ServerSideSkillManager;
-import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import org.slf4j.Logger;
 import team.lodestar.lodestone.systems.postprocess.PostProcessHandler;
 
@@ -125,7 +124,6 @@ public class MinecraftxUndertaleMod {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            new PlayerSkillManager();
             PostProcessHandler.addInstance(TintPostProcessor.INSTANCE);
         }
 

@@ -30,12 +30,6 @@ public class ModMessages {
 
         INSTANCE = net;
 
-        net.messageBuilder(BoneSpikeC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(BoneSpikeC2SPacket::new)
-                .encoder(BoneSpikeC2SPacket::toBytes)
-                .consumerMainThread(BoneSpikeC2SPacket::handle)
-                .add();
-
         net.messageBuilder(ManaS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ManaS2CPacket::new)
                 .encoder(ManaS2CPacket::toBytes)

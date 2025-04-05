@@ -3,9 +3,7 @@ package net.team.mxumod.minecraftxundertale.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.team.mxumod.minecraftxundertale.skill.PlayerSkillManager;
 import net.team.mxumod.minecraftxundertale.skill.ServerSideSkillManager;
-import net.team.mxumod.minecraftxundertale.skill.special.BoneSpikeSkill;
 
 import java.util.function.Supplier;
 

@@ -4,37 +4,19 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-public abstract class Skill<T extends Player> {
-    protected String name;
-    protected int manaCost;
-    protected int cooldown;
-    protected int currentCoolDown = 0;
+public abstract class Skill {
+    protected String skillName;
+    protected int manaCost, cooldown;
 
-    public Skill(String name, int manaCost, int cooldown) {
-        this.name = name;
-        this.manaCost = manaCost;
+    public Skill(String skillName, int manaCost, int cooldown) {
+        this.skillName = skillName;
         this.cooldown = cooldown;
+        this.manaCost = manaCost;
     }
 
-    public void tickCoolDown() {
-        if (currentCoolDown < cooldown) {
-            currentCoolDown += 1;
-        }
-    }
+    public abstract void executeSkill(ServerPlayer player, Object data);;
 
-    public boolean canActivate() {
-        return PlayerSkillManager.getCurrentMana() >= manaCost && currentCoolDown >= cooldown;
-    }
-
-    public void activate(Player player) {
-        currentCoolDown = 0;
-        PlayerSkillManager.reduceMana(manaCost);
-        executeSkill(player);
-    }
-
-    protected abstract void executeSkill(Player player);
-
-    public static Vec3 getPositionInFrontOfPlayer(ServerPlayer player, double distance) {
+    public static Vec3 getPositionInFrontOfPlayer(Player player, double distance) {
         Vec3 playerPos = player.position();
         double playerYaw = Math.toRadians(player.getYRot());
 
@@ -47,18 +29,13 @@ public abstract class Skill<T extends Player> {
     }
 
     public String getName() {
-        return name;
+        return this.skillName;
     }
-
     public int getManaCost() {
-        return manaCost;
+        return this.manaCost;
     }
-
     public int getCooldown() {
-        return cooldown;
+        return this.cooldown;
     }
 
-    public int getCurrentCoolDown() {
-        return currentCoolDown;
-    }
 }
