@@ -127,14 +127,6 @@ public class MinecraftxUndertaleMod {
             PostProcessHandler.addInstance(TintPostProcessor.INSTANCE);
         }
 
-        @SubscribeEvent
-        public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerEntityRenderer(ModEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
-        }
 
-        @SubscribeEvent
-        public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-            event.registerLayerDefinition(BoneProjectileModel.LAYER_LOCATION, BoneProjectileModel::createBodyLayer);
-        }
     }
 }
