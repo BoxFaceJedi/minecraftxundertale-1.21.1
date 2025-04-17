@@ -58,18 +58,19 @@ public class SkillsEvent {
             }else {
                 EnterCombatmode.enterCombatmode();
             }
-        } else if (EnterCombatmode.isCombatmode() && (minecraft.player.getInventory().selected == 0 || minecraft.player.getInventory().selected == 1)) {
+        } else if (EnterCombatmode.isCombatmode()) {
             if (Keybinding.DODGE.consumeClick() && minecraft.player.onGround()) {
                 ModMessages.sendToServer(new SkillsC2SPacket("Side Step"));
                 player.setDeltaMovement(player.getDeltaMovement().normalize().multiply(1.5, 0.0, 1.5));
+            } else if (minecraft.player.getInventory().selected == 0) {
+                if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
+                    ModMessages.sendToServer(new SkillsC2SPacket("Bone Spike"));
+                }
+            }else if (minecraft.player.getInventory().selected == 2) {
+                if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
+                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", CameraLock.getTarget()));
+                }
             }
-        }
-        if (EnterCombatmode.isCombatmode() && minecraft.player.getInventory().selected == 0) {
-            if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
-                ModMessages.sendToServer(new SkillsC2SPacket("Bone Spike"));
-            }/*else if (Keybinding.ULTIMATE_ATTACK.consumeClick()) {
-                Skip
-            }*/
         }
     }
 }

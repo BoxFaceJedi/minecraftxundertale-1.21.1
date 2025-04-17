@@ -56,18 +56,14 @@ public class ServerSideSkillManager {
     }
 
     public static void playerUseSkillRequire(String skillName, ServerPlayer player, Object data) {
-        System.out.println("playerUseSkillRequire 呼叫成功: " + skillName);
         if (!isPlayerContained(player)) return;
         for (Skill skill : playersSkillsMap.get(player)) {
-            System.out.println("比較技能名: 需要的是 " + skillName + "，當前是 " + skill.getName());
             if (!skill.getName().equals(skillName)) continue;
-            System.out.println("比較成功：" + skillName);
             if (!isSkillUsable(skill, player)) return;
             System.out.println("可使用：" + skillName);
             skill.executeSkill(player, data);
             playersCooldownSkillsMap.get(player).add(skill.getName());
             playersManaMap.get(player).reduceValue(skill.getManaCost());
-
             ScheduledFuture<?> cooldownTask = scheduler.schedule(() -> {
                 playersCooldownSkillsMap.get(player).remove(skill.getName());
             }, skill.getCooldown(), TimeUnit.MILLISECONDS);
