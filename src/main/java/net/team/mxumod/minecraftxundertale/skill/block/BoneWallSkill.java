@@ -17,7 +17,7 @@ import java.util.UUID;
 public class BoneWallSkill extends Skill {
 
     public BoneWallSkill() {
-        super("Bone Wall", 0, 100);
+        super("Bone Wall", 2, 100);
     }
 
     public boolean isBlocking() {

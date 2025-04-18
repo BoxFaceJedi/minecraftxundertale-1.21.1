@@ -31,9 +31,15 @@ public class SkillsEvent {
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseButton event) {
         if (minecraft.player == null) return;
-        if (minecraft.player.getInventory().selected == 0 || minecraft.player.getInventory().selected == 1) {
+        if (minecraft.player.getInventory().selected == 0) {
             if (Keybinding.BLOCKING.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.BASIC_ATTACK.isDown()) {
                 ModMessages.sendToServer(new SkillsC2SPacket("Bone Wall"));
+            }
+        }else if (minecraft.player.getInventory().selected == 2) {
+            if (Keybinding.BASIC_ATTACK.consumeClick()) {
+                if (minecraft.options.keyDown.isDown()) {
+                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", CameraLock.getTarget() + "_W"));
+                }
             }
         }
         if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {
