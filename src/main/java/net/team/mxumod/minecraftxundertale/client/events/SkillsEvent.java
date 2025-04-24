@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.SkillsC2SPacket;
+import net.team.mxumod.minecraftxundertale.skill.basic.Telekinesis.TelekinesisData;
 import net.team.mxumod.minecraftxundertale.util.CameraLock;
 import net.team.mxumod.minecraftxundertale.util.Keybinding;
 
@@ -38,7 +39,13 @@ public class SkillsEvent {
         }else if (minecraft.player.getInventory().selected == 2) {
             if (Keybinding.BASIC_ATTACK.consumeClick()) {
                 if (minecraft.options.keyDown.isDown()) {
-                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", CameraLock.getTarget() + "_W"));
+                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", new TelekinesisData(CameraLock.getTarget(), "S")));
+                }else if (minecraft.options.keyLeft.isDown()) {
+                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", new TelekinesisData(CameraLock.getTarget(), "A")));
+                }else if (minecraft.options.keyRight.isDown()) {
+                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", new TelekinesisData(CameraLock.getTarget(), "D")));
+                }else if (minecraft.options.keyUp.isDown()) {
+                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", new TelekinesisData(CameraLock.getTarget(), "W")));
                 }
             }
         }

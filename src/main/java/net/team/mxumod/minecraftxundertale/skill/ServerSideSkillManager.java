@@ -60,7 +60,6 @@ public class ServerSideSkillManager {
         for (Skill skill : playersSkillsMap.get(player)) {
             if (!skill.getName().equals(skillName)) continue;
             if (!isSkillUsable(skill, player)) return;
-            System.out.println("可使用：" + skillName);
             skill.executeSkill(player, data);
             playersCooldownSkillsMap.get(player).add(skill.getName());
             playersManaMap.get(player).reduceValue(skill.getManaCost());

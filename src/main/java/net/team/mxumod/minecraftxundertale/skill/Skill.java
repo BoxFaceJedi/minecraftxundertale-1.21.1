@@ -28,6 +28,12 @@ public abstract class Skill {
         return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
     }
 
+    public Vec3 getPlayerLookVector(ServerPlayer player) {
+        double playerYaw = Math.toRadians(player.getYRot());
+        Math.sin(player.getXRot());
+        return new Vec3(-Math.sin(playerYaw), , Math.cos(playerYaw));
+    }
+
     public String getName() {
         return this.skillName;
     }
