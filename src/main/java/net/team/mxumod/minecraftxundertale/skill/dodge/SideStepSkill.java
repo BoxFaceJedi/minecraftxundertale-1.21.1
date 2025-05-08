@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.skill.dodge;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -34,9 +35,8 @@ public class SideStepSkill extends Skill {
     }
 
     @Override
-    public void executeSkill(ServerPlayer player, @Nullable Object data) {
+    public void executeSkill(ServerPlayer player, @Nullable CompoundTag data) {
         if (!player.onGround()) return;
-        System.out.println("已使用：Side Step");
         iFrameTicks.put(player, I_FRAME_TICKS);
     }
 

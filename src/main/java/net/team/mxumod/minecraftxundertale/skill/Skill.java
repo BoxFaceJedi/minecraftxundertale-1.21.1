@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.skill;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -14,7 +15,7 @@ public abstract class Skill {
         this.manaCost = manaCost;
     }
 
-    public abstract void executeSkill(ServerPlayer player, Object data);;
+    public abstract void executeSkill(ServerPlayer player, CompoundTag data);
 
     public static Vec3 getPositionInFrontOfPlayer(Player player, double distance) {
         Vec3 playerPos = player.position();
@@ -28,11 +29,7 @@ public abstract class Skill {
         return new Vec3(playerPos.x + offsetX, y, playerPos.z + offsetZ);
     }
 
-    public Vec3 getPlayerLookVector(ServerPlayer player) {
-        double playerYaw = Math.toRadians(player.getYRot());
-        Math.sin(player.getXRot());
-        return new Vec3(-Math.sin(playerYaw), , Math.cos(playerYaw));
-    }
+    public static Vec3 getPlayerRightVector(ServerPlayer player) {return player.getLookAngle().cross(player.getUpVector(1.0F)).normalize();}
 
     public String getName() {
         return this.skillName;

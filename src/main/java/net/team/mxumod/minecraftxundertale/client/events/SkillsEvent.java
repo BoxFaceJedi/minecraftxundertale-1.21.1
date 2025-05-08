@@ -2,6 +2,7 @@ package net.team.mxumod.minecraftxundertale.client.events;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -12,7 +13,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.SkillsC2SPacket;
-import net.team.mxumod.minecraftxundertale.skill.basic.Telekinesis.TelekinesisData;
 import net.team.mxumod.minecraftxundertale.util.CameraLock;
 import net.team.mxumod.minecraftxundertale.util.Keybinding;
 
@@ -38,15 +38,20 @@ public class SkillsEvent {
             }
         }else if (minecraft.player.getInventory().selected == 2) {
             if (Keybinding.BASIC_ATTACK.consumeClick()) {
-                if (minecraft.options.keyDown.isDown()) {
-                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", new TelekinesisData(CameraLock.getTarget(), "S")));
-                }else if (minecraft.options.keyLeft.isDown()) {
-                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", new TelekinesisData(CameraLock.getTarget(), "A")));
-                }else if (minecraft.options.keyRight.isDown()) {
-                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", new TelekinesisData(CameraLock.getTarget(), "D")));
-                }else if (minecraft.options.keyUp.isDown()) {
-                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", new TelekinesisData(CameraLock.getTarget(), "W")));
-                }
+                CompoundTag data = new CompoundTag();
+                data.putInt("TargetId", CameraLock.getTarget().getId());
+                if (minecraft.options.keyDown.isDown())
+                    data.putString("Key", "S");
+                else if (minecraft.options.keyLeft.isDown())
+                    data.putString("Key", "A");
+                else if (minecraft.options.keyRight.isDown())
+                    data.putString("Key", "D");
+                else if (minecraft.options.keyUp.isDown())
+                    data.putString("Key", "W");
+                else
+                    data.putString("Key", "S");
+
+                ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", data));
             }
         }
         if (Keybinding.LOCK_ON.consumeClick() && EnterCombatmode.isCombatmode()) {
@@ -78,10 +83,6 @@ public class SkillsEvent {
             } else if (minecraft.player.getInventory().selected == 0) {
                 if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
                     ModMessages.sendToServer(new SkillsC2SPacket("Bone Spike"));
-                }
-            }else if (minecraft.player.getInventory().selected == 2) {
-                if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
-                    ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", CameraLock.getTarget()));
                 }
             }
         }

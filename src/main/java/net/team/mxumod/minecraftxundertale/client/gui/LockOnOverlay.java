@@ -42,23 +42,26 @@ public class LockOnOverlay {
         Vec3 camPos = camera.getPosition();
         Vec3 relativePos = worldPos.subtract(camPos);
 
+        // Obtain combined view-projection matrix (model-view + projection combined)
         Matrix4f projMatrix = mc.gameRenderer.getProjectionMatrix(mc.options.fov().get().floatValue());
-        Matrix4f modelViewMatrix = new Matrix4f()
-                .identity()
-                .rotateX((float) Math.toRadians(camera.getXRot()))
-                .rotateY((float) Math.toRadians(camera.getYRot()));
+        Matrix4f viewMatrix = new Matrix4f()
+                .rotateY((float) Math.toRadians(-camera.getYRot())) // Note the inversion
+                .rotateX((float) Math.toRadians(-camera.getXRot())); // Correct for camera rotation
 
+        // Clip space: Apply view and projection transformations
         Vector4f clipPos = new Vector4f((float) relativePos.x, (float) relativePos.y, (float) relativePos.z, 1.0f);
-        clipPos.mul(modelViewMatrix);
+        clipPos.mul(viewMatrix);
         clipPos.mul(projMatrix);
 
-        if (clipPos.w == 0.0f) return null;
+        if (clipPos.w <= 0.0f) {
+            return null;
+        }
         clipPos.x /= clipPos.w;
         clipPos.y /= clipPos.w;
 
         Window window = mc.getWindow();
-        float screenX = (clipPos.x * 0.5f + 0.5f) * window.getGuiScaledWidth();
-        float screenY = (1.0f - clipPos.y * 0.5f - 0.5f) * window.getGuiScaledHeight();
+        float screenX = (clipPos.x * 0.5f + 0.5f) * window.getGuiScaledWidth();   // X axis
+        float screenY = (1.0f - (clipPos.y * 0.5f + 0.5f)) * window.getGuiScaledHeight(); // Y axis (+1 flip for Y)
 
         return new Vec2(screenX, screenY);
     }

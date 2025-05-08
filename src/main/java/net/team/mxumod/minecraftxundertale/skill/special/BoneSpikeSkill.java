@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.skill.special;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import net.team.mxumod.minecraftxundertale.skill.Skill;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,7 +47,7 @@ public class BoneSpikeSkill extends Skill {
     }
 
     @Override
-    public void executeSkill(ServerPlayer player, Object data) {
+    public void executeSkill(ServerPlayer player, @Nullable CompoundTag data) {
         ServerLevel level = player.serverLevel();
         Vec3 posInFront = getPositionInFrontOfPlayer(player, 1.5); // 區域變數 OK
 

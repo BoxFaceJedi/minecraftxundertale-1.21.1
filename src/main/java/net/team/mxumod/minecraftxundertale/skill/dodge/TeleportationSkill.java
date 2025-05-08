@@ -1,7 +1,7 @@
 package net.team.mxumod.minecraftxundertale.skill.dodge;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 public class TeleportationSkill extends Skill {
@@ -10,7 +10,7 @@ public class TeleportationSkill extends Skill {
     }
 
     @Override
-    public void executeSkill(ServerPlayer player, Object data) {
+    public void executeSkill(ServerPlayer player, CompoundTag data) {
         player.moveTo(player.position().add(player.getDeltaMovement().multiply(5.0, 5.0, 5.0)));
     }
 }

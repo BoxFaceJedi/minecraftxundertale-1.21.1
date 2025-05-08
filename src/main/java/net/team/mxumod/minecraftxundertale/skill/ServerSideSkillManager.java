@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.skill;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.team.mxumod.minecraftxundertale.libraries.ObservableNumber;
 import net.team.mxumod.minecraftxundertale.libraries.ObservableValue;
@@ -55,7 +56,7 @@ public class ServerSideSkillManager {
         }
     }
 
-    public static void playerUseSkillRequire(String skillName, ServerPlayer player, Object data) {
+    public static void playerUseSkillRequire(String skillName, ServerPlayer player, CompoundTag data) {
         if (!isPlayerContained(player)) return;
         for (Skill skill : playersSkillsMap.get(player)) {
             if (!skill.getName().equals(skillName)) continue;

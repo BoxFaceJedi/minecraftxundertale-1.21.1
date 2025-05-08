@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.skill.block;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -51,7 +52,7 @@ public class BoneWallSkill extends Skill {
     }
 
     @Override
-    public void executeSkill(ServerPlayer player, @Nullable Object data) {
+    public void executeSkill(ServerPlayer player, @Nullable CompoundTag data) {
         ServerLevel level = (ServerLevel) player.level();
         Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 

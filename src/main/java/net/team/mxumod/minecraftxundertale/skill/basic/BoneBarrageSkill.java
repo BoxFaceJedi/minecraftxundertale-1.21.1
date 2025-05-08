@@ -1,5 +1,6 @@
 package net.team.mxumod.minecraftxundertale.skill.basic;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -7,6 +8,7 @@ import net.minecraft.world.phys.Vec3;
 import net.team.mxumod.minecraftxundertale.entities.bone.BoneProjectileEntity;
 import net.team.mxumod.minecraftxundertale.skill.Skill;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BoneBarrageSkill extends Skill {
@@ -26,7 +28,7 @@ public class BoneBarrageSkill extends Skill {
     }
 
     @Override
-    public void executeSkill(ServerPlayer player, Object data) {
+    public void executeSkill(ServerPlayer player, @Nullable CompoundTag data) {
         ServerLevel level = (ServerLevel) player.level();
         Vec3 randomPosition = this.getRandomPositionAroundHead(player);
 
