@@ -100,6 +100,10 @@ public class SkillsEvent {
                 if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
                     ModMessages.sendToServer(new SkillsC2SPacket("Bone Spike"));
                 }
+            } else if (minecraft.player.getInventory().selected == 2) {
+                if (Keybinding.SPECIAL_ATTACK.consumeClick()) {
+                    player.moveTo(player.position().add(player.getDeltaMovement().normalize().multiply(15, 0, 15)));
+                }
             }
         }
     }
