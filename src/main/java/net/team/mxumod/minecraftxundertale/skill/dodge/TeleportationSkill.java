@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 public class TeleportationSkill extends Skill {
-    public TeleportationSkill(String name, int manaCost, int cooldown) {
+    public TeleportationSkill() {
         super("Teleportation Skill", 25, 3000);
     }
 

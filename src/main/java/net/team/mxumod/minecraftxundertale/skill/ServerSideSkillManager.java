@@ -7,8 +7,10 @@ import net.team.mxumod.minecraftxundertale.libraries.ObservableValue;
 import net.team.mxumod.minecraftxundertale.networking.ModMessages;
 import net.team.mxumod.minecraftxundertale.networking.packet.ManaS2CPacket;
 import net.team.mxumod.minecraftxundertale.skill.basic.BoneBarrageSkill;
+import net.team.mxumod.minecraftxundertale.skill.basic.TelekinesisSkill;
 import net.team.mxumod.minecraftxundertale.skill.block.BoneWallSkill;
 import net.team.mxumod.minecraftxundertale.skill.dodge.SideStepSkill;
+import net.team.mxumod.minecraftxundertale.skill.dodge.TeleportationSkill;
 import net.team.mxumod.minecraftxundertale.skill.special.BoneSpikeSkill;
 
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ public class ServerSideSkillManager {
         playersSkillsMap.get(player).add(new BoneWallSkill());
         playersSkillsMap.get(player).add(new SideStepSkill());
         playersSkillsMap.get(player).add(new BoneSpikeSkill());
+        playersSkillsMap.get(player).add(new TelekinesisSkill());
+        playersSkillsMap.get(player).add(new TeleportationSkill());
 
         playersCooldownSkillsMap.putIfAbsent(player,new ArrayList<>());
         startRecover(player);

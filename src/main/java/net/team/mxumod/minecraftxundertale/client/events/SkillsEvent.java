@@ -19,11 +19,24 @@ import net.team.mxumod.minecraftxundertale.util.Keybinding;
 @Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SkillsEvent {
     static Minecraft minecraft = Minecraft.getInstance();
+    static int freezeInputTick = 0;
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.RenderTickEvent event) {
-        if (Minecraft.getInstance().player == null) return;
+        if (minecraft.player == null) return;
         if (!EnterCombatmode.isCombatmode()) return;
+        if (freezeInputTick > 0) {
+            freezeInputTick--;
+
+            minecraft.options.keyUp.setDown(false);
+            minecraft.options.keyDown.setDown(false);
+            minecraft.options.keyLeft.setDown(false);
+            minecraft.options.keyRight.setDown(false);
+            minecraft.options.keyJump.setDown(false);
+            minecraft.options.keyAttack.setDown(false);
+            minecraft.options.keyUse.setDown(false);
+            return;
+        }
         if (Keybinding.BASIC_ATTACK.isDown() && minecraft.player.getInventory().selected == 0) {
             ModMessages.sendToServer(new SkillsC2SPacket("Bone Barrage"));
         }
@@ -32,25 +45,27 @@ public class SkillsEvent {
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseButton event) {
         if (minecraft.player == null) return;
+        if (freezeInputTick > 0) return;
         if (minecraft.player.getInventory().selected == 0) {
             if (Keybinding.BLOCKING.isDown() && EnterCombatmode.isCombatmode() && !Keybinding.BASIC_ATTACK.isDown()) {
                 ModMessages.sendToServer(new SkillsC2SPacket("Bone Wall"));
             }
         }else if (minecraft.player.getInventory().selected == 2) {
             if (Keybinding.BASIC_ATTACK.consumeClick()) {
+                if (CameraLock.getTarget() == null) return;
                 CompoundTag data = new CompoundTag();
                 data.putInt("TargetId", CameraLock.getTarget().getId());
-                if (minecraft.options.keyDown.isDown())
+                if (minecraft.options.keyDown.isDown()) {
                     data.putString("Key", "S");
-                else if (minecraft.options.keyLeft.isDown())
+                    freezeInputTick += 60;
+                } else if (minecraft.options.keyLeft.isDown())
                     data.putString("Key", "A");
                 else if (minecraft.options.keyRight.isDown())
                     data.putString("Key", "D");
                 else if (minecraft.options.keyUp.isDown())
                     data.putString("Key", "W");
                 else
-                    data.putString("Key", "S");
-
+                    data.putString("Key", "W");
                 ModMessages.sendToServer(new SkillsC2SPacket("Telekinesis", data));
             }
         }
@@ -69,6 +84,7 @@ public class SkillsEvent {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         if (minecraft.player == null) return;
+        if (freezeInputTick > 0) return;
         LocalPlayer player = minecraft.player;
         if (Keybinding.COMBAT_MODE.consumeClick()) {
             if (EnterCombatmode.isCombatmode()) {
