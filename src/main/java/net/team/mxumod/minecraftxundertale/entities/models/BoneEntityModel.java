@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 
-public class BoneEntityModel extends EntityModel {
+public class BoneEntityModel<T extends Entity> extends EntityModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(MinecraftxUndertaleMod.MOD_ID, "bone_entity"), "main");
     private final ModelPart bone;
 

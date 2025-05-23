@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID) // 默認伺服器端
+@Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID)
 public class BoneSpikeSkill extends Skill {
 
     private static final Set<LivingEntity> noKnockbackTargets = new HashSet<>();
@@ -31,7 +31,6 @@ public class BoneSpikeSkill extends Skill {
     public static void onLivingAttack(LivingAttackEvent event) {
         if (event.getSource().getDirectEntity() instanceof EvokerFangs fangs) {
             if (fangs.getOwner() instanceof ServerPlayer) {
-                // 標記：這個實體不要被擊退
                 noKnockbackTargets.add(event.getEntity());
             }
         }
@@ -42,7 +41,7 @@ public class BoneSpikeSkill extends Skill {
         LivingEntity entity = event.getEntity();
         if (noKnockbackTargets.remove(entity)) {
             event.setCanceled(true);
-            entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, 1.5, 0.0)); // 打飛
+            entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, 1.5, 0.0));
         }
     }
 

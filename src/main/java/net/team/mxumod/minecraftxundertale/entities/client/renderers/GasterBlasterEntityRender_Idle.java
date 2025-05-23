@@ -9,20 +9,21 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
-import net.team.mxumod.minecraftxundertale.entities.bone.BoneProjectileEntity;
-import net.team.mxumod.minecraftxundertale.entities.models.BoneProjectileModel;
+import net.team.mxumod.minecraftxundertale.entities.gasterblasters.GasterBlasterEntity_Idle;
+import net.team.mxumod.minecraftxundertale.entities.models.GasterBlasterEntityModel_Idle;
+import org.jetbrains.annotations.NotNull;
 
-public class BoneProjectileRenderer extends EntityRenderer<BoneProjectileEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(MinecraftxUndertaleMod.MOD_ID, "textures/entities/bone_projectile.png");
-    private final BoneProjectileModel<BoneProjectileEntity> model;
+public class GasterBlasterEntityRender_Idle extends EntityRenderer<GasterBlasterEntity_Idle> {
+    private static final ResourceLocation TEXTURE = new ResourceLocation(MinecraftxUndertaleMod.MOD_ID, "textures/entities/gaster_blaster_idle.png");
+    private final GasterBlasterEntityModel_Idle<GasterBlasterEntity_Idle> model;
 
-    public BoneProjectileRenderer(EntityRendererProvider.Context context) {
+    public GasterBlasterEntityRender_Idle(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new BoneProjectileModel<>(context.bakeLayer(BoneProjectileModel.LAYER_LOCATION));
+        this.model = new GasterBlasterEntityModel_Idle<>(context.bakeLayer(GasterBlasterEntityModel_Idle.LAYER_LOCATION));
     }
 
     @Override
-    public void render(BoneProjectileEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void render(GasterBlasterEntity_Idle entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         // Apply entity rotation
         poseStack.mulPose(Axis.YP.rotationDegrees(-entity.getYRot()));
         poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));
@@ -32,7 +33,7 @@ public class BoneProjectileRenderer extends EntityRenderer<BoneProjectileEntity>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BoneProjectileEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull GasterBlasterEntity_Idle entity) {
         return TEXTURE;
     }
 }

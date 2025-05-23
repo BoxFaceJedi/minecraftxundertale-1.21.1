@@ -10,21 +10,21 @@ import net.minecraft.resources.ResourceLocation;
 import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import net.team.mxumod.minecraftxundertale.entities.bone.BoneEntity;
 import net.team.mxumod.minecraftxundertale.entities.models.BoneEntityModel;
+import org.jetbrains.annotations.NotNull;
 
 public class BoneEntityRenderer extends EntityRenderer<BoneEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MinecraftxUndertaleMod.MOD_ID, "textures/entities/bone_entity.png");
-    private final BoneEntityModel model;
+    private final BoneEntityModel<BoneEntity> model;
 
     public BoneEntityRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
-        this.model = new BoneEntityModel(pContext.bakeLayer(BoneEntityModel.LAYER_LOCATION));
+        this.model = new BoneEntityModel<>(pContext.bakeLayer(BoneEntityModel.LAYER_LOCATION));
     }
 
     @Override
-    public void render(BoneEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void render(@NotNull BoneEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         poseStack.pushPose();
 
-        // 拉伸 Y 軸：高度 2 倍
         poseStack.scale(1.0F, 1.0F, 2.0F);
         poseStack.translate(0, 0.5, 0);
 
@@ -35,7 +35,7 @@ public class BoneEntityRenderer extends EntityRenderer<BoneEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BoneEntity pEntity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull BoneEntity pEntity) {
         return TEXTURE;
     }
 }

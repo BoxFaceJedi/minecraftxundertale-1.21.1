@@ -26,6 +26,12 @@ public class ModEntities {
                             .sized(1.0F, 1.0F)
                             .build("bone_entity"));
 
+    public static final RegistryObject<EntityType<BoneEntity>> GASTER_BLASTER_ENTITY_IDLE =
+            ENTITY_TYPE_DEFERRED_REGISTER.register("gaster_blaster_idle",
+                    () -> EntityType.Builder.<BoneEntity>of(BoneEntity::new, MobCategory.MISC)
+                            .sized(1.0F, 1.0F)
+                            .build("gaster_blaster_idle"));
+
 
     public static void EntityTypeDeferredRegister(IEventBus eventBus) {
         ENTITY_TYPE_DEFERRED_REGISTER.register(eventBus);

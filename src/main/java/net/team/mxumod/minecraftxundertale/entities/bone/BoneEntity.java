@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 
 public class BoneEntity extends Entity {
@@ -21,8 +22,8 @@ public class BoneEntity extends Entity {
     @Override public boolean isPickable() { return true; }
 
     @Override protected void defineSynchedData() {}
-    @Override protected void readAdditionalSaveData(CompoundTag tag) {}
-    @Override protected void addAdditionalSaveData(CompoundTag tag) {}
+    @Override protected void readAdditionalSaveData(@NotNull CompoundTag tag) {}
+    @Override protected void addAdditionalSaveData(@NotNull CompoundTag tag) {}
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
