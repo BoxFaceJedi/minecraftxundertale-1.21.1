@@ -9,6 +9,7 @@ import net.team.mxumod.minecraftxundertale.MinecraftxUndertaleMod;
 import net.team.mxumod.minecraftxundertale.entities.bone.BoneEntity;
 import net.team.mxumod.minecraftxundertale.entities.bone.BoneProjectileEntity;
 import net.team.mxumod.minecraftxundertale.entities.gasterblasters.GasterBlasterEntity_Idle;
+import net.team.mxumod.minecraftxundertale.entities.gasterblasters.GasterBlasterEntity_Launch;
 
 import static net.minecraftforge.registries.ForgeRegistries.ENTITY_TYPES;
 
@@ -33,6 +34,11 @@ public class ModEntities {
                             .sized(1.0F, 1.0F)
                             .build("gaster_blaster_idle"));
 
+    public static final RegistryObject<EntityType<GasterBlasterEntity_Launch>> GASTER_BLASTER_LAUNCH_IDLE =
+            ENTITY_TYPE_DEFERRED_REGISTER.register("gaster_blaster_launch",
+                    () -> EntityType.Builder.<GasterBlasterEntity_Launch>of(GasterBlasterEntity_Launch::new, MobCategory.MISC)
+                            .sized(1.0F, 1.0F)
+                            .build("gaster_blaster_launch"));
 
     public static void EntityTypeDeferredRegister(IEventBus eventBus) {
         ENTITY_TYPE_DEFERRED_REGISTER.register(eventBus);
