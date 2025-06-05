@@ -12,11 +12,11 @@ import net.team.mxumod.minecraftxundertale.entities.gasterblasters.GasterBlaster
 import net.team.mxumod.minecraftxundertale.entities.models.GasterBlasterEntityModel_Idle;
 import org.jetbrains.annotations.NotNull;
 
-public class GasterBlasterEntityRender_Idle extends EntityRenderer<GasterBlasterEntity_Idle> {
+public class GasterBlasterEntityRenderer_Idle extends EntityRenderer<GasterBlasterEntity_Idle> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MinecraftxUndertaleMod.MOD_ID, "textures/entities/gaster_blaster_idle.png");
     private final GasterBlasterEntityModel_Idle<GasterBlasterEntity_Idle> model;
 
-    public GasterBlasterEntityRender_Idle(EntityRendererProvider.Context context) {
+    public GasterBlasterEntityRenderer_Idle(EntityRendererProvider.Context context) {
         super(context);
         this.model = new GasterBlasterEntityModel_Idle<>(context.bakeLayer(GasterBlasterEntityModel_Idle.LAYER_LOCATION));
     }

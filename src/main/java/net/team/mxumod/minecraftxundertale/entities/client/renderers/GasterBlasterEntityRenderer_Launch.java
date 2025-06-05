@@ -18,11 +18,11 @@ import team.lodestar.lodestone.registry.client.LodestoneRenderTypeRegistry;
 import team.lodestar.lodestone.systems.rendering.VFXBuilders;
 import team.lodestar.lodestone.systems.rendering.rendeertype.RenderTypeToken;
 
-public class GasterBlasterEntityRender_Launch extends EntityRenderer<GasterBlasterEntity_Launch> {
+public class GasterBlasterEntityRenderer_Launch extends EntityRenderer<GasterBlasterEntity_Launch> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MinecraftxUndertaleMod.MOD_ID, "textures/entities/gaster_blaster_launch.png");
     private final GasterBlasterEntityModel_Launch<GasterBlasterEntity_Launch> model;
 
-    public GasterBlasterEntityRender_Launch(EntityRendererProvider.Context context) {
+    public GasterBlasterEntityRenderer_Launch(EntityRendererProvider.Context context) {
         super(context);
         this.model = new GasterBlasterEntityModel_Launch<>(context.bakeLayer(GasterBlasterEntityModel_Launch.LAYER_LOCATION));
     }

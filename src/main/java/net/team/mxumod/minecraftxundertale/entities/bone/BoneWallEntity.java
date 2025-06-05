@@ -7,15 +7,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 
-public class BoneEntity extends Entity {
-    public BoneEntity(EntityType<?> type, Level level) {
+public class BoneWallEntity extends Entity {
+    public BoneWallEntity(EntityType<?> type, Level level) {
         super(type, level);
         this.noPhysics = false;
-        this.setBoundingBox(new AABB(this.position(), this.position().add(0, 2, 0)));
     }
 
     @Override public boolean canBeCollidedWith() { return true; }

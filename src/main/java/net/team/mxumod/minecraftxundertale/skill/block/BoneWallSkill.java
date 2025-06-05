@@ -10,6 +10,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.team.mxumod.minecraftxundertale.entities.ModEntities;
+import net.team.mxumod.minecraftxundertale.entities.bone.BoneWallEntity;
 import net.team.mxumod.minecraftxundertale.skill.Skill;
 
 import javax.annotation.Nullable;
@@ -26,7 +28,7 @@ public class BoneWallSkill extends Skill {
     }
 
     private boolean blocking;
-    private IronGolem blockingGolem;
+    private BoneWallEntity blockingGolem;
     private static final UUID SPEED_MODIFIER_ID = UUID.fromString("be386a3e-e2d6-4e9e-8c8f-24df028f546a");
     private static void applySpeedModifier (Player player, double multiplier) {
         var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -48,7 +50,7 @@ public class BoneWallSkill extends Skill {
         var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attributes == null) return;
 
-        attributes.removeModifier(SPEED_MODIFIER_ID); // ✅ Proper removal by UUID
+        attributes.removeModifier(SPEED_MODIFIER_ID);
     }
 
     @Override
@@ -60,8 +62,8 @@ public class BoneWallSkill extends Skill {
             if (this.blockingGolem != null) {
                 this.blockingGolem.remove(Entity.RemovalReason.KILLED);
             }
-            this.blockingGolem = new IronGolem(EntityType.IRON_GOLEM, level);
-            this.blockingGolem.setNoAi(true);
+            this.blockingGolem = new BoneWallEntity(ModEntities.BONE_WALL_ENTITY.get(), level);
+            //this.blockingGolem.setNoAi(true);
             this.blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
             level.addFreshEntity(this.blockingGolem);
 
