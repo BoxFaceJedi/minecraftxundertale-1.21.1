@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -18,6 +19,19 @@ public class BoneWallEntity extends Entity {
 
     @Override public boolean canBeCollidedWith() { return true; }
     @Override public boolean isPickable() { return true; }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        this.setBoundingBox(new AABB(
+                x - 1.5, y, z - 0.5,
+                x + 1.5, y + 2.0, z + 0.5
+        ));
+    }
 
     @Override protected void defineSynchedData() {}
     @Override protected void readAdditionalSaveData(@NotNull CompoundTag tag) {}

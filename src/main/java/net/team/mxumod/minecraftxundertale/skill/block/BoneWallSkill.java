@@ -4,10 +4,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.team.mxumod.minecraftxundertale.entities.ModEntities;
@@ -28,7 +26,7 @@ public class BoneWallSkill extends Skill {
     }
 
     private boolean blocking;
-    private BoneWallEntity blockingGolem;
+    private BoneWallEntity boneWallEntity;
     private static final UUID SPEED_MODIFIER_ID = UUID.fromString("be386a3e-e2d6-4e9e-8c8f-24df028f546a");
     private static void applySpeedModifier (Player player, double multiplier) {
         var attributes = player.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -56,25 +54,26 @@ public class BoneWallSkill extends Skill {
     @Override
     public void executeSkill(ServerPlayer player, @Nullable CompoundTag data) {
         ServerLevel level = (ServerLevel) player.level();
-        Vec3 posInFront = getPositionInFrontOfPlayer(player, 1);
 
         if (!blocking) {
-            if (this.blockingGolem != null) {
-                this.blockingGolem.remove(Entity.RemovalReason.KILLED);
+            if (this.boneWallEntity != null) {
+                this.boneWallEntity.remove(Entity.RemovalReason.KILLED);
             }
-            this.blockingGolem = new BoneWallEntity(ModEntities.BONE_WALL_ENTITY.get(), level);
-            //this.blockingGolem.setNoAi(true);
-            this.blockingGolem.setPos(posInFront.x, posInFront.y, posInFront.z);
-            level.addFreshEntity(this.blockingGolem);
+            this.boneWallEntity = new BoneWallEntity(ModEntities.BONE_WALL_ENTITY.get(), level);
+
+            this.boneWallEntity.setPos(getPositionInFrontOfPlayer(player, 1));
+            this.boneWallEntity.setYRot(player.getYRot());
+
+            level.addFreshEntity(this.boneWallEntity);
 
             applySpeedModifier(player, 0.35);
             this.blocking = true;
         } else {
-            if (this.blockingGolem != null) {
-                this.blockingGolem.remove(Entity.RemovalReason.KILLED);
+            if (this.boneWallEntity != null) {
+                this.boneWallEntity.remove(Entity.RemovalReason.KILLED);
                 removeModifier(player);
             }
-            this.blockingGolem = null;
+            this.boneWallEntity = null;
             this.blocking = false;
         }
     }

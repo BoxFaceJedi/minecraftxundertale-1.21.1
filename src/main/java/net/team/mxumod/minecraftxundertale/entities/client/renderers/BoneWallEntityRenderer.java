@@ -2,6 +2,7 @@ package net.team.mxumod.minecraftxundertale.entities.client.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -23,6 +24,7 @@ public class BoneWallEntityRenderer extends EntityRenderer<BoneWallEntity> {
 
     @Override
     public void render(@NotNull BoneWallEntity entity, float entityYaw, float partialTicks, @NotNull PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        poseStack.mulPose(Axis.YP.rotationDegrees(-entityYaw));
 
         VertexConsumer vertexConsumer = buffer.getBuffer(model.renderType(getTextureLocation(entity)));
         model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
