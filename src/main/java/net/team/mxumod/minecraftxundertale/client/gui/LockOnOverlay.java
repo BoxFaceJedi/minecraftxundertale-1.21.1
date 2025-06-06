@@ -16,9 +16,8 @@ import net.team.mxumod.minecraftxundertale.util.CameraLock;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import team.lodestar.lodestone.systems.item.tools.magic.MagicAxeItem;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import static java.awt.SystemColor.window;
 
 @Mod.EventBusSubscriber(modid = MinecraftxUndertaleMod.MOD_ID, value = Dist.CLIENT)
 public class LockOnOverlay {
@@ -27,7 +26,6 @@ public class LockOnOverlay {
     @SubscribeEvent
     public static void onRenderOverlay(CustomizeGuiOverlayEvent event) {
         if (mc.player == null || CameraLock.getTarget() == null) return;
-        System.out.println("Locked!");
 
         Vec3 targetPos = new Vec3(CameraLock.getTarget().getEyePosition().x, CameraLock.getTarget().getEyePosition().y - 1, CameraLock.getTarget().getEyePosition().z);
         Vec2 screenPos = projectToScreen(targetPos);
@@ -43,12 +41,15 @@ public class LockOnOverlay {
     }
 
     public static Vec2 projectToScreen(Vec3 worldPos) {
+        Window window = mc.getWindow();
         Camera camera = mc.gameRenderer.getMainCamera();
         Vector3f camPos = camera.getPosition().toVector3f();
 
         Vector4f Pos = new Vector4f(camPos, 1.0f);
-        Pos.mul(createViewMatrix(camPos, worldPos.toVector3f(), camera.getUpVector()));
-        Pos.mul(mc.gameRenderer.getProjectionMatrix(mc.options.fov().get().floatValue()));
+        Matrix4f viewMatrix = createViewMatrix(camPos, worldPos.toVector3f(), camera.getUpVector());
+        Matrix4f projectionMatrix = createPerspectiveMatrix(70.0f, (float) window.getGuiScaledWidth() / window.getGuiScaledHeight(), 0.05f, 1000.0f);
+        Pos.mul(viewMatrix);
+        Pos.mul(projectionMatrix);
 
         if (Pos.w <= 0.0f) {
             return null;
@@ -56,10 +57,10 @@ public class LockOnOverlay {
 
         Pos.div(Pos.w);
 
-        Window window = mc.getWindow();
         float screenX = (Pos.x * 0.5f + 0.5f) * window.getGuiScaledWidth();
         float screenY = (1.0f - (Pos.y * 0.5f + 0.5f)) * window.getGuiScaledHeight();
-        System.out.println(new Vec2(screenX, screenY));
+        System.out.println(viewMatrix);
+        System.out.println(projectionMatrix);
         return new Vec2(screenX, screenY);
     }
 
@@ -75,5 +76,21 @@ public class LockOnOverlay {
         view.m03(0);   view.m13(0);   view.m23(0);   view.m33(1);
 
         return view;
+    }
+
+    public static Matrix4f createPerspectiveMatrix(float fovYDeg, float aspect, float zNear, float zFar) {
+        float fovRad = (float) Math.toRadians(fovYDeg);
+        float f = (float) (1.0 / Math.tan(fovRad / 2.0));
+
+        Matrix4f projectionMatrix = new Matrix4f();
+
+        projectionMatrix.m00(f / aspect);
+        projectionMatrix.m11(f);
+        projectionMatrix.m22((zFar + zNear) / (zNear - zFar));
+        projectionMatrix.m23(-1.0f);
+        projectionMatrix.m22((2 * zFar * zNear) / (zNear - zFar));
+        projectionMatrix.m33(0.0f);
+
+        return projectionMatrix;
     }
 }
